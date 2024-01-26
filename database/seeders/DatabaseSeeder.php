@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +15,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        User::factory()->create([
+            'name'     => 'Admin',
+            'email'    => 'admin@example.com',
+            'password' => 'admin',
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory(10)->create();
+        $this->command->info('Таблица с пользователями загружена данными!');
+
+        $this->call(CategorySeeder::class);
+        $this->command->info('Таблица с категориями загружена данными!');
+
+        $this->call(TagSeeder::class);
+        $this->command->info('Таблица с тегами загружена данными!');
+
+        $this->call(ColorSeeder::class);
+        $this->command->info('Таблица с цветами загружена данными!');
     }
 }

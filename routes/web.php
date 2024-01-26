@@ -1,6 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ColorController as AdminColorController;
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +31,7 @@ Route::get('/', static function () {
     ]);
 })->name('index');
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', static function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -36,14 +41,50 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::controller(AdminIndexController::class)->group(function () {
-    Route::prefix('/admin')->group(function () {
-        Route::name('admin.')->group(function () {
+Route::prefix('/admin')->group(function () {
+    Route::name('admin.')->group(function () {
+        // Главная
+        Route::controller(AdminIndexController::class)->group(function () {
             Route::get('/', 'index')->name('index');
         });
-    });
-}
 
-);
+        // Категории
+        Route::resource('category', AdminCategoryController::class)->only(['index', 'create', 'store', 'update']);
+        Route::controller(AdminCategoryController::class)->group(function () {
+            Route::prefix('/category')->group(function () {
+                Route::name('category.')->group(function () {
+
+                    // Удаление тега
+                    Route::delete('/{category:slug}', 'delete')->where('category:slug', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+
+        // Теги
+        Route::resource('tag', AdminTagController::class)->only(['index', 'create', 'store', 'update']);
+        Route::controller(AdminTagController::class)->group(function () {
+            Route::prefix('/tag')->group(function () {
+                Route::name('tag.')->group(function () {
+
+                    // Удаление тега
+                    Route::delete('/{tag:slug}', 'delete')->where('tag:slug', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+
+        // Цвета
+        Route::resource('color', AdminColorController::class)->only(['index', 'create', 'store', 'update']);
+        Route::controller(AdminColorController::class)->group(function () {
+            Route::prefix('/color')->group(function () {
+                Route::name('color.')->group(function () {
+
+                    // Удаление цвета
+                    Route::delete('/{color:slug}', 'delete')->where('color:slug', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+    });
+});
+
 
 require __DIR__ . '/auth.php';

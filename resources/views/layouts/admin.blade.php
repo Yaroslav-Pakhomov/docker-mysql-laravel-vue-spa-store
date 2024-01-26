@@ -36,11 +36,11 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{ route('index') }}" class="nav-link">Сайт</a>
+                <a href="{{ route('index') }}" class="nav-link" target="_blank">Сайт</a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{ route('admin.index') }}" class="nav-link">Админка</a>
-            </li>
+            {{-- <li class="nav-item d-none d-sm-inline-block"> --}}
+            {{--    <a href="{{ route('admin.index') }}" class="nav-link">Админка</a> --}}
+            {{-- </li> --}}
         </ul>
 
         <!-- Right navbar links -->
@@ -168,11 +168,11 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <p class="brand-link">
+        <a href="{{ route('admin.index') }}" class="brand-link">
             <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
                  class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Админка Магазина</span>
-        </p>
+        </a>
 
         <!-- Sidebar -->
         <div class="sidebar">
@@ -221,19 +221,20 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/gallery.html" class="nav-link">
+                        {{--                        <a href="pages/gallery.html" class="nav-link">--}}
+                        <a href="{{ route('admin.category.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-list"></i>
                             <p>Категории</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/gallery.html" class="nav-link">
+                        <a href="{{ route('admin.tag.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-tags"></i>
                             <p>Теги</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/gallery.html" class="nav-link">
+                        <a href="{{ route('admin.color.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-palette"></i>
                             <p>Цвета</p>
                         </a>
@@ -260,7 +261,7 @@
     <!-- /.content-wrapper -->
     <footer class="main-footer">
         <strong>Copyright &copy; 2014-{{ now()->year }}
-            <a href="{{ route('index') }}">Сайт</a>.</strong>
+            <a href="{{ route('index') }}" target="_blank">Сайт</a>.</strong>
         Все права защищены.
     </footer>
 
