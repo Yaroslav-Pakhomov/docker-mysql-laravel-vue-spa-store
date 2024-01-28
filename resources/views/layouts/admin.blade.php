@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use Illuminate\Support\Facades\Session; @endphp
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -18,6 +19,11 @@
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+
+    <!-- Определение цвета по HEX-код -->
+    <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script>
+
+    @vite(['resources/js/admin.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -254,6 +260,29 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+
+        <div class="content-header">
+            @if($message = Session::get('flash_message'))
+                <div class="content-header">
+                    <div class='{{ Session::get('class') }} alert-dismissible mt-3 mx-3 opacity-50' role='alert'>
+                        <button type="button" class="close btn-close" data-dismiss="alert">×</button>
+                        {{ $message }}
+                    </div>
+                </div>
+            @endif
+            @if($errors->any())
+                <div class="bg-opacity-75 alert alert-danger alert-dismissible mt-3 mx-3 " role="alert">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>
+                                <button type="button" class="close btn-close" data-dismiss="alert">×</button>
+                                {{ $error }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
 
         @yield('content')
 

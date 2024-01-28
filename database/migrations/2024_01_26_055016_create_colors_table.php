@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('colors', static function (Blueprint $table) {
             $table->id();
 
-            $table->string('title', 40);
+            $table->string('title', 40)->unique();
             $table->string('slug', 40)->unique();
             $table->string('code', 10);
 

@@ -1,10 +1,15 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head>
+        <title>Dashboard</title>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="laravel_icon.ico">
+    </Head>
 
     <AuthenticatedLayout>
         <template #header>

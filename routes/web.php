@@ -54,7 +54,13 @@ Route::prefix('/admin')->group(function () {
             Route::prefix('/category')->group(function () {
                 Route::name('category.')->group(function () {
 
-                    // Удаление тега
+                    // Страница категории
+                    Route::get('/{category:slug}', 'show')->where('category:slug', '[a-z0-9_-]+')->name('show');
+
+                    // Редактирование категории
+                    Route::get('/{category:slug}/edit', 'edit')->where('category:slug', '[a-z0-9_-]+')->name('edit');
+
+                    // Удаление категории
                     Route::delete('/{category:slug}', 'delete')->where('category:slug', '[a-z0-9_-]+')->name('delete');
                 });
             });
@@ -65,6 +71,12 @@ Route::prefix('/admin')->group(function () {
         Route::controller(AdminTagController::class)->group(function () {
             Route::prefix('/tag')->group(function () {
                 Route::name('tag.')->group(function () {
+
+                    // Страница тега
+                    Route::get('/{tag:slug}', 'show')->where('tag:slug', '[a-z0-9_-]+')->name('show');
+
+                    // Редактирование тега
+                    Route::get('/{tag:slug}/edit', 'edit')->where('tag:slug', '[a-z0-9_-]+')->name('edit');
 
                     // Удаление тега
                     Route::delete('/{tag:slug}', 'delete')->where('tag:slug', '[a-z0-9_-]+')->name('delete');
@@ -77,6 +89,12 @@ Route::prefix('/admin')->group(function () {
         Route::controller(AdminColorController::class)->group(function () {
             Route::prefix('/color')->group(function () {
                 Route::name('color.')->group(function () {
+
+                    // Страница цвета
+                    Route::get('/{color:slug}', 'show')->where('color:slug', '[a-z0-9_-]+')->name('show');
+
+                    // Редактирование цвета
+                    Route::get('/{color:slug}/edit', 'edit')->where('color:slug', '[a-z0-9_-]+')->name('edit');
 
                     // Удаление цвета
                     Route::delete('/{color:slug}', 'delete')->where('color:slug', '[a-z0-9_-]+')->name('delete');

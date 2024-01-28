@@ -7,15 +7,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Создание категории</h1>
+                    <h1 class="m-0">Редактирование цвета</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item active"><a href="{{ route('admin.index') }}">Главная</a></li>
-                        <li class="breadcrumb-item active">
-                            <a href="{{ route('admin.category.index') }}">Категории</a>
-                        </li>
-                        <li class="breadcrumb-item active">Создание категории</li>
+                        <li class="breadcrumb-item active"><a href="{{ route('admin.color.index') }}">Цвета</a></li>
+                        <li class="breadcrumb-item active">Редактирование цвета</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -29,15 +27,15 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('admin.category.store') }}" method="POST">
+        <form action="{{ route('admin.color.update', $color->id) }}" method="POST">
             @csrf
-            @method('POST')
+            @method('PATCH')
             <div class="card-body">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Название категории</label>
+                    <label for="inputTitle">Название цвета</label>
                     <input type="text" class="form-control" id="inputTitle" name="title"
-                           placeholder="Введите название категории"
-                           value="{{ old('title') ?? $category->title ?? '' }}">
+                           placeholder="Введите название цвета"
+                           value="{{ old('title') ?? $color->title ?? '' }}">
 
                     {{-- Сообщение ошибок валидации --}}
                     @error('title')
@@ -48,12 +46,31 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Ссылка</label>
+                    <label for="inputSlug">Ссылка</label>
                     <input type="text" class="form-control" id="inputSlug" name="slug" placeholder="Полученная ссылка"
-                           value="{{ old('slug') ?? $category->slug ?? '' }}">
+                           value="{{ old('slug') ?? $color->slug ?? '' }}">
 
                     {{-- Сообщение ошибок валидации --}}
                     @error('slug')
+                    <div class="alert alert-danger mt-2 ">
+                        <button type="button" class="close btn-close" data-dismiss="alert">×</button>
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <div class="d-flex flex-wrap">
+                        <span style="background: {{ $color->code }}; width: 20px; height: 20px;"
+                              class="d-block px-2"></span>
+                        <label for="inputCode" class="px-2">
+                            Код цвета
+                        </label>
+                    </div>
+                    <input type="text" class="form-control" id="inputCode" name="code" placeholder="Введите код цвета"
+                           value="{{ old('code') ?? $color->code ?? '' }}">
+
+                    {{-- Сообщение ошибок валидации --}}
+                    @error('code')
                     <div class="alert alert-danger mt-2 ">
                         <button type="button" class="close btn-close" data-dismiss="alert">×</button>
                         {{ $message }}
@@ -64,7 +81,7 @@
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Создать</button>
+                <button type="submit" class="btn btn-primary">Редактировать</button>
             </div>
         </form>
     </div>

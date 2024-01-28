@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Создание категории</h1>
+                    <h1 class="m-0">Редактирование категории</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item active">
                             <a href="{{ route('admin.category.index') }}">Категории</a>
                         </li>
-                        <li class="breadcrumb-item active">Создание категории</li>
+                        <li class="breadcrumb-item active">Редактирование категории</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -29,9 +29,9 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('admin.category.store') }}" method="POST">
+        <form action="{{ route('admin.category.update', $category->id) }}" method="POST">
             @csrf
-            @method('POST')
+            @method('PATCH')
             <div class="card-body">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Название категории</label>
@@ -64,7 +64,7 @@
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Создать</button>
+                <button type="submit" class="btn btn-primary">Редактировать</button>
             </div>
         </form>
     </div>
