@@ -87,7 +87,6 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
         $validated = $request->validated();
-
         $category->update($validated);
 
         return redirect()->route('admin.category.show', $category->slug)->with([

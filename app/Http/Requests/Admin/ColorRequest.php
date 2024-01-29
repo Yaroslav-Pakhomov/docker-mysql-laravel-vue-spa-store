@@ -28,21 +28,24 @@ class ColorRequest extends AbstractRequest
     public function createItem(): array
     {
         $rules = [
-            'code' => 'required|string|between:3,7|unique:' . $this->entity['table'] . ',code',
+            'code' => 'required|string|regex:~^[-_a-f0-9#]+$~i|between:3,7|unique:' . $this->entity['table'] . ',code',
         ];
 
         return array_merge(parent::createItem(), $rules);
     }
 
     /**
-     * @return string[]
+     * Объединяет дефолтные правила и правила, специфичные для бренда
+     * для проверки данных при обновлении существующего бренда
+     *
+     * @return array
      */
     public function updateItem(): array
     {
         // получаем объект модели из маршрута: admin/entity/{entity}
         $model = $this->route($this->entity['name']);
         $rules = [
-            'code' => 'required|string|regex:~^[-_a-z0-9]+$~i|between:3,7|' . Rule::unique($this->entity['table'], 'code')->ignore($model->id), // проверка на уникальность code, исключая эту сущность по идентификатору
+            'code' => 'required|string|regex:~^[-_a-f0-9#]+$~i|between:3,7|' . Rule::unique($this->entity['table'], 'code')->ignore($model->id), // проверка на уникальность code, исключая эту сущность по идентификатору
         ];
 
         return array_merge(parent::updateItem(), $rules);
@@ -62,6 +65,7 @@ class ColorRequest extends AbstractRequest
                 'string'   => 'Поле ":attribute" д.б. строкой.',
                 'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max (f00, #f00, ff0000, #ff0000).',
                 'unique'   => '":attribute" уже существует.',
+                'regex'    => '":attribute" не соответствует формату.',
             ],
         ];
 

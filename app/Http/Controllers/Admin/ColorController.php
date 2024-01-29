@@ -25,6 +25,7 @@ class ColorController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @return View
      */
     public function create(): View
     {
@@ -33,14 +34,29 @@ class ColorController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param ColorRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function store(ColorRequest $request)
+    public function store(ColorRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['code'] = $validated['code'][0] === "#" ? $validated['code'] : '#' . $validated['code'];
+        $color = Color::query()->updateOrCreate($validated);
+
+        return redirect()->route('admin.color.show', $color->slug)->with([
+            'flash_message' => "Цвет успешно создан",
+            'class'         => 'alert alert-success',
+        ]);
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param Color $color
+     *
+     * @return View
      */
     public function show(Color $color): View
     {
@@ -49,18 +65,34 @@ class ColorController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param Color $color
+     *
+     * @return View
      */
-    public function edit(Color $color)
+    public function edit(Color $color): View
     {
         return view('admin.color.edit', compact('color'));
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param ColorRequest $request
+     * @param Color        $color
+     *
+     * @return RedirectResponse
      */
-    public function update(ColorRequest $request, Color $color)
+    public function update(ColorRequest $request, Color $color): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['code'] = $validated['code'][0] === "#" ? $validated['code'] : '#' . $validated['code'];
+        $color->update($validated);
+
+        return redirect()->route('admin.color.show', $color->slug)->with([
+            'flash_message' => "Цвет успешно создан",
+            'class'         => 'alert alert-success',
+        ]);
     }
 
     /**

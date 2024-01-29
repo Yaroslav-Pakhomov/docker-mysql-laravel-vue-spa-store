@@ -68,6 +68,9 @@
                     </div>
                     <input type="text" class="form-control" id="inputCode" name="code" placeholder="Введите код цвета"
                            value="{{ old('code') ?? $color->code ?? '' }}">
+                    <div class="near__color">
+
+                    </div>
 
                     {{-- Сообщение ошибок валидации --}}
                     @error('code')

@@ -87,4 +87,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('input[name="slug"]').value = text;
     });
+
+    /**
+     *  Подбирает название и ссылку для цвета при редактировании/создании
+     */
+    document.querySelector('input[name="code"]').addEventListener('input', function (e) {
+        // Удаляем действия по умолчанию
+        e.preventDefault();
+
+        let n_match = ntc.name(this.value);
+        let n_rgb = n_match[0]; // Значение RGB ближайшего совпадения
+        let n_name = n_match[1]; // Текстовая строка: Название цвета
+        let n_exactmatch = n_match[2]; // TRUE, если точное совпадение цветов
+
+        document.querySelector('input[name="title"]').value = '';
+        document.querySelector('input[name="slug"]').value = '';
+
+        document.querySelector('.near__color').classList.add('d-none');
+        if (n_exactmatch) {
+            document.querySelector('input[name="title"]').value = n_name;
+            document.querySelector('input[name="slug"]').value = n_name;
+            document.querySelector('.form-group > div > span').style.background = n_rgb;
+        } else {
+            document.querySelector('.near__color').classList.remove('d-none');
+            document.querySelector('.near__color').innerHTML = 'Название цвета для данного кода нет, ближайший код цвета: ' + n_rgb;
+        }
+    });
 })
