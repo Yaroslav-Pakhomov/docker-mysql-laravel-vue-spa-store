@@ -116,17 +116,13 @@
                 </div>
 
                 <div class="form-group">
-                    {{ $user->gender }}
                     <label for="inputGender">Пол</label>
                     <select class="custom-select" name="gender" id="inputGender">
-                        <option selected>Укажите Ваш пол</option>
+                        <option value="0" selected>Укажите Ваш пол</option>
                         <option value="1" {{ $user->gender === 1 ? 'selected' : '' }}>М</option>
                         <option value="2" {{ $user->gender === 2 ? 'selected' : '' }}>Ж</option>
                     </select>
                 </div>
-
-
-
 
             </div>
             <!-- /.card-body -->

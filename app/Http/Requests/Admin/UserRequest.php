@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -14,7 +14,10 @@ class UserRequest extends FormRequest
      *
      * @var array
      */
-    protected array $entity = [];
+    protected array $entity = [
+        'name'  => 'user',
+        'table' => 'users',
+    ];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -45,7 +48,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name'       => 'required|string|between:3,50',
-            'email'      => 'required|string|between:3,100|regex:~^[-_a-z0-9]+$~i|' . Rule::unique($this->entity['table'], 'email'),
+            'email'      => 'required|string|between:3,100|regex:/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i|' . Rule::unique($this->entity['table'], 'email'),
             'password'   => 'required|string|confirmed', // password_confirmation - поле в blade для валидации "confirmed"
             'patronymic' => 'nullable|string|between:3,50',
             'surname'    => 'nullable|string|between:3,50',
@@ -65,7 +68,7 @@ class UserRequest extends FormRequest
 
         return [
             'name'       => 'required|string|between:3,100',
-            'email'      => 'required|string|regex:~^[-_a-z0-9]+$~i|between:3,100|' . Rule::unique($this->entity['table'], 'email')->ignore($model->id), // проверка на уникальность email, исключая эту сущность по идентификатору
+            'email'      => 'required|string|regex:/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i|between:3,100|' . Rule::unique($this->entity['table'], 'email')->ignore($model->id), // проверка на уникальность email, исключая эту сущность по идентификатору
             'patronymic' => 'nullable|string|between:3,50',
             'surname'    => 'nullable|string|between:3,50',
             'age'        => 'nullable|integer',
@@ -86,7 +89,6 @@ class UserRequest extends FormRequest
                 'required' => 'Поле ":attribute" не заполнено.',
                 'string'   => 'Поле ":attribute" д.б. строкой.',
                 'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max.',
-                'unique'   => '":attribute" уже существует.',
             ],
             'email'      => [
                 'required' => 'Поле ":attribute" не заполнено.',
@@ -94,23 +96,29 @@ class UserRequest extends FormRequest
                 'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max.',
                 'unique'   => '":attribute" уже существует.',
             ],
+            'password'   => [
+                'required'  => 'Поле ":attribute" не заполнено.',
+                'string'    => 'Поле ":attribute" д.б. строкой.',
+                'confirmed' => 'Пароли не совпадают',
+                'unique'    => '":attribute" уже существует.',
+            ],
             'patronymic' => [
-                'string'   => 'Поле ":attribute" д.б. строкой.',
-                'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max.',
+                'string'  => 'Поле ":attribute" д.б. строкой.',
+                'between' => 'Длина строки поля ":attribute" д.б. между :min - :max.',
             ],
             'surname'    => [
-                'string'   => 'Поле ":attribute" д.б. строкой.',
-                'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max.',
+                'string'  => 'Поле ":attribute" д.б. строкой.',
+                'between' => 'Длина строки поля ":attribute" д.б. между :min - :max.',
             ],
             'age'        => [
-                'integer'  => 'Поле ":attribute" д.б. числом.',
+                'integer' => 'Поле ":attribute" д.б. числом.',
             ],
             'address'    => [
-                'string'   => 'Поле ":attribute" д.б. строкой.',
-                'between'  => 'Длина строки поля ":attribute" д.б. между :min - :max.',
+                'string'  => 'Поле ":attribute" д.б. строкой.',
+                'between' => 'Длина строки поля ":attribute" д.б. между :min - :max.',
             ],
             'gender'     => [
-                'integer'  => 'Поле ":attribute" д.б. числом.',
+                'integer' => 'Поле ":attribute" д.б. числом.',
             ],
         ];
     }
@@ -125,6 +133,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name'       => 'Имя пользователя',
+            'password'   => 'Пароль',
             'email'      => 'Email-адрес',
             'patronymic' => 'Отчество',
             'surname'    => 'Фамилия',

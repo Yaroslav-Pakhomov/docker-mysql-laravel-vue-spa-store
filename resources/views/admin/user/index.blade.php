@@ -70,7 +70,7 @@
                             {{ $user->address }}
                         </td>
                         <td class="align-middle">
-                            {{ $user->gender === 1 ? 'М' :'Ж' }}
+                            {{ $user->gender === 0 ? 'не указан' : ($user->gender === 1 ? 'М' : 'Ж') }}
                         </td>
                         <td class="align-middle">
                             {{ $user->email }}

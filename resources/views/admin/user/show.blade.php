@@ -30,7 +30,7 @@
         <p><strong>Почта:</strong> {{ $user->email }}</p>
         <p><strong>Возраст:</strong> {{ $user->age }}</p>
         <p><strong>Адрес:</strong> {{ $user->address }}</p>
-        <p><strong>Пол:</strong> {{ $user->gender === 1 ? 'М' : 'Ж' }}</p>
+        <p><strong>Пол:</strong> {{ $user->gender === 0 ? 'не указан' : ($user->gender === 1 ? 'М' : 'Ж') }}</p>
         <p><strong>Дата создания:</strong> {{ $user->created_at }}</p>
         <p><strong>Дата обновления:</strong> {{ $user->updated_at }}</p>
         <p><strong>Дата удаления:</strong> {{ $user->deleted_at ?? 'Активно' }}</p>
