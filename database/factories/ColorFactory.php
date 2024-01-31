@@ -21,7 +21,7 @@ class ColorFactory extends Factory
     {
         $codeColor = fake()->safeHexColor();
         return [
-            'title' => fake()->safeColorName(),
+            'title' => fake()->unique()->safeColorName(),
             'slug'  => fake()->unique()->slug(3, FALSE),
             'code'  => $codeColor,
 

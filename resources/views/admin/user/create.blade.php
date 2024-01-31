@@ -7,15 +7,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Редактирование категории</h1>
+                    <h1 class="m-0">Создание тега</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item active"><a href="{{ route('admin.index') }}">Главная</a></li>
-                        <li class="breadcrumb-item active">
-                            <a href="{{ route('admin.category.index') }}">Категории</a>
-                        </li>
-                        <li class="breadcrumb-item active">Редактирование категории</li>
+                        <li class="breadcrumb-item active"><a href="{{ route('admin.user.index') }}">Пользователи</a></li>
+                        <li class="breadcrumb-item active">Создание пользователя</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -29,15 +27,15 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('admin.category.update', $category->id) }}" method="POST">
+        <form action="{{ route('admin.user.store') }}" method="POST">
             @csrf
-            @method('PATCH')
+            @method('POST')
             <div class="card-body">
                 <div class="form-group">
-                    <label for="inputTitle">Название категории</label>
+                    <label for="exampleInputEmail1">Название тега</label>
                     <input type="text" class="form-control" id="inputTitle" name="title"
-                           placeholder="Введите название категории"
-                           value="{{ old('title') ?? $category->title ?? '' }}">
+                           placeholder="Введите название тега"
+                           value="{{ old('title') ?? $user->title ?? '' }}">
 
                     {{-- Сообщение ошибок валидации --}}
                     @error('title')
@@ -48,9 +46,9 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="inputSlug">Ссылка</label>
+                    <label for="exampleInputPassword1">Ссылка</label>
                     <input type="text" class="form-control" id="inputSlug" name="slug" placeholder="Полученная ссылка"
-                           value="{{ old('slug') ?? $category->slug ?? '' }}">
+                           value="{{ old('slug') ?? $user->slug ?? '' }}">
 
                     {{-- Сообщение ошибок валидации --}}
                     @error('slug')
@@ -64,7 +62,7 @@
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Редактировать</button>
+                <button type="submit" class="btn btn-primary">Создать</button>
             </div>
         </form>
     </div>

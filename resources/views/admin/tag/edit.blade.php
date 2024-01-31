@@ -34,7 +34,7 @@
             @method('PATCH')
             <div class="card-body">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Название тега</label>
+                    <label for="inputTitle">Название тега</label>
                     <input type="text" class="form-control" id="inputTitle" name="title"
                            placeholder="Введите название тега"
                            value="{{ old('title') ?? $tag->title ?? '' }}">
@@ -48,7 +48,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Ссылка</label>
+                    <label for="inputSlug">Ссылка</label>
                     <input type="text" class="form-control" id="inputSlug" name="slug" placeholder="Полученная ссылка"
                            value="{{ old('slug') ?? $tag->slug ?? '' }}">
 

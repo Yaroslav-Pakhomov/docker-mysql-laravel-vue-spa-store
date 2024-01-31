@@ -31,7 +31,6 @@ class AbstractRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return match ($this->method()) {
             'POST' => $this->createItem(),
             'PUT', 'PATCH' => $this->updateItem(),

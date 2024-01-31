@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ColorController as AdminColorController;
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,24 @@ Route::prefix('/admin')->group(function () {
 
                     // Удаление цвета
                     Route::delete('/{color:slug}', 'delete')->where('color:slug', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+
+        // Пользователи
+        Route::resource('user', AdminUserController::class)->only(['index', 'create', 'store', 'update']);
+        Route::controller(AdminUserController::class)->group(function () {
+            Route::prefix('/user')->group(function () {
+                Route::name('user.')->group(function () {
+
+                    // Страница пользователи
+                    Route::get('/{user:email}', 'show')->where('user:email', '[a-z0-9_-]+')->name('show');
+
+                    // Редактирование пользователи
+                    Route::get('/{user:email}/edit', 'edit')->where('user:email', '[a-z0-9_-]+')->name('edit');
+
+                    // Удаление пользователи
+                    Route::delete('/{user:email}', 'delete')->where('user:email', '[a-z0-9_-]+')->name('delete');
                 });
             });
         });
