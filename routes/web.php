@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ColorController as AdminColorController;
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
@@ -117,6 +118,25 @@ Route::prefix('/admin')->group(function () {
 
                     // Удаление пользователи
                     Route::delete('/{user:email}', 'delete')->where('user:email', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+
+        // Товары
+        Route::resource('product', AdminProductController::class)->only(['index', 'create', 'store', 'update',
+        ]);
+        Route::controller(AdminProductController::class)->group(function () {
+            Route::prefix('/product')->group(function () {
+                Route::name('product.')->group(function () {
+
+                    // Страница товара
+                    Route::get('/{product:slug}', 'show')->where('user:slug', '[a-z0-9_-]+')->name('show');
+
+                    // Редактирование товара
+                    Route::get('/{product:slug}/edit', 'show')->where('user:slug', '[a-z0-9_-]+')->name('edit');
+
+                    // Удаление товара
+                    Route::delete('/{product:slug}', 'delete')->where('user:slug', '[a-z0-9_-]+')->name('delete');
                 });
             });
         });

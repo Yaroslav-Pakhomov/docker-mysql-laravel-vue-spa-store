@@ -221,7 +221,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/gallery.html" class="nav-link">
+                        <a href="{{ route('admin.product.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-tshirt"></i>
                             <p>Товары</p>
                         </a>
@@ -288,7 +288,7 @@
 
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
+    <footer class="main-footer ">
         <strong>Copyright &copy; 2014-{{ now()->year }}
             <a href="{{ route('index') }}" target="_blank">Сайт</a>.</strong>
         Все права защищены.
