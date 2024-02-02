@@ -30,8 +30,20 @@
         <p><strong>Описание:</strong> {{ $product->description }}</p>
         <p><strong>Содержание:</strong> {{ $product->content }}</p>
 
-        <p><strong>Анонс изображение:</strong> <img src="{{ $product->prev_img }}" alt="{{ $product->id }}"></p>
-        <p><strong>Основное изображение:</strong> <img src="{{ $product->main_img }}" alt="{{ $product->id }}"></p>
+        <p><strong>Анонс изображение:</strong>
+            @if($product->prev_img)
+                <img src="{{ $product->prev_img }}" alt="{{ $product->id }}">
+            @else
+                Нет
+            @endif
+        </p>
+        <p><strong>Основное изображение:</strong>
+            @if($product->prev_img)
+                <img src="{{ $product->main_img }}" alt="{{ $product->id }}">
+            @else
+                Нет
+            @endif
+        </p>
 
         <p><strong>Цена:</strong> {{ $product->price }}</p>
         <p><strong>Старая цена:</strong> {{ $product->old_price }}</p>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -23,18 +24,31 @@ class ProductController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $categories = Category::getAllCategories();
+        return view('admin.product.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param ProductRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
+        $product = Product::query()->updateOrCreate($validated);
+
+        return redirect()->route('admin.product.show', $product->slug)->with([
+            'flash_message' => "Товар успешно создан",
+            'class'         => 'alert alert-success',
+        ]);
     }
 
     /**
@@ -53,18 +67,37 @@ class ProductController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param Product $product
+     *
+     * @return View
      */
-    public function edit(Product $product)
+    public function edit(Product $product): View
     {
-        //
+        $product->query()->with('category');
+        $categories = Category::getAllCategories();
+
+        return view('admin.product.edit', compact('product', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param ProductRequest $request
+     * @param Product        $product
+     *
+     * @return RedirectResponse
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
+        $product->update($validated);
+
+        return redirect()->route('admin.product.show', $product->slug)->with([
+            'flash_message' => "Товар успешно отредактирован",
+            'class'         => 'alert alert-success',
+        ]);
     }
 
     /**
@@ -82,6 +115,5 @@ class ProductController extends Controller
             'flash_message' => "Товар успешно удалён",
             'class'         => 'alert alert-success',
         ]);
-        //
     }
 }

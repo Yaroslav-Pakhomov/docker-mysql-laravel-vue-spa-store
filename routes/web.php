@@ -133,7 +133,7 @@ Route::prefix('/admin')->group(function () {
                     Route::get('/{product:slug}', 'show')->where('user:slug', '[a-z0-9_-]+')->name('show');
 
                     // Редактирование товара
-                    Route::get('/{product:slug}/edit', 'show')->where('user:slug', '[a-z0-9_-]+')->name('edit');
+                    Route::get('/{product:slug}/edit', 'edit')->where('user:slug', '[a-z0-9_-]+')->name('edit');
 
                     // Удаление товара
                     Route::delete('/{product:slug}', 'delete')->where('user:slug', '[a-z0-9_-]+')->name('delete');

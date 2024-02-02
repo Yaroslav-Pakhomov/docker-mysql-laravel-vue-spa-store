@@ -272,6 +272,7 @@
             @endif
             @if($errors->any())
                 <div class="bg-opacity-75 alert alert-danger alert-dismissible mt-3 mx-3 " role="alert">
+{{--                    @dd($errors->all())--}}
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>
