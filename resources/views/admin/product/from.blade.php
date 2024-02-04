@@ -1,5 +1,4 @@
 @csrf
-
 <div class="card-body">
     <div class="form-group">
         <label for="inputTitle">Название товара</label>
@@ -29,10 +28,9 @@
         @enderror
     </div>
     <div class="form-group">
-        <label for="inputDescription">Описание</label>
-        <input type="text" class="form-control" id="inputDescription" name="description"
-               placeholder="Описание товара"
-               value="{{ old('description') ?? $product->description ?? '' }}">
+        <label for="textareaDescription">Описание</label>
+        <textarea class="form-control" id="textareaDescription" name="description" rows="3"
+                  placeholder="Описание товара">{{ old('description') ?? $product->description ?? '' }}</textarea>
 
         {{-- Сообщение ошибок валидации --}}
         @error('description')
@@ -43,10 +41,10 @@
         @enderror
     </div>
     <div class="form-group">
-        <label for="inputContent">Содержание</label>
-        <input type="text" class="form-control" id="inputContent" name="content"
-               placeholder="Содержание товара"
-               value="{{ old('content') ?? $product->content ?? '' }}">
+        <label for="textareaContent">Содержание</label>
+
+        <textarea class="form-control" id="textareaContent" name="content" rows="7"
+                  placeholder="Содержание товара">{{ old('content') ?? $product->content ?? '' }}</textarea>
 
         {{-- Сообщение ошибок валидации --}}
         @error('content')
@@ -77,7 +75,7 @@
         @enderror
     </div>
     <div class="form-group">
-        <label for="inputPrice">Цены</label>
+        <label for="inputPrice">Цена</label>
         <input type="text" class="form-control" id="inputPrice" name="price" placeholder="Стоимость товара"
                value="{{ old('price') ?? $product->price ?? '' }}">
 
@@ -116,16 +114,18 @@
         </div>
         @enderror
     </div>
-    <div class="form-check mb-2">
+    <div class="form-group mb-2">
         @if (old('is_published') === 'on' || (isset($product) && $product->is_published === 1))
             @php $checked = 'checked'; @endphp
         @else
             @php $checked = ''; @endphp
         @endif
 
-        <input type="checkbox" class="form-check-input" id="checkIsPublished"
-               name="is_published" {{ $checked }}>
-        <label class="form-check-label" for="checkIsPublished">Опубликовать</label>
+        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+            <input type="checkbox" class="custom-control-input" id="checkIsPublished"
+                   name="is_published" {{ $checked }}>
+            <label class="custom-control-label" for="checkIsPublished">Опубликовать</label>
+        </div>
 
         {{-- Сообщение ошибок валидации --}}
         @error('is_published')
@@ -138,9 +138,14 @@
     <div class="form-group">
         <label for="selectCategory">Выбор категории</label>
         <select class="form-control" id="selectCategory" name="category_id">
-            <option value="0">Выберите категорию</option>
+            <option value="0">Выберите категорию</option value="0">
             @foreach($categories as $category)
-                @php $selected = isset($product) && $category->id === $product->category->id ? 'selected' : ''; @endphp
+                @php
+                    $selected = '';
+                    if (isset($product->category)) {
+                        $selected = isset($product) && $category->id === $product->category->id ? 'selected' : '';
+                    }
+                @endphp
                 <option value="{{ $category->id }}" {{ $selected }}>{{  $category->title}}</option>
             @endforeach
         </select>
@@ -152,6 +157,43 @@
             {{ $message }}
         </div>
         @enderror
+    </div>
+    <div class="form-group">
+        <label>Теги товара</label>
+        <select class="select2" name="tags[]" multiple="multiple" data-placeholder="Список тегов" style="width: 100%;">
+            @foreach($tags as $tag)
+                @if(isset($productTagIds))
+                    @php $selected = in_array($tag->id, $productTagIds, true) ? 'selected' : ''; @endphp
+                @endif
+                <option value="{{ $tag->id }}" {{ $selected }}>{{ $tag->title }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Цвета товара</label>
+        <select class="select2 bg-gradient-cyan" name="colors[]" multiple="multiple" data-placeholder="Список тегов"
+                style="width: 100%;">
+            @foreach($colors as $color)
+                @if(isset($productColorIds))
+                    @php $selected = in_array($color->id, $productColorIds, true) ? 'selected' : ''; @endphp
+                @endif
+                <option value="{{ $color->id }}" {{ $selected }}>{{ $color->title }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label>В избранном у пользователей</label>
+        <div class="select2-purple">
+            <select class="select2" name="users[]" multiple="multiple" data-placeholder="Список пользователей"
+                    data-dropdown-css-class="select2-purple" style="width: 100%;">
+                @foreach($users as $user)
+                    @if(isset($productUserIds))
+                        @php $selected = in_array($user->id, $productUserIds, true) ? 'selected' : ''; @endphp
+                    @endif
+                    <option class="bg-success" value="{{ $user->id }}" {{ $selected }}>{{ $user->name }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </div>
 <!-- /.card-body -->

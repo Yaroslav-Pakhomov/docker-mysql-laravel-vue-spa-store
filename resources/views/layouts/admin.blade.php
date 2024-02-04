@@ -9,6 +9,10 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('laravel_icon.ico') }}">
 
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -272,7 +276,7 @@
             @endif
             @if($errors->any())
                 <div class="bg-opacity-75 alert alert-danger alert-dismissible mt-3 mx-3 " role="alert">
-{{--                    @dd($errors->all())--}}
+                    {{--                    @dd($errors->all())--}}
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>
@@ -305,18 +309,36 @@
 
 <!-- jQuery -->
 <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
+
+<!-- Select2 -->
+<script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('adminlte/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
 </script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
 <!-- overlayScrollbars -->
 <script src="{{ asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
+
+<script>
+    //Initialize Select2 Elements
+    $('.select2').select2();
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+</script>
 
 </body>
 </html>

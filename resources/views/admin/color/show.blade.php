@@ -25,7 +25,7 @@
 
     <div class="px-3">
         <p><strong>Название цвета:</strong> {{ $color->title }}</p>
-        <p><strong>Код:</strong> {{ $color->code }}</p>
+        <p><strong>Код:</strong> <span style="background: {{ $color->code }}; " class="ml-2 p-2">{{ $color->code }}</span></p>
         <p><strong>Ссылка:</strong> {{ $color->slug }}</p>
         <p><strong>Дата создания:</strong> {{ $color->created_at }}</p>
         <p><strong>Дата обновления:</strong> {{ $color->updated_at }}</p>

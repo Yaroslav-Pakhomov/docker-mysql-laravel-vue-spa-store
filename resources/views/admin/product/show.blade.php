@@ -24,6 +24,7 @@
     <!-- /.content-header -->
 
     <div class="px-3 mb-1">
+        <p><strong>ID:</strong> {{ $product->id }}</p>
         <p><strong>Название товара:</strong> {{ $product->title }}</p>
         <p><strong>Ссылка:</strong> {{ $product->slug }}</p>
 
@@ -51,7 +52,32 @@
 
         <p><strong>Опубликовано:</strong> {{ $product->is_published === 1 ? 'Да' : 'Нет' }}</p>
         <p><strong>Категория:</strong>
-            <a href="{{ route('admin.category.show', $product->category->slug) }}">{{ $product->category->title }}</a>
+            @if($product->category)
+                <a href="{{ route('admin.category.show', $product->category->slug) }}">{{ $product->category->title }}</a>
+            @else
+                Не указана
+            @endif
+        </p>
+
+        <p><strong>Теги: </strong>
+            @foreach($product->tags as $tag)
+                <a class="ml-1 px-3 py-1 border border-primary rounded"
+                   href="{{ route('admin.tag.show', $tag->slug) }}">{{ $tag->title }}</a>
+            @endforeach
+        </p>
+
+        <p><strong>Цвета: </strong>
+            @foreach($product->colors as $color)
+                <a style="background: {{ $color->code }};" class="ml-2 px-3 py-1 rounded"
+                   href="{{ route('admin.color.show', $color->slug) }}">{{ $color->title }}</a>
+            @endforeach
+        </p>
+
+        <p><strong>В избранном у пользователей: </strong>
+            @foreach($product->users as $user)
+                <a class="ml-1 px-3 py-1 border border-primary rounded"
+                   href="{{ route('admin.user.show', $user->email) }}">{{ $user->name }}</a>
+            @endforeach
         </p>
 
         <p><strong>Дата создания:</strong> {{ $product->created_at }}</p>

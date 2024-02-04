@@ -34,6 +34,9 @@ class ProductRequest extends AbstractRequest
             'count'        => 'required|integer',
             'is_published' => 'nullable|string',
             'category_id'  => 'nullable|integer',
+            'tags'         => 'nullable|array',
+            'colors'       => 'nullable|array',
+            'users'        => 'nullable|array',
         ];
 
         return array_merge(parent::createItem(), $rules);
@@ -53,6 +56,9 @@ class ProductRequest extends AbstractRequest
             'count'        => 'required|integer',
             'is_published' => 'nullable|string',
             'category_id'  => 'nullable|integer',
+            'tags'         => 'nullable|array',
+            'colors'       => 'nullable|array',
+            'users'        => 'nullable|array',
         ];
 
         return array_merge(parent::updateItem(), $rules);
@@ -90,6 +96,15 @@ class ProductRequest extends AbstractRequest
             'category_id'  => [
                 'integer' => 'Поле ":attribute" д.б. числом.',
             ],
+            'tags'         => [
+                'array' => 'Не верный формат поля ":attribute".',
+            ],
+            'colors'       => [
+                'array' => 'Не верный формат поля ":attribute".',
+            ],
+            'users'        => [
+                'array' => 'Не верный формат поля ":attribute".',
+            ],
         ];
 
         return array_merge(parent::messages(), $messages);
@@ -106,6 +121,9 @@ class ProductRequest extends AbstractRequest
             'count'        => 'Количество',
             'is_published' => 'Опубликовано',
             'category_id'  => 'ID категории',
+            'tags'         => 'Теги',
+            'colors'       => 'Цвета',
+            'users'        => 'Пользователи',
         ];
 
         return array_merge(parent::attributes(), $attributes);

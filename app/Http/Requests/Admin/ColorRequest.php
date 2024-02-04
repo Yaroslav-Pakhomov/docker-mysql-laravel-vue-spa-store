@@ -27,6 +27,7 @@ class ColorRequest extends AbstractRequest
      */
     public function createItem(): array
     {
+        // dd(ColorRequest::all());
         $rules = [
             'code' => 'required|string|regex:~^[-_a-f0-9#]+$~i|between:3,7|unique:' . $this->entity['table'] . ',code',
         ];

@@ -35,5 +35,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ProductSeeder::class);
         $this->command->info('Таблица с товарами загружена данными!');
+
+        $this->call(ColorProductSeeder::class);
+        $this->command->info('Таблица отношений товара и цветов загружена данными!');
+
+        $this->call(ProductTagSeeder::class);
+        $this->command->info('Таблица отношений товара и тегов загружена данными!');
+
+        $this->call(ProductUserSeeder::class);
+        $this->command->info('Таблица отношений товара и пользователей загружена данными!');
     }
 }

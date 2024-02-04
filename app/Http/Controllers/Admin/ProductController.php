@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -29,7 +32,11 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Category::getAllCategories();
-        return view('admin.product.create', compact('categories'));
+        $colors = Color::getAllColors();
+        $tags = Tag::getAllTags();
+        $users = User::getAllUsers();
+
+        return view('admin.product.create', compact('categories', 'colors', 'tags', 'users',));
     }
 
     /**
@@ -42,8 +49,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
-        $product = Product::query()->updateOrCreate($validated);
+        $product = Product::storeProduct($validated);
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно создан",
@@ -60,7 +66,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
-        $product->query()->with('category');
+        $product->query()->with(['category', 'colors', 'tags', 'users']);
 
         return view('admin.product.show', compact('product'));
     }
@@ -74,10 +80,32 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        $product->query()->with('category');
-        $categories = Category::getAllCategories();
+        $product->query()->with(['category', 'colors', 'tags', 'users']);
 
-        return view('admin.product.edit', compact('product', 'categories'));
+        $productTags = $product->tags->toArray();
+        $productTagIds = [];
+        foreach ($productTags as $productTag) {
+            $productTagIds[] = $productTag['id'];
+        }
+
+        $productColors = $product->colors->toArray();
+        $productColorIds = [];
+        foreach ($productColors as $productColor) {
+            $productColorIds[] = $productColor['id'];
+        }
+
+        $productUsers = $product->users->toArray();
+        $productUserIds = [];
+        foreach ($productUsers as $productUser) {
+            $productUserIds[] = $productUser['id'];
+        }
+
+        $categories = Category::getAllCategories();
+        $colors = Color::getAllColors();
+        $tags = Tag::getAllTags();
+        $users = User::getAllUsers();
+
+        return view('admin.product.edit', compact('product', 'categories', 'colors', 'tags', 'users', 'productTagIds', 'productColorIds', 'productUserIds'));
     }
 
     /**
@@ -91,8 +119,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
-        $product->update($validated);
+        $product = $product->updateProduct($validated, $product);
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно отредактирован",
@@ -109,6 +136,10 @@ class ProductController extends Controller
      */
     public function delete(Product $product): RedirectResponse
     {
+        // dd($product->tags->toArray());
+        $product->colors()->detach();
+        $product->tags()->detach();
+        $product->users()->detach();
         $product->delete();
 
         return redirect()->route('admin.product.index')->with([
