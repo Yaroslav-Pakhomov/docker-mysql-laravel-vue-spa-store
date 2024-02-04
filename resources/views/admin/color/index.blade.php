@@ -24,13 +24,7 @@
     <div class="card">
         <div class="card-header">
             <div class="card-tools">
-                <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                {{ $allColors->links('pagination.custom') }}
             </div>
         </div>
         <!-- /.card-header -->
@@ -49,7 +43,16 @@
                 <tbody>
                 @foreach ($allColors  as $color)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}.</td>
+                        <td class="align-middle">
+                            @if($allColors->lastPage() === $allColors->currentPage())
+                                {{-- Пагинация для последней страницы --}}
+                                @php $first_el = $allColors->lastItem() - $allColors->count(); @endphp
+                                {{ $first_el + $loop->iteration}}.
+                            @else
+                                {{-- Пагинация для остальных страниц --}}
+                                {{ $allColors->count() * ($allColors->currentPage() - 1) + $loop->iteration  }}.
+                            @endif
+                        </td>
                         <td class="align-middle">
                             <a href="{{ route('admin.color.show', $color->slug ) }}">{{ $color->title }}</a>
                         </td>
@@ -88,13 +91,7 @@
 
         <div class="card-header">
             <div class="card-tools">
-                <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                {{ $allColors->links('pagination.custom') }}
             </div>
         </div>
         <!-- /.card-header -->

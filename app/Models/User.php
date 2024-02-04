@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,10 +48,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return Collection|array
+     * @return LengthAwarePaginator
      */
-    public static function getAllUsers(): Collection|array
+    public static function getAllUsers(): LengthAwarePaginator
     {
-        return self::query()->orderBy('id', 'asc')->get();
+        return self::query()->orderBy('id')->paginate(10);
     }
 }

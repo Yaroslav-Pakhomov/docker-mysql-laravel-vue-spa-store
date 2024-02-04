@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,11 +34,11 @@ class Category extends Model
     /**
      * Возвращает все категории
      *
-     * @return Collection|array
+     * @return LengthAwarePaginator
      */
-    public static function getAllCategories(): Collection|array
+    public static function getAllCategories(): LengthAwarePaginator
     {
-        return self::query()->orderBy('id', 'asc')->get();
+        return self::query()->orderBy('id', 'desc')->paginate(5);
     }
 
 

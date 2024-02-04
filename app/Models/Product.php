@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,11 +36,11 @@ class Product extends Model
     protected $guarded = [];
 
     /**
-     * @return Collection|array
+     * @return LengthAwarePaginator
      */
-    public static function getAllProducts(): Collection|array
+    public static function getAllProducts(): LengthAwarePaginator
     {
-        return self::query()->orderBy('id', 'desc')->get();
+        return self::query()->orderBy('id', 'desc')->paginate(10);
     }
 
     /**

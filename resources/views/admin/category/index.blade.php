@@ -24,17 +24,12 @@
     <div class="card">
         <div class="card-header">
             <div class="card-tools">
-                <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                {{ $allCategories->links('pagination.custom') }}
             </div>
         </div>
         <!-- /.card-header -->
 
+        {{--        @dd()--}}
         <div class="card-body px-3 py-2  mb-4">
             <table class="table table-striped">
                 <thead>
@@ -48,7 +43,16 @@
                 <tbody>
                 @foreach ($allCategories  as $category)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}.</td>
+                        <td class="align-middle">
+                            @if($allCategories->lastPage() === $allCategories->currentPage())
+                                {{-- Пагинация для последней страницы --}}
+                                @php $first_el = $allCategories->lastItem() - $allCategories->count(); @endphp
+                                {{ $first_el + $loop->iteration}}.
+                            @else
+                                {{-- Пагинация для остальных страниц --}}
+                                {{ $allCategories->count() * ($allCategories->currentPage() - 1) + $loop->iteration  }}.
+                            @endif
+                        </td>
                         <td class="align-middle">
                             <a href="{{ route('admin.category.show', $category->slug ) }}">{{ $category->title }}</a>
                         </td>
@@ -84,13 +88,7 @@
 
         <div class="card-header">
             <div class="card-tools">
-                <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                {{ $allCategories->links('pagination.custom') }}
             </div>
         </div>
         <!-- /.card-header -->
