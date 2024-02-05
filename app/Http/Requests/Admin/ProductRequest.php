@@ -28,7 +28,7 @@ class ProductRequest extends AbstractRequest
         $rules = [
             'description'  => 'required|string',
             'content'      => 'nullable|string',
-            'img'          => 'nullable|img|mimes:jpeg,jpg,png|max:5000',
+            'img'          => 'nullable|mimes:jpeg,jpg,png|max:5000',
             'price'        => 'required|decimal:2',
             'old_price'    => 'nullable|decimal:2',
             'count'        => 'required|integer',
@@ -50,7 +50,7 @@ class ProductRequest extends AbstractRequest
         $rules = [
             'description'  => 'required|string',
             'content'      => 'nullable|string',
-            'img'          => 'nullable|img|mimes:jpeg,jpg,png|max:5000',
+            'img'          => 'nullable|mimes:jpeg,jpg,png|max:5000',
             'price'        => 'required|decimal:2',
             'old_price'    => 'nullable|decimal:2',
             'count'        => 'required|integer',

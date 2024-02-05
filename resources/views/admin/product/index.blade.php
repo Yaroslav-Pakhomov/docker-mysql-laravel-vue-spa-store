@@ -75,19 +75,19 @@
                             {{ $product->count }}
                         </td>
                         <td class="align-middle">
-                            <div class="d-flex flex-wrap">
+                            <div class="d-flex flex-wrap justify-content-center">
                                 <a href="{{ route('admin.product.show', $product->slug ) }}"
-                                   class="btn btn-block btn-outline-primary w-auto">
+                                   class="btn btn-block btn-outline-primary w-auto mt-2">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="{{ route('admin.product.edit', $product->slug) }}"
-                                   class="btn btn-block btn-outline-success mt-0 ml-2 w-auto">
+                                   class="btn btn-block btn-outline-success mt-0 ml-2 w-auto mt-2">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                                 <form action="{{ route('admin.product.delete', $product->slug) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-block btn-outline-danger ml-2">
+                                    <button type="submit" class="btn btn-block btn-outline-danger ml-2 mt-2">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>

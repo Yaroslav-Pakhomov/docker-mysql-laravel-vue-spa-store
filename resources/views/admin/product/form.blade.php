@@ -138,7 +138,7 @@
     <div class="form-group">
         <label for="selectCategory">Выбор категории</label>
         <select class="form-control" id="selectCategory" name="category_id">
-            <option value="0">Выберите категорию</option value="0">
+            <option value="0">Выберите категорию</option>
             @foreach($categories as $category)
                 @php
                     $selected = '';

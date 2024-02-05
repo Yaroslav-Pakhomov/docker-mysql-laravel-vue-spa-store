@@ -29,7 +29,7 @@
         <!-- form start -->
         <form action="{{ route('admin.product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @method('PATCH')
-            @include('admin.product.from')
+            @include('admin.product.form')
         </form>
     </div>
 

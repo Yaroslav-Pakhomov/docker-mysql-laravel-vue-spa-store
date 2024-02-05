@@ -29,7 +29,7 @@
         <!-- form start -->
         <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
             @method('POST')
-            @include('admin.product.from')
+            @include('admin.product.form')
         </form>
     </div>
 
