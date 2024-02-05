@@ -21,6 +21,16 @@ use Intervention\Image\Interfaces\EncodedImageInterface;
  * @property mixed        $colors
  * @property mixed        $users
  * @property mixed|string $main_img
+ * @property mixed        $slug
+ * @property mixed        $title
+ * @property mixed        $category_id
+ * @property mixed        $description
+ * @property mixed        $content
+ * @property mixed        $price
+ * @property mixed        $old_price
+ * @property mixed        $count
+ * @property bool|mixed   $is_published
+ * @property mixed|string $prev_img
  */
 class Product extends Model
 {
@@ -82,6 +92,8 @@ class Product extends Model
     }
 
     /**
+     * Обновление товара
+     *
      * @param array   $validated
      * @param Product $product
      *
@@ -106,7 +118,10 @@ class Product extends Model
         }
 
         // Сохраняем изображения превью и основное
-        self::uploadImage($validated['img'], $product);
+        if (isset($validated['img'])) {
+            self::removeImage($product);
+            self::uploadImage($validated['img'], $product);
+        }
         unset($validated['img'],);
 
         $product->update($validated);
@@ -115,29 +130,60 @@ class Product extends Model
     }
 
     /**
+     * Создание товара
+     *
      * @param array $validated
      *
      * @return Model
      */
     public static function storeProduct(array $validated): Model
     {
-        $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
-        $tags = $validated['tags'];
-        $colors = $validated['colors'];
-        $users = $validated['users'];
+        $product = new Product();
+        $product->title = $validated['title'];
+        $product->slug = $validated['slug'];
+        $product->description = $validated['description'];
+        $product->content = $validated['content'];
+        $product->price = $validated['price'];
+        $product->old_price = $validated['old_price'];
+        $product->count = $validated['count'];
+        $product->is_published = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
+        $product->category_id = isset($validated['category_id']) && (int)$validated['category_id'] === 0 ? NULL : $validated['category_id'];
 
-        unset($validated['tags'], $validated['colors'], $validated['users']);
-        if ((int)$validated['category_id'] === 0) {
-            unset($validated['category_id'],);
+        // Сохраняем изображения превью и основное
+        if (isset($validated['img'])) {
+            self::uploadImage($validated['img'], $product);
         }
+        $product->save();
 
-        $product = self::query()->updateOrCreate($validated);
-        $product->tags()->sync($tags);
-        $product->colors()->sync($colors);
-        $product->users()->sync($users);
+        $tags = $validated['tags'] ?? [];
+        $colors = $validated['colors'] ?? [];
+        $users = $validated['users'] ?? [];
+
+        $product->tags()->attach($tags);
+        $product->colors()->attach($colors);
+        $product->users()->attach($users);
 
         return $product;
     }
+
+    /**
+     * Удаление товара
+     *
+     * @param Product $product
+     *
+     * @return void
+     */
+    public static function deleteProduct(Product $product): void
+    {
+        $product->colors()->detach();
+        $product->tags()->detach();
+        $product->users()->detach();
+        self::removeImage($product);
+
+        $product->update();
+        $product->delete();
+    }
+
 
     /**
      * Загрузка изображения при создании поста
@@ -155,7 +201,6 @@ class Product extends Model
             $name = md5(Carbon::now() . '_' . $orig_img->getClientOriginalName());
             // расширение файла
             $ext = $orig_img->getClientOriginalExtension();
-
             // сохраним его в storage/images/original
             Storage::putFileAs('public/images/original', $orig_img, $name . '.' . $ext);
 
@@ -164,11 +209,9 @@ class Product extends Model
             // Размер 1200x400
             //---------------------------------------------
             // создаем jpg изображение для списка постов блога размером 1200x400, качество 100%
-            $image = self::setResizeImage($orig_img, 1200, 600);
-
+            $main_img = self::setResizeImage($orig_img, 1200, 600);
             // сохраняем это изображение под именем $name.jpg в директории public/images/images
-            Storage::put('public/images/main_img/' . $name . '.jpg', $image);
-            // $image->destroy();
+            Storage::put('public/images/main_img/' . $name . '.jpg', $main_img);
             // записываем путь в БД
             $product->main_img = Storage::url('public/images/main_img/' . $name . '.jpg');
             //---------------------------------------------
@@ -180,10 +223,9 @@ class Product extends Model
             // Размер 600x200
             //---------------------------------------------
             // создаем jpg изображение для списка постов блога размером 600x200, качество 100%
-            $thumbnail = self::setResizeImage($orig_img, 600, 300);
+            $prev_img = self::setResizeImage($orig_img, 600, 300);
             // сохраняем это изображение под именем $name.jpg в директории public/img/thumb
-            Storage::put('public/images/prev_img/' . $name . '.jpg', $thumbnail);
-            // $thumbnail->destroy();
+            Storage::put('public/images/prev_img/' . $name . '.jpg', $prev_img);
             // записываем путь в БД
             $product->prev_img = Storage::url('public/images/prev_img/' . $name . '.jpg');
             //---------------------------------------------
@@ -205,7 +247,6 @@ class Product extends Model
     {
         $manager = new ImageManager(Driver::class);
         $image = $manager->read($orig_img);
-        // $image = Image::make($orig_img);
         $resizeHeight = $image->height();
         $resizeWidth = $image->width();
 
@@ -215,10 +256,53 @@ class Product extends Model
             $image->coverDown($width, $height);
         } else {
             // Изменяет размер границ текущего изображения на заданную ширину и высоту, фоновый цвет чёрный
-            $image->resizeCanvas($width, $height, '000000', 'center');
+            $image->resizeCanvas($width, $height, '000000');
         }
 
         // Кодируем текущее изображение в jpg, качество 100%
         return $image->toJpeg(90);
+    }
+
+    /**
+     * Удаление изображения при обновлении и удалении поста
+     *
+     * @param Product $product
+     *
+     * @return void
+     */
+    public static function removeImage(Product $product): void
+    {
+        // Основное изображение
+        if (!empty($product->main_img)) {
+            $name = basename($product->main_img);
+            if (Storage::exists('public/images/main_img/' . $name)) {
+                Storage::delete('public/images/main_img/' . $name);
+            }
+            $product->main_img = NULL;
+        }
+        // Анонс-изображение
+        if (!empty($product->prev_img)) {
+            $name = basename($product->prev_img);
+            if (Storage::exists('public/images/prev_img/' . $name)) {
+                Storage::delete('public/images/prev_img/' . $name);
+            }
+            $product->prev_img = NULL;
+        }
+
+        if (!empty($name)) {
+            // Все изображения директорий
+            $images = Storage::files('public/images/original');
+
+            // берём имя файла без расширения
+            $base = pathinfo($name, PATHINFO_FILENAME);
+
+            foreach ($images as $img) {
+                $temp = pathinfo($img, PATHINFO_FILENAME);
+                if ($temp === $base) {
+                    Storage::delete($img);
+                    break;
+                }
+            }
+        }
     }
 }

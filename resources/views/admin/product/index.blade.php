@@ -56,7 +56,12 @@
                         </td>
                         <td class="align-middle">
                             <a href="{{ route('admin.product.show', $product->slug ) }}">
-                                <img style="max-width: 150px" src="{{ $product->prev_img }}" alt="{{ $product->id }}">
+                                @if($product->prev_img)
+                                    <img style="max-width: 150px" src="{{ $product->prev_img }}" alt="{{ $product->id }}">
+                                @else
+                                    Изображения нет
+                                @endif
+
                             </a>
                         </td>
                         <td class="align-middle">

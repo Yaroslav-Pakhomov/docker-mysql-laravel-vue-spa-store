@@ -75,7 +75,6 @@ class ProductRequest extends AbstractRequest
                 'string' => 'Поле ":attribute" д.б. строкой.',
             ],
             'img'          => [
-                'img'   => 'Недопустимый формат картинки',
                 'mimes' => 'Файл «:attribute» должен иметь формат :values',
                 'max'   => 'Файл «:attribute» должен быть не больше :max Кбайт',
             ],

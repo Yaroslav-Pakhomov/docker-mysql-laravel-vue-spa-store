@@ -119,7 +119,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         $validated = $request->validated();
-        $product = $product->updateProduct($validated, $product);
+        $product = Product::updateProduct($validated, $product);
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно отредактирован",
@@ -136,11 +136,7 @@ class ProductController extends Controller
      */
     public function delete(Product $product): RedirectResponse
     {
-        // dd($product->tags->toArray());
-        $product->colors()->detach();
-        $product->tags()->detach();
-        $product->users()->detach();
-        $product->delete();
+        Product::deleteProduct($product);
 
         return redirect()->route('admin.product.index')->with([
             'flash_message' => "Товар успешно удалён",
