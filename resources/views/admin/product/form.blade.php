@@ -115,9 +115,8 @@
         @enderror
     </div>
     <div class="form-group mb-2">
-        @if (old('is_published') === 'on' || (isset($product) && $product->is_published === 1))
-            @php $checked = 'checked'; @endphp
-        @else
+        @php $checked = 'checked'; @endphp
+        @if ((count(old()) > 0 && old('is_published') !== 'on') || (isset($product) && $product->is_published !== 1))
             @php $checked = ''; @endphp
         @endif
 
@@ -141,9 +140,13 @@
             <option value="0">Выберите категорию</option>
             @foreach($categories as $category)
                 @php
+
                     $selected = '';
                     if (isset($product->category)) {
-                        $selected = isset($product) && $category->id === $product->category->id ? 'selected' : '';
+                        $selected = (isset($product) && $product->category->id === $category->id)  ? 'selected' : '';
+                    }
+                    if(old('category_id')) {
+                        $selected = (int)old('category_id') === (int)$category->id  ? 'selected' : '';
                     }
                 @endphp
                 <option value="{{ $category->id }}" {{ $selected }}>{{  $category->title}}</option>
@@ -162,9 +165,19 @@
         <label>Теги товара</label>
         <select class="select2" name="tags[]" multiple="multiple" data-placeholder="Список тегов" style="width: 100%;">
             @foreach($tags as $tag)
-                @if(isset($productTagIds))
-                    @php $selected = in_array($tag->id, $productTagIds, true) ? 'selected' : ''; @endphp
+
+                {{-- Проверка заполненности из БД--}}
+                @php $selected = isset($productTagIds) && in_array($tag->id, $productTagIds, true) ? 'selected' : ''; @endphp
+
+                {{-- Проверка заполненности данными--}}
+                @if(old('tags'))
+                    @php $tag_value_ids = []; @endphp
+                    @foreach(old('tags') as $tag_value_id)
+                        @php $tag_value_ids[] = (int) $tag_value_id; @endphp
+                    @endforeach
+                    @php $selected = isset($tag_value_ids) && in_array($tag->id, $tag_value_ids, true) ? 'selected' : ''; @endphp
                 @endif
+
                 <option value="{{ $tag->id }}" {{ $selected }}>{{ $tag->title }}</option>
             @endforeach
         </select>
@@ -174,9 +187,19 @@
         <select class="select2 bg-gradient-cyan" name="colors[]" multiple="multiple" data-placeholder="Список тегов"
                 style="width: 100%;">
             @foreach($colors as $color)
-                @if(isset($productColorIds))
-                    @php $selected = in_array($color->id, $productColorIds, true) ? 'selected' : ''; @endphp
+
+                {{-- Проверка заполненности из БД--}}
+                @php $selected = isset($productColorIds) && in_array($color->id, $productColorIds, true) ? 'selected' : ''; @endphp
+
+                {{-- Проверка заполненности данными--}}
+                @if(old('colors'))
+                    @php $color_value_ids = []; @endphp
+                    @foreach(old('colors') as $color_value_id)
+                        @php $color_value_ids[] = (int) $color_value_id; @endphp
+                    @endforeach
+                    @php $selected = isset($color_value_ids) && in_array($color->id, $color_value_ids, true) ? 'selected' : ''; @endphp
                 @endif
+
                 <option value="{{ $color->id }}" {{ $selected }}>{{ $color->title }}</option>
             @endforeach
         </select>
@@ -187,9 +210,19 @@
             <select class="select2" name="users[]" multiple="multiple" data-placeholder="Список пользователей"
                     data-dropdown-css-class="select2-purple" style="width: 100%;">
                 @foreach($users as $user)
-                    @if(isset($productUserIds))
-                        @php $selected = in_array($user->id, $productUserIds, true) ? 'selected' : ''; @endphp
+
+                    {{-- Проверка заполненности из БД--}}
+                    @php $selected = isset($productUserIds) && in_array($user->id, $productUserIds, true) ? 'selected' : ''; @endphp
+
+                    {{-- Проверка заполненности данными--}}
+                    @if(old('users'))
+                        @php $user_value_ids = []; @endphp
+                        @foreach(old('users') as $user_value_id)
+                            @php $user_value_ids[] = (int) $user_value_id; @endphp
+                        @endforeach
+                        @php $selected = isset($user_value_ids) && in_array($user->id, $user_value_ids, true) ? 'selected' : ''; @endphp
                     @endif
+
                     <option class="bg-success" value="{{ $user->id }}" {{ $selected }}>{{ $user->name }}</option>
                 @endforeach
             </select>
