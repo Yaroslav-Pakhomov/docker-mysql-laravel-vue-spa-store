@@ -24,6 +24,10 @@ use Inertia\Inertia;
 |
 */
 
+// -----------------------------
+// Основной сайт - начало
+// -----------------------------
+
 Route::get('/', static function () {
     return Inertia::render('Welcome', [
         'canLogin'       => Route::has('login'),
@@ -42,6 +46,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/home-page', static function () {
+    return inertia::render('HomePage');
+})->name('home-page');
+
+// -----------------------------
+// Основной сайт - конец
+// -----------------------------
+
+// -----------------------------
+// Админ-панель - начало
+// -----------------------------
 
 Route::prefix('/admin')->group(function () {
     Route::name('admin.')->group(function () {
@@ -143,5 +159,8 @@ Route::prefix('/admin')->group(function () {
     });
 });
 
+// -----------------------------
+// Админ-панель - конец
+// -----------------------------
 
 require __DIR__ . '/auth.php';

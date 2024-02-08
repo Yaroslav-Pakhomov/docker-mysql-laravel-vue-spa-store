@@ -23,8 +23,7 @@ defineProps({
     <Head>
         <title>Welcome</title>
 
-        <!-- Favicon -->
-        <link rel="shortcut icon" href="laravel_icon.ico">
+
     </Head>
 
     <div
