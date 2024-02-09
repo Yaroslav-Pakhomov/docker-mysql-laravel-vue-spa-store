@@ -46,7 +46,7 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{ route('index') }}" class="nav-link" target="_blank">Сайт</a>
+                <a href="{{ route('site.index') }}" class="nav-link" target="_blank">Сайт</a>
             </li>
             {{-- <li class="nav-item d-none d-sm-inline-block"> --}}
             {{--    <a href="{{ route('admin.index') }}" class="nav-link">Админка</a> --}}
@@ -295,7 +295,7 @@
     <!-- /.content-wrapper -->
     <footer class="main-footer ">
         <strong>Copyright &copy; 2014-{{ now()->year }}
-            <a href="{{ route('index') }}" target="_blank">Сайт</a>.</strong>
+            <a href="{{ route('site.index') }}" target="_blank">Сайт</a>.</strong>
         Все права защищены.
     </footer>
 

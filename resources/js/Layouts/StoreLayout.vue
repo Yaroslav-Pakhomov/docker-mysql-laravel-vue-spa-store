@@ -11,7 +11,7 @@ export default {
     <div id="app">
 
         StoreLayout.vue
-        <br>
+<!--        <br>-->
 
         <slot/>
     </div>
