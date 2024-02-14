@@ -27,11 +27,12 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $description = strlen($this->description) > 17 ? substr($this->description, 0, 17) . '...' : $this->description;
         return [
             'id'          => $this->id,
             'title'       => $this->title,
             'slug'        => $this->slug,
-            'description' => $this->description,
+            'description' => $description,
             'main_img'    => $this->main_img ?? 'site/assets/img/product/main-product/product7.webp',
             'prev_img'    => $this->prev_img ?? 'site/assets/img/product/main-product/product8.webp',
             'old_price'   => $this->old_price,

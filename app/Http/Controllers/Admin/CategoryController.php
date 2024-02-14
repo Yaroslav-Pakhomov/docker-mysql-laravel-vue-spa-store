@@ -19,7 +19,7 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
-        $allCategories = Category::getAllCategories();
+        $allCategories = Category::getAllCategoriesAdmin();
 
         return view('admin.category.index', compact('allCategories'));
     }
@@ -80,7 +80,7 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param CategoryRequest $request
-     * @param Category        $category
+     * @param Category $category
      *
      * @return RedirectResponse
      */

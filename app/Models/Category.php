@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,13 +33,23 @@ class Category extends Model
     protected $guarded = [];
 
     /**
-     * Возвращает все категории
+     * Возвращает все категории с пагинацией
      *
      * @return LengthAwarePaginator
      */
-    public static function getAllCategories(): LengthAwarePaginator
+    public static function getAllCategoriesAdmin(): LengthAwarePaginator
     {
         return self::query()->orderBy('id', 'desc')->paginate(5);
+    }
+
+    /**
+     * Возвращает все категории для сайта
+     *
+     * @return Collection|array
+     */
+    public static function getAllCategoriesSite(): Collection|array
+    {
+        return self::query()->orderBy('id', 'desc')->get();
     }
 
 
