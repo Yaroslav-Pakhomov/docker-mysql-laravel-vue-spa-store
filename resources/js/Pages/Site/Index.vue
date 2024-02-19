@@ -369,6 +369,8 @@ export default {
                                                                     :src="product.prev_img"
                                                                     :alt="product.title">
                                                             </a>
+                                                            Категория:
+                                                            {{ product.category ? product.category.data.title : "Нет" }}
                                                             <span class="product__badge">-14%</span>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">
@@ -521,6 +523,8 @@ export default {
                                                                     :src="product.prev_img"
                                                                     :alt="product.title">
                                                             </a>
+                                                            Категория:
+                                                            {{ product.category ? product.category.data.title : "Нет" }}
                                                             <span class="product__badge">-14%</span>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">
@@ -673,6 +677,8 @@ export default {
                                                                     :src="product.prev_img"
                                                                     :alt="product.title">
                                                             </a>
+                                                            Категория:
+                                                            {{ product.category ? product.category.data.title : "Нет" }}
                                                             <span class="product__badge">-14%</span>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">
@@ -825,6 +831,8 @@ export default {
                                                                     :src="product.prev_img"
                                                                     :alt="product.title">
                                                             </a>
+                                                            Категория:
+                                                            {{ product.category ? product.category.data.title : "Нет" }}
                                                             <span class="product__badge">-14%</span>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">
@@ -977,6 +985,8 @@ export default {
                                                                     :src="product.prev_img"
                                                                     :alt="product.title">
                                                             </a>
+                                                            Категория:
+                                                            {{ product.category ? product.category.data.title : "Нет" }}
                                                             <span class="product__badge">-14%</span>
                                                             <ul class="product__card--action d-flex align-items-center justify-content-center">
                                                                 <li class="product__card--action__list">

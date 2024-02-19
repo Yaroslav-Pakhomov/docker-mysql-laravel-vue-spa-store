@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\IndexController as SiteIndexController;
+use App\Http\Controllers\Site\ShopController as SiteShopController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -57,6 +58,18 @@ Route::prefix('/')->group(function () {
         // Главная
         Route::controller(SiteIndexController::class)->group(function () {
             Route::get('/', 'index')->name('index');
+        });
+
+        // Магазин
+        Route::resource('shop', SiteShopController::class)->only(['index', 'create', 'store', 'update']);
+        Route::controller(SiteShopController::class)->group(function () {
+            Route::prefix('/shop')->group(function () {
+                Route::name('shop.')->group(function () {
+
+                    // Страница товара
+                    Route::get('/{product:slug}', 'show')->where('user:slug', '[a-z0-9_-]+')->name('show');
+                });
+            });
         });
     });
 });

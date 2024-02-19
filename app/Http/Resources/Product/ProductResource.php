@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Http\Resources\Category\CategoriesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property mixed $prev_img
  * @property mixed $old_price
  * @property mixed $price
+ * @property mixed $category
  */
 class ProductResource extends JsonResource
 {
@@ -39,6 +41,7 @@ class ProductResource extends JsonResource
             'price'       => $this->price,
             'created_at'  => is_object($this->created_at) ? $this->created_at->diffForHumans() : "",
             'updated_at'  => is_object($this->updated_at) ? $this->updated_at->diffForHumans() : "",
+            'category'    => new CategoriesResource($this->category),
         ];
 //        return parent::toArray($request);
     }
