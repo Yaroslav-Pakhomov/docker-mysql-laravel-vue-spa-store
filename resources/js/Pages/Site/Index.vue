@@ -1,6 +1,7 @@
 <script>
 import {Head, Link} from '@inertiajs/vue3';
 import StoreLayout from "@/Layouts/StoreLayout.vue";
+import ModalProduct from "@/Components/ModalProduct.vue";
 
 export default {
     // Название компонента
@@ -8,6 +9,7 @@ export default {
 
     // Подключенные компоненты
     components: {
+        ModalProduct,
         Head,
         Link,
         StoreLayout,
@@ -21,11 +23,22 @@ export default {
 
     data() {
         return {
-            a: 'Привет',
-        }
+            productModal: {},
+            // a: 'Привет',
+        };
     },
 
-    methods: {},
+    methods: {
+        openModalProduct(slug) {
+            // Асинхронный запрос 2 способа
+            // axios.get('/shop/' + product.slug)
+            axios.get(this.route('site.shop.show', slug))
+                .then(res => {
+                    this.productModal = res.data;
+                });
+
+        },
+    },
 
     computed: {},
 
@@ -376,6 +389,7 @@ export default {
                                                                 <li class="product__card--action__list">
                                                                     <a class="product__card--action__btn"
                                                                        title="Quick View"
+                                                                       @click="openModalProduct(product.slug)"
                                                                        data-open="modal1" href="javascript:void(0)">
                                                                         <svg class="product__card--action__btn--svg"
                                                                              width="16"
@@ -530,6 +544,7 @@ export default {
                                                                 <li class="product__card--action__list">
                                                                     <a class="product__card--action__btn"
                                                                        title="Quick View"
+                                                                       @click="openModalProduct(product.slug)"
                                                                        data-open="modal1" href="javascript:void(0)">
                                                                         <svg class="product__card--action__btn--svg"
                                                                              width="16"
@@ -684,6 +699,7 @@ export default {
                                                                 <li class="product__card--action__list">
                                                                     <a class="product__card--action__btn"
                                                                        title="Quick View"
+                                                                       @click="openModalProduct(product.slug)"
                                                                        data-open="modal1" href="javascript:void(0)">
                                                                         <svg class="product__card--action__btn--svg"
                                                                              width="16"
@@ -838,6 +854,7 @@ export default {
                                                                 <li class="product__card--action__list">
                                                                     <a class="product__card--action__btn"
                                                                        title="Quick View"
+                                                                       @click="openModalProduct(product.slug)"
                                                                        data-open="modal1" href="javascript:void(0)">
                                                                         <svg class="product__card--action__btn--svg"
                                                                              width="16"
@@ -992,6 +1009,7 @@ export default {
                                                                 <li class="product__card--action__list">
                                                                     <a class="product__card--action__btn"
                                                                        title="Quick View"
+                                                                       @click="openModalProduct(product.slug)"
                                                                        data-open="modal1" href="javascript:void(0)">
                                                                         <svg class="product__card--action__btn--svg"
                                                                              width="16"
@@ -1774,6 +1792,8 @@ export default {
             </div>
         </section>
         <!-- End product section -->
+
+        <ModalProduct :product="productModal"/>
 
     </StoreLayout>
 </template>

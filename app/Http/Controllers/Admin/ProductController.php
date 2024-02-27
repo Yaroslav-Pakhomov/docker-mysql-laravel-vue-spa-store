@@ -53,7 +53,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно создан",
-            'class'         => 'alert alert-success',
+            'class' => 'alert alert-success',
         ]);
     }
 
@@ -100,9 +100,9 @@ class ProductController extends Controller
             $productUserIds[] = $productUser['id'];
         }
 
-        $categories = Category::getAllCategories();
+        $categories = Category::getAllCategoriesAdmin();
         $colors = Color::getAllColors();
-        $tags = Tag::getAllTags();
+        $tags = Tag::getAllTagsAdmin();
         $users = User::getAllUsers();
 
         return view('admin.product.edit', compact('product', 'categories', 'colors', 'tags', 'users', 'productTagIds', 'productColorIds', 'productUserIds'));
@@ -112,7 +112,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param ProductRequest $request
-     * @param Product        $product
+     * @param Product $product
      *
      * @return RedirectResponse
      */
@@ -123,7 +123,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно отредактирован",
-            'class'         => 'alert alert-success',
+            'class' => 'alert alert-success',
         ]);
     }
 
@@ -140,7 +140,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.index')->with([
             'flash_message' => "Товар успешно удалён",
-            'class'         => 'alert alert-success',
+            'class' => 'alert alert-success',
         ]);
     }
 }
