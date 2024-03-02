@@ -21,7 +21,7 @@
     10. Brand logo css
     11. Accordion css
     12. Footer css
-    13. Quickview css
+    13. Quick view css
     14. Small Product css
     15. Single Product css
     16. Product details css
@@ -35,7 +35,7 @@
     24. My account page css
     25. Login page css
     26. Faq page css
-    27. Counterup css here
+    27. Counter up css here
     28. Contact page css
     29. Compare page css
     30. Checkout Page Css
@@ -51,6 +51,9 @@
     1. Base CSS
 */
 :root {
+    --background-color: #ffffff;
+    --white-color: #ffffff;
+    --black-color: #000000;
     --primary-color: #212121;
     --secondary-color: #ED1D24;
     --foreground-color: #121416;
@@ -1666,6 +1669,10 @@ body.overlay__active::before,
     display: block;
     padding: 15px 20px;
     text-transform: uppercase;
+}
+
+.offcanvas__menu_item.active {
+    color: var(--secondary-color);
 }
 
 /*
@@ -3377,7 +3384,7 @@ body.overlay__active::before,
 .quantity__value {
     display: inline-block;
     border: 1px solid var(--border-color);
-    margin: 0px;
+    margin: 0;
     width: 3.3rem;
     height: 3rem;
     text-align: center;
@@ -3403,7 +3410,7 @@ input.quantity__number {
     border: none;
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
-    margin: 0px;
+    margin: 0;
     width: 3.3rem;
     height: 3rem;
 }
@@ -9633,7 +9640,7 @@ input.quickview__value--number {
 }
 
 /*
-    27. Counterup css here
+    27. Counter up css here
 */
 .counterup__banner__bg2 {
     background: var(--bg-offwhite-color);

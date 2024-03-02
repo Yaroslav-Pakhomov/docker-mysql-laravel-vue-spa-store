@@ -19,6 +19,7 @@ export default {
     props: {
         products: Array,
         categories: Array,
+        active: Boolean,
     },
 
     data() {
@@ -54,7 +55,7 @@ export default {
 </script>
 
 <template>
-    <StoreLayout :categories="categories">
+    <StoreLayout :categories="categories" :siteActive="active">
 
         <!--        {{ a }}-->
         <!-- Start slider section -->

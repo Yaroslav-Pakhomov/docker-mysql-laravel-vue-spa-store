@@ -28,6 +28,7 @@ class IndexController extends Controller
         return inertia('Site/Index', [
             'products'   => $products,
             'categories' => $categories,
+            'active' => true,
         ]);
     }
 }

@@ -26,6 +26,7 @@ export default {
         tags: Array,
         min_price: Number,
         max_price: Number,
+        active: Boolean,
     },
 
     data() {
@@ -61,7 +62,7 @@ export default {
 </script>
 
 <template>
-    <StoreLayout :categories="categories">
+    <StoreLayout :categories="categories" :shopActive="active">
 
         <div class="collection mt-100">
             <div class="container">
