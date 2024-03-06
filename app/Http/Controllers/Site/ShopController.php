@@ -51,7 +51,7 @@ class ShopController extends Controller
             'categories' => $categories,
             'tags'       => $tags,
             'colors'     => $colors,
-            'active' => true,
+            'active'     => true,
         ]);
     }
 

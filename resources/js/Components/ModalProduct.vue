@@ -1,6 +1,21 @@
 <script>
 import {Link} from '@inertiajs/vue3';
 
+/**
+ * @typedef {Object} product
+ * @property {string} title
+ * @property {string} slug
+ * @property {string} description
+ * @property {string} prev_img
+ * @property {string} main_img
+ * @property {float} price
+ * @property {float} old_price
+ * @property {Object} colors
+ * @property {Object} tags
+ * @property {Object} category
+ * @property {string} category.title
+ */
+
 export default {
 
     name: 'ModalProduct',
@@ -21,10 +36,49 @@ export default {
     },
 
     data() {
-        return {}
+        return {
+            data_counter: 1,
+        }
     },
 
-    methods: {},
+    methods: {
+        // Номер итерации
+        checkedIter(iter) {
+            return Number(iter) === 0;
+        },
+
+        // -----------------------------
+        // Кол-во товара - начало
+        // -----------------------------
+
+        increaseButton(event) {
+            event.preventDefault();
+            let input = event.target.previousElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                let value = parseInt(String(input.value), 10);
+                value = isNaN(value) ? 0 : value;
+                value++;
+                input.value = value;
+            }
+        },
+        decreaseButton(event) {
+            event.preventDefault();
+            let input = event.target.nextElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                let value = parseInt(String(input.value), 10);
+                value = isNaN(value) ? 0 : value;
+                value < 1 ? (value = 1) : "";
+                value--;
+                input.value = value;
+            }
+        },
+
+        // -----------------------------
+        // Кол-во товара - конец
+        // -----------------------------
+    },
+
+    computed: {}
 };
 
 </script>
@@ -47,13 +101,13 @@ export default {
                                         <div class="product__media--preview__items">
                                             <a class="product__media--preview__items--link glightbox"
                                                data-gallery="product-media-preview"
-                                               href="/site/assets/img/product/big-product/product1.webp"><img
+                                               :href="product.main_img"><img
                                                 class="product__media--preview__items--img"
-                                                src="/site/assets/img/product/big-product/product1.webp"
+                                                :src="product.main_img"
                                                 alt="product-media-img"></a>
                                             <div class="product__media--view__icon">
                                                 <a class="product__media--view__icon--link glightbox"
-                                                   href="/site/assets/img/product/big-product/product1.webp"
+                                                   :href="product.main_img"
                                                    data-gallery="product-media-preview">
                                                     <svg class="product__items--action__btn--svg"
                                                          xmlns="http://www.w3.org/2000/svg" width="22.51"
@@ -166,7 +220,7 @@ export default {
                                     <div class="swiper-slide">
                                         <div class="product__media--nav__items">
                                             <img class="product__media--nav__items--img"
-                                                 src="/site/assets/img/product/small-product/product1.webp"
+                                                 :src="product.prev_img"
                                                  alt="product-nav-img">
                                         </div>
                                     </div>
@@ -286,77 +340,56 @@ export default {
                                         <fieldset class="variant__input--fieldset">
                                             <legend class="product__variant--title mb-8">Цвета :</legend>
                                             <div class="variant__color d-flex">
-                                                <div class="variant__color--list">
-                                                    <input id="color-red1" name="color" type="radio" checked>
-                                                    <label class="variant__color--value red" for="color-red1"
-                                                           title="Red"><img class="variant__color--value__img"
-                                                                            src="/site/assets/img/product/small-product/product1.webp"
-                                                                            alt="variant-color-img"></label>
-                                                </div>
-                                                <div class="variant__color--list">
-                                                    <input id="color-red2" name="color" type="radio">
-                                                    <label class="variant__color--value red" for="color-red2"
-                                                           title="Black"><img
-                                                        class="variant__color--value__img"
-                                                        src="/site/assets/img/product/small-product/product2.webp"
-                                                        alt="variant-color-img"></label>
-                                                </div>
-                                                <div class="variant__color--list">
-                                                    <input id="color-red3" name="color" type="radio">
-                                                    <label class="variant__color--value red" for="color-red3"
-                                                           title="Pink"><img class="variant__color--value__img"
-                                                                             src="/site/assets/img/product/small-product/product3.webp"
-                                                                             alt="variant-color-img"></label>
-                                                </div>
-                                                <div class="variant__color--list">
-                                                    <input id="color-red4" name="color" type="radio">
-                                                    <label class="variant__color--value red" for="color-red4"
-                                                           title="Orange"><img class="variant__color--value__img"
-                                                                               src="/site/assets/img/product/small-product/product4.webp"
-                                                                               alt="variant-color-img"></label>
-                                                </div>
+                                                <template v-for="(color, iter) in product.colors">
+                                                    <div class="variant__color--list">
+                                                        <input :id="`color-${color.title}-${color.id}`" name="color"
+                                                               type="radio" :checked="checkedIter(iter)">
+                                                        <label class="variant__color--value red"
+                                                               :for="`color-${color.title}-${color.id}`"
+                                                               :style="{ background: color.code }"
+                                                               :title="color.title">
+                                                        </label>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </fieldset>
                                     </div>
                                     <div class="product__variant--list mb-15">
                                         <fieldset class="variant__input--fieldset">
-                                            <legend class="product__variant--title mb-8">Weight :</legend>
-                                            <ul class="variant__size d-flex">
-                                                <li class="variant__size--list">
-                                                    <input id="weight1" name="weight" type="radio" checked>
-                                                    <label class="variant__size--value red" for="weight1">5 kg</label>
-                                                </li>
-                                                <li class="variant__size--list">
-                                                    <input id="weight2" name="weight" type="radio">
-                                                    <label class="variant__size--value red" for="weight2">3 kg</label>
-                                                </li>
-                                                <li class="variant__size--list">
-                                                    <input id="weight3" name="weight" type="radio">
-                                                    <label class="variant__size--value red" for="weight3">2 kg</label>
-                                                </li>
+                                            <legend class="product__variant--title mb-8">Теги:</legend>
+                                            <ul class="variant__size d-flex flex-wrap">
+                                                <template v-for="tag in product.tags">
+                                                    <li class="variant__size--list">
+                                                        <a href="#" class="variant__size--value">#{{ tag.title }}</a>
+                                                    </li>
+                                                </template>
                                             </ul>
                                         </fieldset>
                                     </div>
                                     <div class="quickview__variant--list quantity d-flex align-items-center mb-10">
                                         <div class="quantity__box">
                                             <button type="button"
+                                                    @click="decreaseButton"
                                                     class="quantity__value quickview__value--quantity decrease"
                                                     aria-label="quantity value" value="Decrease Value">-
                                             </button>
                                             <label>
                                                 <input type="number" class="quantity__number quickview__value--number"
-                                                       value="1" data-counter/>
+                                                       value="1"
+                                                       data-counter/>
                                             </label>
                                             <button type="button"
+                                                    @click="increaseButton"
                                                     class="quantity__value quickview__value--quantity increase"
                                                     aria-label="quantity value" value="Increase Value">+
                                             </button>
                                         </div>
-                                        <button class="primary__btn quickview__cart--btn" type="submit">Add To Cart
+                                        <button class="primary__btn quickview__cart--btn" type="submit">
+                                            Add To Cart
                                         </button>
                                     </div>
                                     <div class="quickview__variant--list variant__wishlist mb-10">
-                                        <a class="variant__wishlist--icon" href="wishlist.html" title="Add to wishlist">
+                                        <a class="variant__wishlist--icon" href="#" title="Add to wishlist">
                                             <svg class="quickview__variant--wishlist__svg"
                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                                 <path

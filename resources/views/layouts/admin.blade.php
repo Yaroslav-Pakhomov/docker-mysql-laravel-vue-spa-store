@@ -219,7 +219,7 @@
 
                     <li class="nav-header">РАЗДЕЛЫ</li>
                     <li class="nav-item">
-                        <a href="pages/gallery.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-shopping-bag"></i>
                             <p>Заказы</p>
                         </a>

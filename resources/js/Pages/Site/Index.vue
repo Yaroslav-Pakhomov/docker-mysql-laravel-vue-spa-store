@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             productModal: {},
-            // a: 'Привет',
+            data_counter: 1,
         };
     },
 
@@ -44,7 +44,7 @@ export default {
     computed: {},
 
     mounted() {
-        // // Имитация события изменения в теге body
+        // Имитация события изменения в теге body
         let body = document.querySelector('body');
         let event_change = new Event('change');
         body.dispatchEvent(event_change);
@@ -118,7 +118,8 @@ export default {
                 <div class="row mb--n25">
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="36" height="47" viewBox="0 0 36 47" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +146,7 @@ export default {
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="43" height="36" viewBox="0 0 43 36" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +162,7 @@ export default {
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="51" height="40" viewBox="0 0 51 40" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -177,7 +178,7 @@ export default {
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="50" height="31" viewBox="0 0 50 31" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -193,7 +194,7 @@ export default {
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="53" height="36" viewBox="0 0 53 36" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -209,7 +210,7 @@ export default {
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4 col-6 mb-25">
                         <div class="categories__card text-center">
-                            <a class="categories__card--link" href="shop.html">
+                            <a class="categories__card--link" :href="route('site.shop.index')">
                                 <span class="categories__icon">
                                     <svg width="34" height="45" viewBox="0 0 34 45" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -237,7 +238,7 @@ export default {
                 <div class="row  mb--n30">
                     <div class="col-lg-6 col-md-6 mb-30">
                         <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
+                            <a class="banner__thumbnail display-block" :href="route('site.shop.index')"><img
                                 class="banner__thumbnail--img banner__max--height"
                                 src="/site/assets/img/banner/banner1.webp" alt="banner-img">
                                 <div class="banner__content">
@@ -260,7 +261,7 @@ export default {
                     </div>
                     <div class="col-lg-6 col-md-6 mb-30">
                         <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
+                            <a class="banner__thumbnail display-block" :href="route('site.shop.index')"><img
                                 class="banner__thumbnail--img banner__max--height"
                                 src="/site/assets/img/banner/banner2.webp" alt="banner-img">
                                 <div class="banner__content right">
@@ -1778,7 +1779,7 @@ export default {
                                                 </span>
                                             </li>
                                         </ul>
-                                        <h3 class="small__product--card__title"><a href="product-details.html">Conseqr
+                                        <h3 class="small__product--card__title"><a href="product-details.html">Consequent
                                             adipis and. </a></h3>
                                         <div class="product__card--price">
                                             <span class="current__price">$132.52</span>

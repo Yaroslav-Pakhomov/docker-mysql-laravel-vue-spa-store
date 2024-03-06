@@ -27,7 +27,7 @@
   16. Modal JS Activation
   17. Accordion Activation
   18. Footer widget Activation
-  19. Flightbox Activation
+  19. Flight box Activation
   20. CounterUp Activation
   21. Offcanvas Mobile Menu Function
   22. Newsletter popup Activation
@@ -39,7 +39,6 @@
 let body = document.querySelector('body');
 body.addEventListener('change', function () {
 
-
 // Preloader
     const preLoader = function () {
         let preloaderWrapper = document.getElementById("preloader");
@@ -50,7 +49,7 @@ body.addEventListener('change', function () {
     preLoader();
 
 // getSiblings
-    var getSiblings = function (elem) {
+    let getSiblings = function (elem) {
         const siblings = [];
         let sibling = elem.parentNode.firstChild;
         while (sibling) {
@@ -63,7 +62,7 @@ body.addEventListener('change', function () {
     };
 
     /* Slide Up */
-    var slideUp = (target, time) => {
+    let slideUp = (target, time) => {
         const duration = time ? time : 500;
         target.style.transitionProperty = "height, margin, padding";
         target.style.transitionDuration = duration + "ms";
@@ -82,7 +81,7 @@ body.addEventListener('change', function () {
     };
 
     /* Slide Down */
-    var slideDown = (target, time) => {
+    let slideDown = (target, time) => {
         const duration = time ? time : 500;
         target.style.removeProperty("display");
         let display = window.getComputedStyle(target).display;
@@ -107,7 +106,7 @@ body.addEventListener('change', function () {
 // Get window top offset
     function TopOffset(el) {
         let rect = el.getBoundingClientRect(),
-            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
         return {top: rect.top + scrollTop};
     }
 
@@ -116,7 +115,7 @@ body.addEventListener('change', function () {
     const headerStickyTarget = document.querySelector(".header__sticky");
 
     if (headerStickyTarget) {
-        let headerHeight = headerStickyWrapper.clientHeight;
+        // let headerHeight = headerStickyWrapper.clientHeight;
         window.addEventListener("scroll", function () {
             let StickyTargetElement = TopOffset(headerStickyWrapper);
             let TargetElementTopOffset = StickyTargetElement.top;
@@ -147,7 +146,7 @@ body.addEventListener('change', function () {
     /*
       1. slider swiper activation
     */
-    var swiper = new Swiper(".hero__slider--activation", {
+    let swiper = new Swiper(".hero__slider--activation", {
         slidesPerView: 1,
         loop: true,
         clickable: true,
@@ -166,7 +165,7 @@ body.addEventListener('change', function () {
     /*
       2. product swiper column4 activation
     */
-    var swiper = new Swiper(".product__swiper--activation", {
+    swiper = new Swiper(".product__swiper--activation", {
         slidesPerView: 4,
         loop: true,
         clickable: true,
@@ -196,7 +195,7 @@ body.addEventListener('change', function () {
     /*
       3. product swiper column4 style2 activation
     */
-    var swiper = new Swiper(".product__swiper--column4__style2", {
+    swiper = new Swiper(".product__swiper--column4__style2", {
         slidesPerView: 4,
         loop: true,
         clickable: true,
@@ -232,7 +231,7 @@ body.addEventListener('change', function () {
     /*
       4. single product nav activation
     */
-    var swiper = new Swiper(".single__product--nav", {
+    swiper = new Swiper(".single__product--nav", {
         loop: true,
         spaceBetween: 20,
         slidesPerView: 5,
@@ -264,7 +263,7 @@ body.addEventListener('change', function () {
             prevEl: ".swiper-button-prev",
         },
     });
-    var swiper2 = new Swiper(".single__product--preview", {
+    let swiper2 = new Swiper(".single__product--preview", {
         loop: true,
         spaceBetween: 10,
         thumbs: {
@@ -275,7 +274,7 @@ body.addEventListener('change', function () {
     /*
       5. product swiper column1 activation
     */
-    var swiper = new Swiper(".product__swiper--column1", {
+    swiper = new Swiper(".product__swiper--column1", {
         slidesPerView: 4,
         loop: false,
         clickable: true,
@@ -290,7 +289,7 @@ body.addEventListener('change', function () {
     /*
       6. blog swiper activation
     */
-    var swiper = new Swiper(".blog__swiper--activation", {
+    swiper = new Swiper(".blog__swiper--activation", {
         slidesPerView: 3,
         loop: true,
         clickable: true,
@@ -320,7 +319,7 @@ body.addEventListener('change', function () {
     /*
       7. testimonial swiper activation
     */
-    var swiper = new Swiper(".testimonial__swiper--activation", {
+    swiper = new Swiper(".testimonial__swiper--activation", {
         slidesPerView: 2,
         loop: true,
         clickable: true,
@@ -344,7 +343,7 @@ body.addEventListener('change', function () {
     /*
       8. quickview swiper activation
     */
-    var swiper = new Swiper(".quickview__swiper--activation", {
+    swiper = new Swiper(".quickview__swiper--activation", {
         slidesPerView: 1,
         loop: true,
         clickable: true,
@@ -362,7 +361,7 @@ body.addEventListener('change', function () {
     /*
       9. product details media swiper activation
     */
-    var swiper = new Swiper(".product__media--nav", {
+    swiper = new Swiper(".product__media--nav", {
         loop: true,
         spaceBetween: 10,
         slidesPerView: 4,
@@ -384,7 +383,7 @@ body.addEventListener('change', function () {
             prevEl: ".swiper-button-prev",
         },
     });
-    var swiper2 = new Swiper(".product__media--preview", {
+    swiper2 = new Swiper(".product__media--preview", {
         loop: true,
         spaceBetween: 10,
         thumbs: {
@@ -395,7 +394,7 @@ body.addEventListener('change', function () {
     /*
       10. testimonial active one activation
     */
-    var swiper3 = new Swiper(".testimonial__active--one", {
+    let swiper3 = new Swiper(".testimonial__active--one", {
         loop: true,
         spaceBetween: 20,
         slidesPerView: 5,
@@ -421,7 +420,7 @@ body.addEventListener('change', function () {
             prevEl: ".swiper-button-prev",
         },
     });
-    var swiper2 = new Swiper(".testimonial__active--two", {
+    swiper2 = new Swiper(".testimonial__active--two", {
         loop: true,
         spaceBetween: 10,
         thumbs: {
@@ -543,7 +542,7 @@ body.addEventListener('change', function () {
     /*
       14. OffCanvas Sidebar Activation
     */
-    function offcanvsSidebar(openTrigger, closeTrigger, wrapper) {
+    function offcanvasSidebar(openTrigger, closeTrigger, wrapper) {
         let OpenTriggerprimary__btn = document.querySelectorAll(openTrigger);
         let closeTriggerprimary__btn = document.querySelector(closeTrigger);
         let WrapperSidebar = document.querySelector(wrapper);
@@ -562,7 +561,7 @@ body.addEventListener('change', function () {
         if (OpenTriggerprimary__btn && WrapperSidebar) {
             OpenTriggerprimary__btn.forEach(function (singleItem) {
                 singleItem.addEventListener("click", function (e) {
-                    if (e.target.dataset.offcanvas != undefined) {
+                    if (e.target.dataset.offcanvas !== undefined) {
                         WrapperSidebar.classList.add("active");
                         document
                             .querySelector("body")
@@ -575,7 +574,7 @@ body.addEventListener('change', function () {
 
         if (closeTriggerprimary__btn && WrapperSidebar) {
             closeTriggerprimary__btn.addEventListener("click", function (e) {
-                if (e.target.dataset.offcanvas != undefined) {
+                if (e.target.dataset.offcanvas !== undefined) {
                     WrapperSidebar.classList.remove("active");
                     document
                         .querySelector("body")
@@ -587,57 +586,60 @@ body.addEventListener('change', function () {
     }
 
 // Mini Cart
-    offcanvsSidebar(
+    offcanvasSidebar(
         ".minicart__open--btn",
         ".minicart__close--btn",
         ".offCanvas__minicart"
     );
 
 // Search Bar
-    offcanvsSidebar(
+    offcanvasSidebar(
         ".search__open--btn",
         ".predictive__search--close__btn",
         ".predictive__search--box"
     );
 
 // Offcanvas filter sidebar
-    offcanvsSidebar(
+    offcanvasSidebar(
         ".widget__filter--btn",
         ".offcanvas__filter--close",
         ".offcanvas__filter--sidebar"
     );
 
     /*
-      15. Qunatity Button Activation
+      15. Quantity Button Activation
     */
-    const quantityWrapper = document.querySelectorAll(".quantity__box");
-    if (quantityWrapper) {
-        quantityWrapper.forEach(function (singleItem) {
-            let increaseButton = singleItem.querySelector(".increase");
-            let decreaseButton = singleItem.querySelector(".decrease");
-
-            increaseButton.addEventListener("click", function (e) {
-                let input = e.target.previousElementSibling.children[0];
-                if (input.dataset.counter != undefined) {
-                    let value = parseInt(input.value, 10);
-                    value = isNaN(value) ? 0 : value;
-                    value++;
-                    input.value = value;
-                }
-            });
-
-            decreaseButton.addEventListener("click", function (e) {
-                let input = e.target.nextElementSibling.children[0];
-                if (input.dataset.counter != undefined) {
-                    let value = parseInt(input.value, 10);
-                    value = isNaN(value) ? 0 : value;
-                    value < 1 ? (value = 1) : "";
-                    value--;
-                    input.value = value;
-                }
-            });
-        });
-    }
+    // const quantityWrapper = document.querySelectorAll(".quantity__box");
+    // if (quantityWrapper) {
+    //     console.log(quantityWrapper);
+    //     quantityWrapper.forEach(function (singleItem) {
+    //         let increaseButton = singleItem.querySelector(".increase");
+    //         let decreaseButton = singleItem.querySelector(".decrease");
+    //
+    //         increaseButton.addEventListener("click", function (e) {
+    //             e.preventDefault();
+    //             let input = e.target.previousElementSibling.children[0];
+    //             if (input.dataset.counter !== undefined) {
+    //                 let value = parseInt(String(input.value), 10);
+    //                 value = isNaN(value) ? 0 : value;
+    //                 value++;
+    //                 input.value = value;
+    //             }
+    //         });
+    //
+    //         decreaseButton.addEventListener("click", function (e) {
+    //             e.preventDefault();
+    //             let input = e.target.nextElementSibling.children[0];
+    //             if (input.dataset.counter !== undefined) {
+    //                 let value = parseInt(String(input.value), 10);
+    //                 value = isNaN(value) ? 0 : value;
+    //                 value < 1 ? (value = 1) : "";
+    //                 value--;
+    //                 input.value = value;
+    //             }
+    //         });
+    //     });
+    // }
 
     /*
       16. Modal JS Activation
@@ -657,12 +659,12 @@ body.addEventListener('change', function () {
         });
     }
     document.addEventListener("click", (e) => {
-        if (e.target == document.querySelector(".modal.is-visible")) {
+        if (e.target === document.querySelector(".modal.is-visible")) {
             document.querySelector(".modal.is-visible").classList.remove(isVisible);
         }
     });
     document.addEventListener("keyup", (e) => {
-        if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
+        if (e.key === "Escape" && document.querySelector(".modal.is-visible")) {
             document.querySelector(".modal.is-visible").classList.remove(isVisible);
         }
     });
@@ -671,8 +673,8 @@ body.addEventListener('change', function () {
       17. Accordion Activation
     */
     function customAccordion(accordionWrapper, singleItem, accordionBody) {
-        let accoridonButtons = document.querySelectorAll(accordionWrapper);
-        accoridonButtons.forEach(function (item) {
+        let accordionButtons = document.querySelectorAll(accordionWrapper);
+        accordionButtons.forEach(function (item) {
             item.addEventListener("click", function (evt) {
                 let itemTarget = evt.target;
                 if (
@@ -689,9 +691,9 @@ body.addEventListener('change', function () {
                         singleAccordionWrapper.classList.add("active");
                         slideDown(singleAccordionBody);
                         getSiblings(singleAccordionWrapper).forEach(function (item) {
-                            let sibllingSingleAccordionBody = item.querySelector(accordionBody);
+                            let siblingSingleAccordionBody = item.querySelector(accordionBody);
                             item.classList.remove("active");
-                            slideUp(sibllingSingleAccordionBody);
+                            slideUp(siblingSingleAccordionBody);
                         });
                     }
                 }
@@ -762,7 +764,7 @@ body.addEventListener('change', function () {
     });
 
     /*
-      19. Flightbox Activation
+      19. Flight box Activation
     */
     const customLightboxHTML = `<div id="glightbox-body" class="glightbox-container">
     <div class="gloader visible"></div>
@@ -836,7 +838,7 @@ body.addEventListener('change', function () {
         if (offcanvasOpen) {
             offcanvasOpen.addEventListener("click", function (e) {
                 e.preventDefault();
-                if (e.target.dataset.offcanvas != undefined) {
+                if (e.target.dataset.offcanvas !== undefined) {
                     offcanvasHeader.classList.add("open");
                     body.classList.add("mobile_menu_open");
                 }
@@ -845,7 +847,7 @@ body.addEventListener('change', function () {
         if (offcanvasClose) {
             offcanvasClose.addEventListener("click", function (e) {
                 e.preventDefault();
-                if (e.target.dataset.offcanvas != undefined) {
+                if (e.target.dataset.offcanvas !== undefined) {
                     offcanvasHeader.classList.remove("open");
                     body.classList.remove("mobile_menu_open");
                 }
@@ -982,9 +984,9 @@ body.addEventListener('change', function () {
                 ".newsletter__popup--close__btn"
             ),
             dontShowPopup = document.querySelector("#newsletter__dont--show"),
-            popuDontShowMode = localStorage.getItem("newsletter__show");
+            popupDontShowMode = localStorage.getItem("newsletter__show");
 
-        if (newsletterWrapper && popuDontShowMode == null) {
+        if (newsletterWrapper && popupDontShowMode == null) {
             window.addEventListener("load", (event) => {
                 setTimeout(function () {
                     document.body.classList.add("overlay__active");

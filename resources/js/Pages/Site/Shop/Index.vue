@@ -5,6 +5,26 @@ import Pagination from "@/Components/Pagination.vue";
 import ModalProduct from "@/Components/ModalProduct.vue";
 // import {createLogger} from "vite";
 
+/**
+ * @typedef {Object} products
+ * @property {float} total
+ * @property {Object} links
+ * @property {Object} data
+ *
+ * @typedef {Object} product
+ * @property {string} title
+ * @property {string} slug
+ * @property {string} description
+ * @property {string} prev_img
+ * @property {string} main_img
+ * @property {float} price
+ * @property {float} old_price
+ * @property {Object} category
+ * @property {Object} colors
+ * @property {Object} tags
+ *
+ */
+
 export default {
     // Название компонента
     name: 'ShopIndexPage',
@@ -32,7 +52,6 @@ export default {
     data() {
         return {
             productModal: {},
-            // a: 'Привет',
         }
     },
 
@@ -44,7 +63,6 @@ export default {
                 .then(res => {
                     this.productModal = res.data;
                 });
-
         },
     },
 
@@ -246,8 +264,9 @@ export default {
                                                                         class="rating__review--text">(126) Review</span>
                                                                 </li>
                                                             </ul>
-                                                            <h3 class="product__card--title"><a
-                                                                href="product-details.html">{{ product.title }}</a></h3>
+                                                            <h3 class="product__card--title">
+                                                                <a href="product-details.html">{{ product.title }}</a>
+                                                            </h3>
                                                             <div class="product__card--price">
                                                                 <span class="current__price">${{ product.price }}</span>
                                                                 <span class="old__price"> ${{

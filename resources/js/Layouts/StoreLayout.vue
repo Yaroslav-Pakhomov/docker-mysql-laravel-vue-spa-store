@@ -1,5 +1,6 @@
 <script>
 import {Head, Link} from '@inertiajs/vue3';
+import RightMinicart from "@/Components/RightMinicart.vue";
 
 export default {
 
@@ -8,6 +9,7 @@ export default {
     components: {
         Head,
         Link,
+        RightMinicart,
     },
 
     // Передаваемые св-ва от родителя и/или от контроллера
@@ -25,22 +27,17 @@ export default {
     },
 
     data() {
-        return {
-            // objClass: {
-            //     active: false,
-            // valid:  false,
-            // },
-        }
+        return {}
     },
 
     methods: {
-        setActiveLink(event) {
-            console.log(event.target.innerHTML);
-            console.log(event.target.classList);
-            console.log(event.target);
-            console.log(event);
-            event.target.classList.add('active');
-        }
+        // setActiveLink(event) {
+        //     console.log(event.target.innerHTML);
+        //     console.log(event.target.classList);
+        //     console.log(event.target);
+        //     console.log(event);
+        //     event.target.classList.add('active');
+        // }
     },
 
     computed: {
@@ -104,10 +101,10 @@ export default {
                 <div class="header__topbar--inner d-flex align-items-center justify-content-between">
                     <ul class="header__topbar--info d-none d-lg-flex">
                         <li class="header__info--list">
-                            <a class="header__info--link" href="shop.html">STORES</a>
+                            <a class="header__info--link" :href="route('site.shop.index')">STORES</a>
                         </li>
                         <li class="header__info--list">
-                            <a class="header__info--link" href="shop.html">DELIVERY</a>
+                            <a class="header__info--link" :href="route('site.shop.index')">DELIVERY</a>
                         </li>
                         <li class="header__info--list">
                             <a class="header__info--link" href="privacy-policy.html">GUARANTEE</a>
@@ -222,7 +219,7 @@ export default {
                         </a>
                     </div>
                     <div class="main__logo">
-                        <h1 class="main__logo--title"><a class="main__logo--link" href="index.html"><img
+                        <h1 class="main__logo--title"><a class="main__logo--link" :href="route('site.index')"><img
                             class="main__logo--img" src="/site/assets/img/logo/nav-log.webp"
                             alt="logo-img"></a></h1>
                     </div>
@@ -335,35 +332,7 @@ export default {
                                                     href="checkout.html">Checkout</a></li>
                                             </ul>
                                         </li>
-                                        <li class="header__mega--menu__li fullscreen__style d-flex">
-                                            <a class="header__mega--menu__banner display-block" href="shop.html"><img
-                                                class="header__mega--menu__banner--img"
-                                                src="/site/assets/img/banner/banner1.webp"
-                                                alt="banner-menu">
-                                                <div class="banner__content">
-                                                <span
-                                                    class="banner__content--subtitle text__secondary mb-10">20% off</span>
-                                                    <h2 class="banner__content--title"><span
-                                                        class="banner__content--title__inner">New</span> COLLECTION</h2>
-                                                    <span class="banner__content--price">$22.99</span>
-                                                </div>
-                                            </a>
-                                            <a class="header__mega--menu__banner display-block" href="shop.html"><img
-                                                class="header__mega--menu__banner--img"
-                                                src="/site/assets/img/banner/banner2.webp"
-                                                alt="banner-menu">
-                                                <div class="banner__content right">
-                                                    <span class="banner__badge--style2">20% Off</span>
-                                                    <h2 class="banner__content--title"><span
-                                                        class="banner__content--title__inner"> ON </span> SALE <br>
-                                                        PRODUCT</h2>
-                                                </div>
-                                            </a>
-                                        </li>
                                     </ul>
-                                </li>
-                                <li class="header__menu--items">
-                                    <a class="header__menu--link" href="shop.html">Accesories </a>
                                 </li>
                                 <li class="header__menu--items">
                                     <a class="header__menu--link" href="blog.html">Blog
@@ -587,7 +556,7 @@ export default {
                             <ul class="d-none d-lg-block">
                                 <template v-for="category in categories" :key="category.id">
                                     <li class="categories__menu--items">
-                                        <a class="categories__menu--link" href="shop.html">
+                                        <a class="categories__menu--link" :href="route('site.shop.index')">
                                             <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg"
                                                  width="24"
                                                  height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -628,7 +597,7 @@ export default {
                                     <template v-for="category in categories">
                                         <li class="categories__menu--items">
                                             <Link
-                                                :href="route('site.index')"
+                                                :href="route('site.shop.index')"
                                                 class="categories__menu--link"
                                                 :key="category.id">
                                                 <svg class="categories__menu--svgicon"
@@ -732,37 +701,7 @@ export default {
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li class="header__mega--menu__li fullscreen__style d-flex">
-                                                <a class="header__mega--menu__banner display-block"
-                                                   href="shop.html"><img
-                                                    class="header__mega--menu__banner--img"
-                                                    src="/site/assets/img/banner/banner1.webp"
-                                                    alt="banner-menu">
-                                                    <div class="banner__content">
-                                                        <span class="banner__content--subtitle text__secondary mb-10">20% off</span>
-                                                        <h2 class="banner__content--title"><span
-                                                            class="banner__content--title__inner">New</span> COLLECTION
-                                                        </h2>
-                                                        <span class="banner__content--price">$22.99</span>
-                                                    </div>
-                                                </a>
-                                                <a class="header__mega--menu__banner display-block"
-                                                   href="shop.html"><img
-                                                    class="header__mega--menu__banner--img"
-                                                    src="/site/assets/img/banner/banner2.webp"
-                                                    alt="banner-menu">
-                                                    <div class="banner__content right">
-                                                        <span class="banner__badge--style2">20% Off</span>
-                                                        <h2 class="banner__content--title"><span
-                                                            class="banner__content--title__inner"> ON </span> SALE <br>
-                                                            PRODUCT</h2>
-                                                    </div>
-                                                </a>
-                                            </li>
                                         </ul>
-                                    </li>
-                                    <li class="header__menu--items">
-                                        <a class="header__menu--link text-white" href="shop.html">Accesories </a>
                                     </li>
                                     <li class="header__menu--items">
                                         <a class="header__menu--link text-white" href="blog.html">Blog
@@ -885,7 +824,7 @@ export default {
         <div class="offcanvas__header">
             <div class="offcanvas__inner">
                 <div class="offcanvas__logo">
-                    <a class="offcanvas__logo_link" href="index.html">
+                    <a class="offcanvas__logo_link" :href="route('site.index')">
                         <img src="/site/assets/img/logo/nav-log.webp" alt="Grocee Logo" width="158"
                              height="36">
                     </a>
@@ -1096,100 +1035,7 @@ export default {
         <!-- End Offcanvas stikcy toolbar -->
 
         <!-- Start offCanvas minicart -->
-        <div class="offCanvas__minicart">
-            <div class="minicart__header ">
-                <div class="minicart__header--top d-flex justify-content-between align-items-center">
-                    <h3 class="minicart__title"> Shopping Cart</h3>
-                    <button class="minicart__close--btn" aria-label="minicart close btn" data-offcanvas>
-                        <svg class="minicart__close--icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path fill="currentColor" stroke="currentColor" stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="32" d="M368 368L144 144M368 144L144 368"/>
-                        </svg>
-                    </button>
-                </div>
-                <p class="minicart__header--desc">The organic foods products are limited</p>
-            </div>
-            <div class="minicart__product">
-                <div class="minicart__product--items d-flex">
-                    <div class="minicart__thumb">
-                        <a href="product-details.html"><img
-                            src="/site/assets/img/product/small-product/product1.webp"
-                            alt="prduct-img"></a>
-                    </div>
-                    <div class="minicart__text">
-                        <h4 class="minicart__subtitle"><a href="product-details.html">Car & Motorbike Care.</a></h4>
-                        <span class="color__variant"><b>Color:</b> Beige</span>
-                        <div class="minicart__price">
-                            <span class="minicart__current--price">$125.00</span>
-                            <span class="minicart__old--price">$140.00</span>
-                        </div>
-                        <div class="minicart__text--footer d-flex align-items-center">
-                            <div class="quantity__box minicart__quantity">
-                                <button type="button" class="quantity__value decrease" aria-label="quantity value"
-                                        value="Decrease Value">-
-                                </button>
-                                <label>
-                                    <input type="number" class="quantity__number" value="1" data-counter/>
-                                </label>
-                                <button type="button" class="quantity__value increase" aria-label="quantity value"
-                                        value="Increase Value">+
-                                </button>
-                            </div>
-                            <button class="minicart__product--remove" type="button">Remove</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="minicart__product--items d-flex">
-                    <div class="minicart__thumb">
-                        <a href="product-details.html"><img
-                            src="/site/assets/img/product/small-product/product2.webp"
-                            alt="prduct-img"></a>
-                    </div>
-                    <div class="minicart__text">
-                        <h4 class="minicart__subtitle"><a href="product-details.html">Engine And Drivetrain.</a></h4>
-                        <span class="color__variant"><b>Color:</b> Green</span>
-                        <div class="minicart__price">
-                            <span class="minicart__current--price">$115.00</span>
-                            <span class="minicart__old--price">$130.00</span>
-                        </div>
-                        <div class="minicart__text--footer d-flex align-items-center">
-                            <div class="quantity__box minicart__quantity">
-                                <button type="button" class="quantity__value decrease" aria-label="quantity value"
-                                        value="Decrease Value">-
-                                </button>
-                                <label>
-                                    <input type="number" class="quantity__number" value="1" data-counter/>
-                                </label>
-                                <button type="button" class="quantity__value increase" aria-label="quantity value"
-                                        value="Increase Value">+
-                                </button>
-                            </div>
-                            <button class="minicart__product--remove" type="button">Remove</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="minicart__amount">
-                <div class="minicart__amount_list d-flex justify-content-between">
-                    <span>Sub Total:</span>
-                    <span><b>$240.00</b></span>
-                </div>
-                <div class="minicart__amount_list d-flex justify-content-between">
-                    <span>Total:</span>
-                    <span><b>$240.00</b></span>
-                </div>
-            </div>
-            <div class="minicart__conditions text-center">
-                <input class="minicart__conditions--input" id="accept" type="checkbox">
-                <label class="minicart__conditions--label" for="accept">I agree with the <a
-                    class="minicart__conditions--link" href="privacy-policy.html">Privacy Policy</a></label>
-            </div>
-            <div class="minicart__button d-flex justify-content-center">
-                <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
-                <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
-            </div>
-        </div>
+        <RightMinicart/>
         <!-- End offCanvas minicart -->
 
         <!-- Start search box area -->
@@ -1381,15 +1227,20 @@ export default {
                             </h2>
                             <ul class="footer__widget--menu footer__widget--inner">
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text"
-                                                                          href="shop.html">Smartphone ablet</a></li>
+                                                                          :href="route('site.shop.index')">Smartphone
+                                    ablet</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text"
-                                                                          href="shop.html">Computer Laptop</a></li>
+                                                                          :href="route('site.shop.index')">Computer
+                                    Laptop</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text"
-                                                                          href="shop.html">TV & Audio</a></li>
+                                                                          :href="route('site.shop.index')">TV &
+                                    Audio</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text"
-                                                                          href="shop.html">Car Accessories</a></li>
+                                                                          :href="route('site.shop.index')">Car
+                                    Accessories</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text"
-                                                                          href="shop.html">Cameras Photos</a></li>
+                                                                          :href="route('site.shop.index')">Cameras
+                                    Photos</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1502,7 +1353,7 @@ export default {
             <div class="container">
                 <div class="footer__bottom--inenr d-flex justify-content-between align-items-center">
                     <div class="footer__logo">
-                        <a class="footer__logo--link" href="index.html"><img
+                        <a class="footer__logo--link" :href="route('site.index')"><img
                             src="/site/assets/img/logo/nav-log-light.webp" alt="logo-img"></a>
                     </div>
                     <p class="copyright__content"><span class="text__secondary">© 2022</span> Powered by <a
