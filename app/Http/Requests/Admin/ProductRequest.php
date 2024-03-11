@@ -26,17 +26,18 @@ class ProductRequest extends AbstractRequest
     {
         // dd(ProductRequest::all());
         $rules = [
-            'description'  => 'required|string',
-            'content'      => 'nullable|string',
-            'img'          => 'nullable|mimes:jpeg,jpg,png|max:5000',
-            'price'        => 'required|decimal:2',
-            'old_price'    => 'nullable|decimal:2',
-            'count'        => 'required|integer',
-            'is_published' => 'nullable|string',
-            'category_id'  => 'nullable|integer',
-            'tags'         => 'nullable|array',
-            'colors'       => 'nullable|array',
-            'users'        => 'nullable|array',
+            'description'    => 'required|string',
+            'content'        => 'nullable|string',
+            'img'            => 'nullable|mimes:jpeg,jpg,png|max:5000',
+            'price'          => 'required|decimal:2',
+            'old_price'      => 'nullable|decimal:2',
+            'count'          => 'required|integer',
+            'is_published'   => 'nullable|string',
+            'category_id'    => 'nullable|integer',
+            'tags'           => 'nullable|array',
+            'colors'         => 'nullable|array',
+            'users'          => 'nullable|array',
+            'product_images' => 'nullable|array',
         ];
 
         return array_merge(parent::createItem(), $rules);
@@ -48,17 +49,18 @@ class ProductRequest extends AbstractRequest
     public function updateItem(): array
     {
         $rules = [
-            'description'  => 'required|string',
-            'content'      => 'nullable|string',
-            'img'          => 'nullable|mimes:jpeg,jpg,png|max:5000',
-            'price'        => 'required|decimal:2',
-            'old_price'    => 'nullable|decimal:2',
-            'count'        => 'required|integer',
-            'is_published' => 'nullable|string',
-            'category_id'  => 'nullable|integer',
-            'tags'         => 'nullable|array',
-            'colors'       => 'nullable|array',
-            'users'        => 'nullable|array',
+            'description'    => 'required|string',
+            'content'        => 'nullable|string',
+            'img'            => 'nullable|mimes:jpeg,jpg,png|max:5000',
+            'price'          => 'required|decimal:2',
+            'old_price'      => 'nullable|decimal:2',
+            'count'          => 'required|integer',
+            'is_published'   => 'nullable|string',
+            'category_id'    => 'nullable|integer',
+            'tags'           => 'nullable|array',
+            'colors'         => 'nullable|array',
+            'users'          => 'nullable|array',
+            'product_images' => 'nullable|array',
         ];
 
         return array_merge(parent::updateItem(), $rules);
@@ -67,41 +69,44 @@ class ProductRequest extends AbstractRequest
     public function messages(): array
     {
         $messages = [
-            'description'  => [
+            'description'    => [
                 'required' => 'Поле ":attribute" не заполнено.',
                 'string'   => 'Поле ":attribute" д.б. строкой.',
             ],
-            'content'      => [
+            'content'        => [
                 'string' => 'Поле ":attribute" д.б. строкой.',
             ],
-            'img'          => [
+            'img'            => [
                 'mimes' => 'Файл «:attribute» должен иметь формат :values',
                 'max'   => 'Файл «:attribute» должен быть не больше :max Кбайт',
             ],
-            'price'        => [
+            'price'          => [
                 'required' => 'Поле ":attribute" не заполнено.',
                 'decimal'  => 'Поле ":attribute" д.б. формата ###.00.',
             ],
-            'old_price'    => [
+            'old_price'      => [
                 'decimal' => 'Поле ":attribute" д.б. формата ###.00 .',
             ],
-            'count'        => [
+            'count'          => [
                 'required' => 'Поле ":attribute" не заполнено.',
                 'integer'  => 'Поле ":attribute" д.б. числом.',
             ],
-            'is_published' => [
+            'is_published'   => [
                 'string' => 'Поле ":attribute" д.б. строкой.',
             ],
-            'category_id'  => [
+            'category_id'    => [
                 'integer' => 'Поле ":attribute" д.б. числом.',
             ],
-            'tags'         => [
+            'tags'           => [
                 'array' => 'Не верный формат поля ":attribute".',
             ],
-            'colors'       => [
+            'colors'         => [
                 'array' => 'Не верный формат поля ":attribute".',
             ],
-            'users'        => [
+            'users'          => [
+                'array' => 'Не верный формат поля ":attribute".',
+            ],
+            'product_images' => [
                 'array' => 'Не верный формат поля ":attribute".',
             ],
         ];
@@ -112,17 +117,18 @@ class ProductRequest extends AbstractRequest
     public function attributes(): array
     {
         $attributes = [
-            'description'  => 'Описание',
-            'content'      => 'Содержание',
-            'img'          => 'Изображение',
-            'price'        => 'Цена',
-            'old_price'    => 'Старая цена',
-            'count'        => 'Количество',
-            'is_published' => 'Опубликовано',
-            'category_id'  => 'ID категории',
-            'tags'         => 'Теги',
-            'colors'       => 'Цвета',
-            'users'        => 'Пользователи',
+            'description'    => 'Описание',
+            'content'        => 'Содержание',
+            'img'            => 'Изображение',
+            'price'          => 'Цена',
+            'old_price'      => 'Старая цена',
+            'count'          => 'Количество',
+            'is_published'   => 'Опубликовано',
+            'category_id'    => 'ID категории',
+            'tags'           => 'Теги',
+            'colors'         => 'Цвета',
+            'users'          => 'Пользователи',
+            'product_images' => 'Изображения',
         ];
 
         return array_merge(parent::attributes(), $attributes);

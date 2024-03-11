@@ -59,7 +59,7 @@
         <div class="input-group">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputImg" name="img">
-                <label class="custom-file-label" for="inputImg">Выберете файл (jpeg, jpg, png)</label>
+                <label class="custom-file-label" for="inputImg">Выберете файл основного изображения (jpeg, jpg, png)</label>
             </div>
             <div class="input-group-append">
                 <span class="input-group-text">Загрузить</span>
@@ -74,6 +74,44 @@
         </div>
         @enderror
     </div>
+
+    <div class="form-group">
+        <label for="inputProductImg1">Загрузите изображение</label>
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputProductImg1" name="product_images[]">
+                <label class="custom-file-label" for="inputImg">Выберете файл для галереи (jpeg, jpg, png)</label>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text">Загрузить</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputProductImg2">Загрузите изображение</label>
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputProductImg2" name="product_images[]">
+                <label class="custom-file-label" for="inputImg">Выберете файл для галереи (jpeg, jpg, png)</label>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text">Загрузить</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputProductImg3">Загрузите изображение</label>
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputProductImg3" name="product_images[]">
+                <label class="custom-file-label" for="inputImg">Выберете файл для галереи (jpeg, jpg, png)</label>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text">Загрузить</span>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="inputPrice">Цена</label>
         <input type="text" class="form-control" id="inputPrice" name="price" placeholder="Стоимость товара"

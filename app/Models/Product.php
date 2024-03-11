@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -17,6 +18,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 
 /**
+ * @property mixed        $id
  * @property mixed        $tags
  * @property mixed        $colors
  * @property mixed        $users
@@ -92,6 +94,14 @@ class Product extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function productImages(): HasMany
+    {
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+
+    /**
      * Обновление товара
      *
      * @param array   $validated
@@ -103,6 +113,9 @@ class Product extends Model
     {
         $validated['is_published'] = isset($validated['is_published']) && (string)$validated['is_published'] === 'on';
 
+        $product_images = $validated['product_images'] ?? [];
+        ProductImage::updateProductImages($product_images, $product);
+
         // Теги, цвета, пользователи
         $validated['tags'] = $validated['tags'] ?? [];
         $product->tags()->sync($validated['tags']);
@@ -110,7 +123,7 @@ class Product extends Model
         $product->colors()->sync($validated['colors']);
         $validated['users'] = $validated['users'] ?? [];
         $product->users()->sync($validated['users']);
-        unset($validated['tags'], $validated['colors'], $validated['users']);
+        unset($validated['tags'], $validated['colors'], $validated['users'], $validated['product_images']);
 
         // Категория
         if ((int)$validated['category_id'] === 0) {
@@ -162,6 +175,9 @@ class Product extends Model
         $product->tags()->attach($tags);
         $product->colors()->attach($colors);
         $product->users()->attach($users);
+
+        $product_images = $validated['product_images'] ?? [];
+        ProductImage::createProductImages($product_images, $product);
 
         return $product;
     }

@@ -16,6 +16,7 @@ class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @return View
      */
     public function index(): View
@@ -27,16 +28,17 @@ class ProductController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return View
      */
     public function create(): View
     {
-        $categories = Category::getAllCategories();
+        $categories = Category::getAllCategoriesAdmin();
         $colors = Color::getAllColors();
-        $tags = Tag::getAllTags();
+        $tags = Tag::getAllTagsAdmin();
         $users = User::getAllUsers();
 
-        return view('admin.product.create', compact('categories', 'colors', 'tags', 'users',));
+        return view('admin.product.create', compact('categories', 'colors', 'tags', 'users'));
     }
 
     /**
@@ -49,11 +51,13 @@ class ProductController extends Controller
     public function store(ProductRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        // dd($validated);
+        // unset($validated['product_images']);
         $product = Product::storeProduct($validated);
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно создан",
-            'class' => 'alert alert-success',
+            'class'         => 'alert alert-success',
         ]);
     }
 
@@ -112,7 +116,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param ProductRequest $request
-     * @param Product $product
+     * @param Product        $product
      *
      * @return RedirectResponse
      */
@@ -123,7 +127,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.show', $product->slug)->with([
             'flash_message' => "Товар успешно отредактирован",
-            'class' => 'alert alert-success',
+            'class'         => 'alert alert-success',
         ]);
     }
 
@@ -140,7 +144,7 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.index')->with([
             'flash_message' => "Товар успешно удалён",
-            'class' => 'alert alert-success',
+            'class'         => 'alert alert-success',
         ]);
     }
 }

@@ -80,6 +80,22 @@
             @endforeach
         </p>
 
+        <p>
+            <strong>Галерея: </strong>
+
+            @if(count($product->productImages) > 0)
+                <div class="d-flex flex-wrap">
+                    @foreach($product->productImages as $productImage)
+                        <img class="d-inline-block w-25 my-5 mx-auto" src="{{ $productImage->main_gallery }}"
+                             alt="{{ $productImage->id }}">
+                    @endforeach
+                </div>
+            @else
+                Нет изображений
+            @endif
+
+        </p>
+
         <p><strong>Дата создания:</strong> {{ $product->created_at }}</p>
         <p><strong>Дата обновления:</strong> {{ $product->updated_at }}</p>
         <p><strong>Дата удаления:</strong> {{ $product->deleted_at ?? 'Активно' }}</p>

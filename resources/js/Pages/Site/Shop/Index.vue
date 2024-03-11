@@ -62,6 +62,7 @@ export default {
             axios.get(this.route('site.shop.show', slug))
                 .then(res => {
                     this.productModal = res.data;
+                    console.log(this.productModal);
                 });
         },
     },
