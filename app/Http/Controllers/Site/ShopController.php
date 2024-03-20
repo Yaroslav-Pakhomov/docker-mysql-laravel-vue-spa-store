@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Site\ShopFilterRequest;
 use App\Http\Resources\Category\CategoriesResource;
 use App\Http\Resources\Category\CategoriesResourceFull;
 use App\Http\Resources\Color\ColorsResource;
@@ -14,6 +15,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -24,8 +26,11 @@ class ShopController extends Controller
     /**
      * Главная страница Админки
      */
-    public function index(): Response|ResponseFactory
+    public function index(ShopFilterRequest $request): Response|ResponseFactory
     {
+        // dump($request->all());
+        dump($request->validated());
+
         // Продукты
         $products = Product::query()->orderBy('updated_at', 'desc')->with(['category',])->paginate(24);
         $max_price = (float)Product::query()->max('price');

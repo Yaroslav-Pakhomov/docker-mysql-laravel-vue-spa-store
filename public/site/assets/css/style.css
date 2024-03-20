@@ -5164,7 +5164,7 @@ input[type=number]::-webkit-outer-spin-button {
     visibility: hidden;
     -webkit-transition: 0.4s;
     transition: 0.4s;
-    padding: 0 2rem 2rem;
+    padding: 1rem 2rem 2rem;
     background: var(--body-background-color);
 }
 
@@ -8836,7 +8836,9 @@ input.quickview__value--number {
 .shop__sidebar--widget {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 75px;
+    overflow-y: auto;
+    height: calc(100vh - 80px);
 }
 
 .single__widget {

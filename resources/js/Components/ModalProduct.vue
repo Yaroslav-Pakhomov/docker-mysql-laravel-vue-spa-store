@@ -14,7 +14,7 @@ import 'swiper/css/thumbs';
 import '../../css/swiper.css';
 
 // import required modules
-import {Pagination, FreeMode, Navigation, Thumbs} from 'swiper/modules';
+import {Pagination, Navigation} from 'swiper/modules';
 
 /**
  * @typedef {Object} product

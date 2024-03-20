@@ -94,6 +94,8 @@ export default {
     </div>
     <!-- End preloader -->
 
+
+
     <!-- Start header area -->
     <header class="header__section mb-20">
         <div class="header__topbar border-bottom">
@@ -544,14 +546,15 @@ export default {
                                 <rect y="13.3333" width="17" height="1.5" fill="currentColor"/>
                             </svg>
 
-                            <span class="categories__menu--title">Select categories</span>
+                            <span class="categories__menu--title">Категория</span>
                             <svg class="categories__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355"
                                  height="8.394" viewBox="0 0 10.355 6.394">
                                 <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
                                       transform="translate(-6 -8.59)" fill="currentColor"/>
                             </svg>
                         </div>
-                        <div class="dropdown__categories--menu border-radius-5 active collapse show"
+                        <!-- show -->
+                        <div class="dropdown__categories--menu border-radius-5 active collapse "
                              id="categoriesAccordion">
                             <ul class="d-none d-lg-block">
                                 <template v-for="category in categories" :key="category.id">
