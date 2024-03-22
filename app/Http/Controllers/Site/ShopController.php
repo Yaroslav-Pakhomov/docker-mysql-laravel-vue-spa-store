@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\Classic\ProductFilter;
 use App\Http\Requests\Site\ShopFilterRequest;
 use App\Http\Resources\Category\CategoriesResource;
 use App\Http\Resources\Category\CategoriesResourceFull;
@@ -15,6 +16,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Tag;
+use App\Models\Traits\HasFilter;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -28,14 +30,26 @@ class ShopController extends Controller
      */
     public function index(ShopFilterRequest $request): Response|ResponseFactory
     {
-        // dump($request->all());
-        dump($request->validated());
+        /**
+         * Отвалидированный запрос фильтров
+         */
+        $requestFilter = $request->validated();
 
-        // Продукты
-        $products = Product::query()->orderBy('updated_at', 'desc')->with(['category',])->paginate(24);
-        $max_price = (float)Product::query()->max('price');
-        $min_price = (float)Product::query()->min('price');
-        // $products = ProductResource::collection($allProducts)->resolve();
+        /**
+         * Объект фильтра для товара
+         */
+        $productFilter = new ProductFilter($requestFilter);
+
+        /**
+         * Продукты, перебор всех фильтров из запроса,
+         * Метод filters() реализован scope подходом Laravel
+         * Подключается к модели Product с помощью трейта HasFilter
+         */
+        $productQuery = Product::filters($productFilter);
+        $products = $productQuery->orderBy('updated_at', 'desc')->with(['category',])->paginate(24);
+
+        $maxPrice = (float)Product::query()->max('price');
+        $minPrice = (float)Product::query()->min('price');
 
         // Категории
         $allCategories = Category::getAllCategoriesSite();
@@ -51,11 +65,12 @@ class ShopController extends Controller
 
         return inertia('Site/Shop/Index', [
             'products'   => $products,
-            'max_price'  => $max_price,
-            'min_price'  => $min_price,
+            'max_price'  => $maxPrice,
+            'min_price'  => $minPrice,
             'categories' => $categories,
             'tags'       => $tags,
             'colors'     => $colors,
+            // 'request_filter'     => $request_filter,
             'active'     => true,
         ]);
     }
@@ -69,46 +84,45 @@ class ShopController extends Controller
      */
     public function show(Product $product): array
     {
-        $productTest = ProductResourceFull::make($product)->resolve();
-//        return $product->query()->with(['category', 'colors', 'tags', 'users']);
+        $productModal = ProductResourceFull::make($product)->resolve();
 
         // Цвета
-        $product_colors = $productTest['colors'];
-        unset($productTest['colors']);
-        foreach ($product_colors as $colors) {
+        $productColors = $productModal['colors'];
+        unset($productModal['colors']);
+        foreach ($productColors as $colors) {
             foreach ($colors as $color) {
                 if (!empty($color)) {
-                    $productTest['colors'][] = ColorsResource::make($color)->resolve();
+                    $productModal['colors'][] = ColorsResource::make($color)->resolve();
                 }
             }
         }
-        if (!isset($productTest['colors'])) {
-            $productTest['colors'] = [];
+        if (!isset($productModal['colors'])) {
+            $productModal['colors'] = [];
         }
 
         // Теги
-        $product_tags = $productTest['tags'];
-        unset($productTest['tags']);
-        foreach ($product_tags as $tags) {
+        $productTags = $productModal['tags'];
+        unset($productModal['tags']);
+        foreach ($productTags as $tags) {
             foreach ($tags as $tag) {
                 if (!empty($tag)) {
-                    $productTest['tags'][] = TagsResource::make($tag)->resolve();
+                    $productModal['tags'][] = TagsResource::make($tag)->resolve();
                 }
             }
         }
-        if (!isset($productTest['tags'])) {
-            $productTest['tags'] = [];
+        if (!isset($productModal['tags'])) {
+            $productModal['tags'] = [];
         }
 
         // Категория
-        $product_category = $productTest['category'] ?? [];
-        unset($productTest['category']);
-        foreach ($product_category as $category) {
+        $productCategory = $productModal['category'] ?? [];
+        unset($productModal['category']);
+        foreach ($productCategory as $category) {
             if (!empty($category)) {
-                $productTest['category'] = CategoriesResourceFull::make($category)->resolve();
+                $productModal['category'] = CategoriesResourceFull::make($category)->resolve();
             }
         }
 
-        return $productTest;
+        return $productModal;
     }
 }

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Http\Filters\Classic\Interfaces\IFilter;
+use App\Models\Traits\HasFilter;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,6 +40,7 @@ use Intervention\Image\Interfaces\EncodedImageInterface;
 class Product extends Model
 {
     use HasFactory;
+    use HasFilter;
     use SoftDeletes;
 
     /**
@@ -199,7 +203,6 @@ class Product extends Model
         $product->update();
         $product->delete();
     }
-
 
     /**
      * Загрузка изображения при создании поста
