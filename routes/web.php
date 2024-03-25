@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Site\FilterController as SiteFilterController;
 use App\Http\Controllers\Site\IndexController as SiteIndexController;
 use App\Http\Controllers\Site\ShopController as SiteShopController;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,17 @@ Route::prefix('/')->group(function () {
         // Главная
         Route::controller(SiteIndexController::class)->group(function () {
             Route::get('/', 'index')->name('index');
+        });
+
+        // Фильтры
+        Route::controller(SiteFilterController::class)->group(function () {
+            Route::prefix('/filter')->group(function () {
+                Route::name('filter.')->group(function () {
+
+                    // Главный контроллер
+                    Route::get('/', 'index')->name('index');
+                });
+            });
         });
 
         // Магазин

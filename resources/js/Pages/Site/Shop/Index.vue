@@ -1,8 +1,10 @@
 <script>
 import {Head, Link} from '@inertiajs/vue3';
-import StoreLayout  from "@/Layouts/StoreLayout.vue";
-import Pagination   from "@/Components/Pagination.vue";
+import StoreLayout from "@/Layouts/StoreLayout.vue";
+import Pagination from "@/Components/Pagination.vue";
 import ModalProduct from "@/Components/ModalProduct.vue";
+import Filter from "@/Components/Filter.vue";
+import FilterSidebar from "@/Components/FilterSidebar.vue";
 // import {createLogger} from "vite";
 
 /**
@@ -10,7 +12,6 @@ import ModalProduct from "@/Components/ModalProduct.vue";
  * @property {float} total
  * @property {Object} links
  * @property {Object} data
- *
  * @typedef {Object} product
  * @property {string} title
  * @property {string} slug
@@ -22,121 +23,49 @@ import ModalProduct from "@/Components/ModalProduct.vue";
  * @property {Object} category
  * @property {Object} colors
  * @property {Object} tags
+ * @property {Array} categories_checked
+ * @property {Array} colors_checked
+ * @property {Array} tags_checked
  *
  */
 
 export default {
-    // Название компонента
+    /**
+     * Название компонента
+     */
     name: 'ShopIndexPage',
 
-    // Подключенные компоненты
+    /**
+     * Подключенные компоненты
+     */
     components: {
         ModalProduct,
         Head,
         Link,
         StoreLayout,
         Pagination,
+        Filter,
+        FilterSidebar,
     },
 
-    // Передаваемые св-ва от родителя и/или от контроллера
+    /**
+     * Передаваемые св-ва от родителя и/или от контроллера
+     */
     props: {
-        products  : Object,
-        colors    : Object,
+        products: Object,
         categories: Array,
-        tags      : Array,
-        min_price : Number,
-        max_price : Number,
-        active    : Boolean,
+        request_filter: Object,
+        active        : Boolean,
     },
 
+    /**
+     * Св-ва компонента
+     */
     data() {
         return {
-            productModal      : {},
-            categories_checked: [],
-            colors_checked    : [],
-            tags_checked      : [],
-            min_price_filter  : '',
-            max_price_filter  : '',
+            productModal: {},
         }
     },
-
-    methods: {
-        openModalProduct(slug) {
-            // Асинхронный запрос 2 способа
-            // axios.get('/shop/' + product.slug)
-            axios.get(this.route('site.shop.show', slug))
-                .then(res => {
-                    this.productModal = res.data;
-                });
-        },
-
-        getFilterProducts() {
-            let condition_min = this.max_price < this.min_price_filter || this.min_price_filter < this.min_price || (this.min_price_filter > this.max_price_filter && this.max_price_filter.length > 0);
-            let condition_max = this.max_price < this.max_price_filter || this.max_price_filter < this.min_price || (this.min_price_filter > this.max_price_filter && this.min_price_filter.length > 0);
-
-            let price_from = condition_min ? this.min_price : this.min_price_filter;
-            let price_to = condition_max ? this.max_price : this.max_price_filter;
-
-            let filter_params = {
-                'categories_checked': this.categories_checked,
-                'colors_checked'    : this.colors_checked,
-                'tags_checked'      : this.tags_checked,
-                'price_from'        : price_from,
-                'price_to'          : price_to,
-            };
-
-            this.$inertia.get('/shop', filter_params);
-
-            // axios.get(this.route('site.shop.index', filter_params))
-            //     .then(res => {
-            //         console.log(res.data);
-            //     });
-        },
-
-        // Переключатель категории
-        toggleCategory(id) {
-            this.toggleParam(id, this.categories_checked);
-        },
-
-        // Переключатель цвета
-        toggleColor(id) {
-            this.toggleParam(id, this.colors_checked);
-        },
-
-        // Переключатель тегов
-        toggleTag(id) {
-            this.toggleParam(id, this.tags_checked);
-        },
-
-        // Переключатель передаваемого параметра
-        toggleParam(id, params_checked) {
-            if (this.inArray(id, params_checked)) {
-                this.removeElemArray(id, params_checked);
-            } else {
-                params_checked.push(id);
-            }
-            this.getFilterProducts();
-        },
-
-        // Проверка существования элемента в массиве
-        inArray(needle, haystack) {
-            let length = haystack.length;
-            for (let i = 0; i < length; i++) {
-                if (Number(haystack[i]) === Number(needle)) return true;
-            }
-            return false;
-        },
-
-        // Удаление элемента из массива
-        removeElemArray(item, array) {
-            let index = array.indexOf(item);
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-        },
-    },
-
-    computed: {},
 
     mounted() {
         // Имитация события изменения в теге body
@@ -145,6 +74,24 @@ export default {
         body.dispatchEvent(event_change);
     },
 
+    /**
+     * Методы компонента
+     */
+    methods: {
+        /**
+         * Обработчик события вызова модального окна товара
+         */
+        openModalProduct(slug) {
+            // Асинхронный запрос 2 способа
+            // axios.get('/shop/' + product.slug)
+            axios.get(this.route('site.shop.show', slug))
+                .then(res => {
+                    this.productModal = res.data;
+                });
+        },
+    },
+
+    computed: {},
 }
 
 </script>
@@ -153,138 +100,7 @@ export default {
     <StoreLayout :categories="categories" :shopActive="active">
 
         <!-- Start offcanvas filter sidebar -->
-        <div class="offcanvas__filter--sidebar widget__area">
-            <button type="button" class="offcanvas__filter--close" data-offcanvas>
-                <svg class="minicart__close--icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="32" d="M368 368L144 144M368 144L144 368"></path>
-                </svg>
-                <span class="offcanvas__filter--close__text">Close</span>
-            </button>
-            <div class="offcanvas__filter--sidebar__inner">
-                <div class="single__widget widget__bg">
-
-                    <div
-                        class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                        data-bs-toggle="collapse" data-bs-target="#filter-collection">
-                        <h2 class="h3">Категории</h2>
-                        <span class="faq-heading-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                 viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                 stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
-                    </div>
-                    <div id="filter-collection" class="accordion-collapse collapse show">
-                        <!--                        <ul class="widget__categories&#45;&#45;menu">-->
-                        <ul class="">
-                            <template v-for="category in categories">
-                                <li class="filter-item widget__categories--menu__list">
-                                    <label class="filter-label widget__categories--menu__label px-3">
-                                        <input type="checkbox" name="category_filter"
-                                               :checked="inArray(category.id, categories_checked)"
-                                               @click="toggleCategory(category.id)"/>
-                                        <span class="filter-checkbox rounded me-2"></span>
-                                        <span class="filter-text">{{ category.title }}</span>
-                                    </label>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                </div>
-                <div class="single__widget widget__bg filter-widget filter-color">
-                    <div
-                        class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                        data-bs-toggle="collapse" data-bs-target="#filter-color">
-                        <h2 class="h3">Цвета</h2>
-                        <span class="faq-heading-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                 viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                 stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
-                    </div>
-                    <div id="filter-color" class="accordion-collapse collapse show">
-                        <ul class="filter-lists list-unstyled mb-0">
-                            <template v-for="color in colors">
-                                <li class="filter-item">
-                                    <label class="filter-label" :style="{backgroundColor: color.code}">
-                                        <input type="checkbox" name="color_filter"
-                                               :checked="inArray(color.id, colors_checked)"
-                                               @click="toggleColor(color.id)"/>
-                                        <span class="filter-checkbox rounded me-2"></span>
-                                    </label>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                </div>
-                <div class="single__widget price__filter widget__bg">
-                    <h2 class="widget__title h3">Цена</h2>
-                    <form class="price__filter--form" action="#">
-                        <div class="price__filter--form__inner mb-15 d-flex align-items-center">
-                            <div class="price__filter--group">
-                                <label class="price__filter--label" for="Filter-Price-GTE">От</label>
-                                <div class="price__filter--input">
-                                    <span class="price__filter--currency">$</span>
-                                    <input class="price__filter--input__field border-0" name="min_price_filter"
-                                           id="Filter-Price-GTE" type="number" v-model="min_price_filter"
-                                           :placeholder="min_price" :min="min_price"
-                                           :max="max_price">
-                                </div>
-                            </div>
-                            <div class="price__divider">
-                                <span>-</span>
-                            </div>
-                            <div class="price__filter--group">
-                                <label class="price__filter--label" for="Filter-Price-LTE">До</label>
-                                <div class="price__filter--input">
-                                    <span class="price__filter--currency">$</span>
-                                    <input class="price__filter--input__field border-0" name="max_price_filter"
-                                           id="Filter-Price-LTE" type="number" v-model="max_price_filter"
-                                           :placeholder="max_price" :min="min_price"
-                                           :max="max_price">
-                                </div>
-                            </div>
-                        </div>
-                        <button @click.prevent="getFilterProducts()" class="primary__btn price__filter--btn"
-                                type="submit">Фильтровать
-                        </button>
-                    </form>
-                </div>
-                <div class="single__widget widget__bg">
-                    <div
-                        class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                        data-bs-toggle="collapse" data-bs-target="#filter-vendor">
-                        Теги
-                        <span class="faq-heading-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                 viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                 stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
-                    </div>
-                    <div id="filter-vendor" class="accordion-collapse collapse show">
-                        <ul class="filter-lists list-unstyled mb-0">
-                            <template v-for="tag in tags">
-                                <li class="filter-item">
-                                    <label class="filter-label">
-                                        <input type="checkbox" name="tag_filter"
-                                               :checked="inArray(tag.id, tags_checked)"
-                                               @click="toggleTag(tag.id)"/>
-                                        <span class="filter-checkbox rounded me-2"></span>
-                                        <span class="filter-text">{{ tag.title }}</span>
-                                    </label>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <FilterSidebar :request_filter="request_filter"/>
         <!-- End offcanvas filter sidebar -->
 
         <!-- Start shop section -->
@@ -292,151 +108,10 @@ export default {
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3 col-lg-4 shop-col-width-lg-4">
-                        <div class="shop__sidebar--widget widget__area d-none d-lg-block">
-                            <h3>Фильтры</h3>
-                            <div class="single__widget widget__bg">
-                                <div
-                                    class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                    data-bs-toggle="collapse" data-bs-target="#filter-collection">
-                                    Категории
-                                    <span class="faq-heading-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div id="filter-collection" class="accordion-collapse collapse show">
-                                    <ul class="filter-lists list-unstyled mb-0">
-                                        <template v-for="category in categories">
-                                            <li class="filter-item">
-                                                <label class="filter-label">
-                                                    <input type="checkbox" name="category_filter"
-                                                           :checked="inArray(category.id, categories_checked)"
-                                                           @click="toggleCategory(category.id)"/>
-                                                    <span class="filter-checkbox rounded me-2"></span>
-                                                    <span class="filter-text">{{ category.title }}</span>
-                                                </label>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="single__widget widget__bg filter-widget filter-color">
-                                <div
-                                    class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                    data-bs-toggle="collapse" data-bs-target="#filter-color">
-                                    Цвета
-                                    <span class="faq-heading-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div id="filter-color" class="accordion-collapse collapse show">
-                                    <ul class="filter-lists list-unstyled mb-0">
-                                        <template v-for="color in colors">
-                                            <li class="filter-item">
-                                                <label class="filter-label" :style="{backgroundColor: color.code}">
-                                                    <input type="checkbox" name="color_filter"
-                                                           :checked="inArray(color.id, colors_checked)"
-                                                           @click="toggleColor(color.id)"/>
-                                                    <span class="filter-checkbox rounded me-2"></span>
-                                                </label>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="single__widget price__filter widget__bg">
-                                <div
-                                    class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                    data-bs-toggle="collapse" data-bs-target="#filter-price">
-                                    Цена
-                                    <span class="faq-heading-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div id="filter-price" class="accordion-collapse collapse show">
-                                    <form class="price__filter--form" action="#">
-                                        <div class="price__filter--form__inner mb-15 d-flex align-items-center">
-                                            <div class="price__filter--group">
-                                                <label class="price__filter--label" for="Filter-Price-GTE2">От</label>
-                                                <div
-                                                    class="price__filter--input border-radius-5 d-flex align-items-center">
-                                                    <span class="price__filter--currency">$</span>
-                                                    <input class="price__filter--input__field border-0"
-                                                           name="min_price_filter" id="Filter-Price-GTE2"
-                                                           type="number" v-model="min_price_filter"
-                                                           :placeholder="Math.floor(min_price)"
-                                                           :min="Math.floor(min_price)"
-                                                           :max="Math.ceil(max_price)">
-                                                </div>
-                                            </div>
-                                            <div class="price__divider">
-                                                <span>-</span>
-                                            </div>
-                                            <div class="price__filter--group">
-                                                <label class="price__filter--label" for="Filter-Price-LTE2">До</label>
-                                                <div
-                                                    class="price__filter--input border-radius-5 d-flex align-items-center">
-                                                    <span class="price__filter--currency">$</span>
-                                                    <input class="price__filter--input__field border-0"
-                                                           name="max_price_filter" id="Filter-Price-LTE2"
-                                                           type="number" v-model="max_price_filter"
-                                                           :placeholder="Math.ceil(max_price)"
-                                                           :min="Math.floor(min_price)"
-                                                           :max="Math.ceil(max_price)">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button @click.prevent="getFilterProducts()"
-                                                class="primary__btn price__filter--btn" type="submit">Фильтровать
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="single__widget widget__bg filter-widget">
-                                <div
-                                    class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                    data-bs-toggle="collapse" data-bs-target="#filter-vendor">
-                                    Теги
-                                    <span class="faq-heading-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div id="filter-vendor" class="accordion-collapse collapse show">
-                                    <ul class="filter-lists list-unstyled mb-0">
-                                        <template v-for="tag in tags">
-                                            <li class="filter-item">
-                                                <label class="filter-label">
-                                                    <input type="checkbox" name="tag_filter"
-                                                           :checked="inArray(tag.id, tags_checked)"
-                                                           @click="toggleTag(tag.id)"/>
-                                                    <span class="filter-checkbox rounded me-2"></span>
-                                                    <span class="filter-text">{{ tag.title }}</span>
-                                                </label>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        <Filter :request_filter="request_filter"/>
                     </div>
                     <div class="col-xl-9 col-lg-8 shop-col-width-lg-8">
                         <div class="shop__right--sidebar">
-
                             <div class="shop__product--wrapper">
                                 <div class="shop__header d-flex align-items-center justify-content-between mb-30">
                                     <div
@@ -704,9 +379,9 @@ export default {
                                                                 <span class="rating__icon">
                                                                     <svg width="14" height="13" viewBox="0 0 14 13"
                                                                          fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"/>
+                                                                        <path
+                                                                            d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
+                                                                            fill="currentColor"/>
                                                                     </svg>
                                                                 </span>
                                                                     </li>

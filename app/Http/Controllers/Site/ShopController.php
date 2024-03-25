@@ -13,15 +13,9 @@ use App\Http\Resources\Color\ColorsResource;
 use App\Http\Resources\Product\ProductResourceFull;
 use App\Http\Resources\Tag\TagsResource;
 use App\Models\Category;
-use App\Models\Color;
 use App\Models\Product;
-use App\Models\Tag;
-use App\Models\Traits\HasFilter;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-
-// use App\Http\Resources\Product\ProductResource;
 
 class ShopController extends Controller
 {
@@ -48,30 +42,16 @@ class ShopController extends Controller
         $productQuery = Product::filters($productFilter);
         $products = $productQuery->orderBy('updated_at', 'desc')->with(['category',])->paginate(24);
 
-        $maxPrice = (float)Product::query()->max('price');
-        $minPrice = (float)Product::query()->min('price');
-
         // Категории
         $allCategories = Category::getAllCategoriesSite();
         $categories = CategoriesResource::collection($allCategories)->resolve();
 
-        // Теги
-        $allTags = Tag::getAllTagsSite();
-        $tags = TagsResource::collection($allTags)->resolve();
-
-        // Цвета
-        $allColors = Color::all();
-        $colors = ColorsResource::collection($allColors)->resolve();
 
         return inertia('Site/Shop/Index', [
-            'products'   => $products,
-            'max_price'  => $maxPrice,
-            'min_price'  => $minPrice,
-            'categories' => $categories,
-            'tags'       => $tags,
-            'colors'     => $colors,
-            // 'request_filter'     => $request_filter,
-            'active'     => true,
+            'products'       => $products,
+            'categories'     => $categories,
+            'request_filter' => $requestFilter,
+            'active'         => TRUE,
         ]);
     }
 

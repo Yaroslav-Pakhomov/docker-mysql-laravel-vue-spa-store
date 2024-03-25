@@ -103,7 +103,7 @@ export default {
                 <div class="minicart__thumb">
                     <a href="product-details.html"><img
                         src="/site/assets/img/product/small-product/product1.webp"
-                        alt="prduct-img"></a>
+                        alt="product-img"></a>
                 </div>
                 <div class="minicart__text">
                     <h4 class="minicart__subtitle"><a href="product-details.html">Car & Motorbike Care.</a></h4>
@@ -134,7 +134,7 @@ export default {
                 <div class="minicart__thumb">
                     <a href="product-details.html"><img
                         src="/site/assets/img/product/small-product/product2.webp"
-                        alt="prduct-img"></a>
+                        alt="product-img"></a>
                 </div>
                 <div class="minicart__text">
                     <h4 class="minicart__subtitle"><a href="product-details.html">Engine And Drivetrain.</a></h4>
