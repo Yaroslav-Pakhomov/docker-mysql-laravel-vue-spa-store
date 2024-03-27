@@ -52,8 +52,8 @@ export default {
      * Передаваемые св-ва от родителя и/или от контроллера
      */
     props: {
-        products: Object,
-        categories: Array,
+        products      : Object,
+        categories    : Array,
         request_filter: Object,
         active        : Boolean,
     },
@@ -294,7 +294,7 @@ export default {
                                     <p class="collection-counter text_16 mb-0 ms-2">({{ products.total }} ед.)</p>
                                 </div>
 
-                                <Pagination class="mt-6" :links="products.links"/>
+                                <Pagination class="mt-6" :links="products.links" :request_filter="request_filter"/>
 
                                 <div class="tab_content">
                                     <div id="product_grid" class="tab_pane active show">
@@ -634,7 +634,7 @@ export default {
                                     </div>
                                 </div>
 
-                                <Pagination class="mt-6" :links="products.links"/>
+                                <Pagination class="mt-6" :links="products.links" :request_filter="request_filter"/>
                             </div>
                         </div>
                     </div>
