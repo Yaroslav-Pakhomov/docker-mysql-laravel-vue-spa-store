@@ -10,8 +10,10 @@ export default {
      * Передаваемые св-ва от родителя и/или от контроллера
      */
     props: {
-        // Объект с выбранными значениями
+        // Объект с выбранными значениями фильтра
         request_filter: Object,
+        // Параметр сортировки
+        sort_param: String,
     },
 
     /**
@@ -153,6 +155,7 @@ export default {
                 'tags_checked'      : this.tags_checked,
                 'price_from'        : price_from,
                 'price_to'          : price_to,
+                'sort'              : this.sort_param,
             };
 
             this.$inertia.get('/shop', filter_params);
@@ -196,7 +199,7 @@ export default {
          */
         resetFilters() {
             this.$inertia.get('/shop');
-        }
+        },
     },
 };
 

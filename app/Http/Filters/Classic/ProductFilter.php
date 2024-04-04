@@ -16,6 +16,7 @@ class ProductFilter extends AbstractFilter
     public const TAGS = 'tags_checked';
     public const PRICE_FROM = 'price_from';
     public const PRICE_TO = 'price_to';
+    public const SORT = 'sort';
 
     /**
      * Методы привязанные к ключам-параметрам по которым происходит фильтрация
@@ -30,6 +31,7 @@ class ProductFilter extends AbstractFilter
             self::TAGS       => 'tagsFilter',
             self::PRICE_FROM => 'priceFromFilter',
             self::PRICE_TO   => 'priceToFilter',
+            self::SORT       => 'sortBy',
         ];
     }
 
@@ -60,5 +62,17 @@ class ProductFilter extends AbstractFilter
     public function priceToFilter(Builder $builder, $value): void
     {
         $builder->where('price', '<=', (float)$value);
+    }
+
+    public function sortBy(Builder $builder, $value): void
+    {
+        match ($value) {
+            'alphabet_increase' => $builder->orderBy('title'),
+            'alphabet_decrease' => $builder->orderBy('title', 'desc'),
+            'price_increase' => $builder->orderBy('price'),
+            'price_decrease' => $builder->orderBy('price', 'desc'),
+            'date_increase' => $builder->orderBy('updated_at'),
+            'recommended', 'top_sail', 'date_decrease' => $builder->orderBy('updated_at', 'desc'),
+        };
     }
 }

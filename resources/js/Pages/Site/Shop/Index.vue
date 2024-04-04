@@ -1,9 +1,9 @@
 <script>
-import {Head, Link} from '@inertiajs/vue3';
-import StoreLayout from "@/Layouts/StoreLayout.vue";
-import Pagination from "@/Components/Pagination.vue";
-import ModalProduct from "@/Components/ModalProduct.vue";
-import Filter from "@/Components/Filter.vue";
+import {Head, Link}  from '@inertiajs/vue3';
+import StoreLayout   from "@/Layouts/StoreLayout.vue";
+import Pagination    from "@/Components/Pagination.vue";
+import ModalProduct  from "@/Components/ModalProduct.vue";
+import Filter        from "@/Components/Filter.vue";
 import FilterSidebar from "@/Components/FilterSidebar.vue";
 // import {createLogger} from "vite";
 
@@ -28,6 +28,11 @@ import FilterSidebar from "@/Components/FilterSidebar.vue";
  * @property {Array} tags_checked
  *
  */
+
+const SORT_OBJ = {
+    'recommended': 'Рекомендуемые',
+    'top_sail'   : 'Самый продаваемый',
+};
 
 export default {
     /**
@@ -64,6 +69,8 @@ export default {
     data() {
         return {
             productModal: {},
+            sort_str    : 'Рекомендуемые',
+            sort_param  : '',
         }
     },
 
@@ -72,6 +79,8 @@ export default {
         let body = document.querySelector('body');
         let event_change = new Event('change');
         body.dispatchEvent(event_change);
+
+        this.checkSorting();
     },
 
     /**
@@ -89,6 +98,60 @@ export default {
                     this.productModal = res.data;
                 });
         },
+
+        setSorting(param) {
+
+            let size = Object.keys(this.request_filter).length;
+            let all_filter = {};
+            if (size > 0) {
+                this.request_filter.sort = param;
+                this.sort_param = param;
+                all_filter = this.request_filter;
+            } else {
+                all_filter = {'sort': param};
+            }
+
+            this.$inertia.get('/shop', all_filter);
+        },
+
+        /**
+         * Проверка на наличии параметра сортировки в объекте фильтрации
+         */
+        checkSorting() {
+            // console.log(SORT_OBJ);
+            if (this.request_filter.sort === 'recommended') {
+                this.sort_str = 'Рекомендуемые';
+                this.sort_param = 'recommended';
+            }
+            if (this.request_filter.sort === 'top_sail') {
+                this.sort_str = 'Самый продаваемый';
+                this.sort_param = 'top_sail';
+            }
+            if (this.request_filter.sort === 'alphabet_increase') {
+                this.sort_str = 'По алфавиту, от А до Я';
+                this.sort_param = 'alphabet_increase';
+            }
+            if (this.request_filter.sort === 'alphabet_decrease') {
+                this.sort_str = 'По алфавиту, от Я до А';
+                this.sort_param = 'alphabet_decrease';
+            }
+            if (this.request_filter.sort === 'price_increase') {
+                this.sort_str = 'Цена от низкой к высокой';
+                this.sort_param = 'price_increase';
+            }
+            if (this.request_filter.sort === 'price_decrease') {
+                this.sort_str = 'Цена от высокой к низкой';
+                this.sort_param = 'price_decrease';
+            }
+            if (this.request_filter.sort === 'date_increase') {
+                this.sort_str = 'Дата, от старой к новой';
+                this.sort_param = 'date_increase';
+            }
+            if (this.request_filter.sort === 'date_decrease') {
+                this.sort_str = 'Дата, от новой к старой';
+                this.sort_param = 'date_decrease';
+            }
+        },
     },
 
     computed: {},
@@ -100,7 +163,7 @@ export default {
     <StoreLayout :categories="categories" :shopActive="active">
 
         <!-- Start offcanvas filter sidebar -->
-        <FilterSidebar :request_filter="request_filter"/>
+        <FilterSidebar :request_filter="request_filter" :sort_param="sort_param"/>
         <!-- End offcanvas filter sidebar -->
 
         <!-- Start shop section -->
@@ -108,7 +171,7 @@ export default {
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3 col-lg-4 shop-col-width-lg-4">
-                        <Filter :request_filter="request_filter"/>
+                        <Filter :request_filter="request_filter" :sort_param="sort_param"/>
                     </div>
                     <div class="col-xl-9 col-lg-8 shop-col-width-lg-8">
                         <div class="shop__right--sidebar">
@@ -144,7 +207,7 @@ export default {
                                                         stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="28"/>
                                             </svg>
-                                            <span class="widget__filter--btn__text">Filter</span>
+                                            <span class="widget__filter--btn__text">Фильтр</span>
                                         </button>
                                         <div
                                             class="product__view--mode__list product__short--by align-items-center d-flex ">
@@ -161,21 +224,13 @@ export default {
                                         </div>
                                         <div
                                             class="product__view--mode__list product__short--by align-items-center d-flex">
-                                            <!--                                            <label class="product__view&#45;&#45;label">Sort By :</label>-->
-                                            <!--                                            <div class="select shop__header&#45;&#45;select">-->
-                                            <!--                                                <select class="product__view&#45;&#45;select">-->
-                                            <!--                                                    <option selected value="1">Sort by latest</option>-->
-                                            <!--                                                    <option value="2">Sort by popularity</option>-->
-                                            <!--                                                    <option value="3">Sort by newness</option>-->
-                                            <!--                                                    <option value="4">Sort by rating</option>-->
-                                            <!--                                                </select>-->
-                                            <!--                                            </div>-->
                                             <div class="filter-sorting">
-                                                <div class="collection-sorting position-relative d-none d-lg-block">
+<!--                                                <div class="collection-sorting position-relative d-none d-lg-block">-->
+                                                <div class="collection-sorting position-relative d-lg-block">
                                                     <div
                                                         class="sorting-header text_16 d-flex align-items-center justify-content-end">
-                                                        <span class="sorting-title me-2">Sort by:</span>
-                                                        <span class="active-sorting">Featured</span>
+                                                        <span class="sorting-title me-2">Сортировать:</span>
+                                                        <span class="active-sorting">{{ sort_str }}</span>
                                                         <span class="sorting-icon">
                                                             <svg class="icon icon-down feather feather-chevron-down"
                                                                  xmlns="http://www.w3.org/2000/svg"
@@ -188,30 +243,38 @@ export default {
                                                         </span>
                                                     </div>
                                                     <ul class="sorting-lists list-unstyled m-0">
-                                                        <li><a href="#" class="text_14">Featured</a></li>
-                                                        <li><a href="#" class="text_14">Best Selling</a></li>
-                                                        <li><a href="#" class="text_14">Alphabetically, A-Z</a></li>
-                                                        <li><a href="#" class="text_14">Alphabetically, Z-A</a></li>
-                                                        <li><a href="#" class="text_14">Price, low to high</a></li>
-                                                        <li><a href="#" class="text_14">Price, high to low</a></li>
-                                                        <li><a href="#" class="text_14">Date, old to new</a></li>
-                                                        <li><a href="#" class="text_14">Date, new to old</a></li>
+                                                        <li><a @click.prevent="setSorting('recommended')" href="#"
+                                                               class="text_14">Рекомендуемые</a></li>
+                                                        <li><a @click.prevent="setSorting('top_sail')" href="#"
+                                                               class="text_14">Самый продаваемый</a></li>
+                                                        <li><a @click.prevent="setSorting('alphabet_increase')" href="#"
+                                                               class="text_14">По алфавиту, от А до Я</a></li>
+                                                        <li><a @click.prevent="setSorting('alphabet_decrease')" href="#"
+                                                               class="text_14">По алфавиту, от Я до А</a></li>
+                                                        <li><a @click.prevent="setSorting('price_increase')" href="#"
+                                                               class="text_14">Цена от низкой к высокой</a></li>
+                                                        <li><a @click.prevent="setSorting('price_decrease')" href="#"
+                                                               class="text_14">Цена от высокой к низкой</a></li>
+                                                        <li><a @click.prevent="setSorting('date_increase')" href="#"
+                                                               class="text_14">Дата, от старой к новой</a></li>
+                                                        <li><a @click.prevent="setSorting('date_decrease')" href="#"
+                                                               class="text_14">Дата, от новой к старой</a></li>
                                                     </ul>
                                                 </div>
-                                                <div
-                                                    class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">
-                                                    <span class="mobile-filter-icon me-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2"
-                                                             stroke-linecap="round" stroke-linejoin="round"
-                                                             class="icon icon-filter">
-                                                            <polygon
-                                                                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                                                        </svg>
-                                                    </span>
-                                                    <span class="mobile-filter-heading">Filter and Sorting</span>
-                                                </div>
+<!--                                                <div-->
+<!--                                                    class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">-->
+<!--                                                    <span class="mobile-filter-icon me-2">-->
+<!--                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
+<!--                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
+<!--                                                             stroke-width="2"-->
+<!--                                                             stroke-linecap="round" stroke-linejoin="round"-->
+<!--                                                             class="icon icon-filter">-->
+<!--                                                            <polygon-->
+<!--                                                                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>-->
+<!--                                                        </svg>-->
+<!--                                                    </span>-->
+<!--                                                    <span class="mobile-filter-heading">Filter and Sorting</span>-->
+<!--                                                </div>-->
                                             </div>
 
                                         </div>

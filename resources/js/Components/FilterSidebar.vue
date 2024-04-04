@@ -12,6 +12,8 @@ export default {
     props: {
         // Объект с выбранными значениями
         request_filter: Object,
+        // Параметр сортировки
+        sort_param: String,
     },
 
     /**
@@ -20,18 +22,18 @@ export default {
     data() {
         return {
             // Значения для фильтра
-            min_price: null,
-            max_price: null,
+            min_price : null,
+            max_price : null,
             categories: [],
-            colors: [],
-            tags: [],
+            colors    : [],
+            tags      : [],
 
             // Выбранные значения для фильтра
-            min_price_filter: null,
-            max_price_filter: null,
+            min_price_filter  : null,
+            max_price_filter  : null,
             categories_checked: [],
-            colors_checked: [],
-            tags_checked: [],
+            colors_checked    : [],
+            tags_checked      : [],
         }
     },
 
@@ -149,10 +151,11 @@ export default {
 
             let filter_params = {
                 'categories_checked': this.categories_checked,
-                'colors_checked': this.colors_checked,
-                'tags_checked': this.tags_checked,
-                'price_from': price_from,
-                'price_to': price_to,
+                'colors_checked'    : this.colors_checked,
+                'tags_checked'      : this.tags_checked,
+                'price_from'        : price_from,
+                'price_to'          : price_to,
+                'sort'              : this.sort_param,
             };
 
             this.$inertia.get('/shop', filter_params);

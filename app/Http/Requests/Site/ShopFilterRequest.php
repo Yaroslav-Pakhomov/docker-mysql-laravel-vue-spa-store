@@ -44,6 +44,7 @@ class ShopFilterRequest extends FormRequest
             "tags_checked"       => ['nullable', 'array',],
             "price_from"         => ['nullable', 'decimal:0,2',],
             "price_to"           => ['nullable', 'decimal:0,2',],
+            "sort"               => ['nullable', 'string',],
         ];
     }
 
@@ -70,6 +71,9 @@ class ShopFilterRequest extends FormRequest
             'price_to'           => [
                 'decimal:0,2' => 'Поле ":attribute" д.б. числом.',
             ],
+            'sort'               => [
+                'string' => 'Поле ":attribute" д.б. строкой.',
+            ],
         ];
     }
 
@@ -86,6 +90,7 @@ class ShopFilterRequest extends FormRequest
             'tags_checked'       => 'Тэги',
             'price_from'         => 'Цена от',
             'price_to'           => 'Цена от',
+            'sort'               => 'Сортировка',
         ];
     }
 }
