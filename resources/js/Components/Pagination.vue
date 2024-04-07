@@ -1,6 +1,14 @@
 <script>
 import {Link} from '@inertiajs/vue3';
 
+/**
+ * @typedef {Object} products
+ * @property {Number} current_page
+ * @property {Number} last_page
+ * @typedef {Object} products.links
+ * @property {Number} length
+ */
+
 export default {
 
     name: 'Pagination',
@@ -10,13 +18,14 @@ export default {
     },
 
     props: {
-        links: Array,
-        // Объект с выбранными значениями
+        products: Object,
+        // Объект с выбранными значениями фильтра и сортировки
         request_filter: Object,
     },
 
     mounted() {
-
+        console.log(this.products);
+        // console.log(this.links);
     },
 
     methods: {
@@ -27,38 +36,6 @@ export default {
             return str;
         },
 
-        /**
-         * Проверка на фильтрацию товаров
-         */
-        checkFilters() {
-            for (let param in this.request_filter) {
-                if (param === 'categories_checked') {
-                    for (let category in this.request_filter[param]) {
-                        this.toggleParam(this.request_filter[param][category], this.categories_checked);
-                    }
-                }
-
-                if (param === 'colors_checked') {
-                    for (let color in this.request_filter[param]) {
-                        this.toggleParam(this.request_filter[param][color], this.colors_checked);
-                    }
-                }
-
-                if (param === 'tags_checked') {
-                    for (let tag in this.request_filter[param]) {
-                        this.toggleParam(this.request_filter[param][tag], this.tags_checked);
-                    }
-                }
-
-                if (param === 'price_from') {
-                    this.min_price_filter = +this.min_price !== +this.request_filter[param] ? +this.request_filter[param] : null;
-                }
-
-                if (param === 'price_to') {
-                    this.max_price_filter = +this.max_price !== +this.request_filter[param] ? +this.request_filter[param] : null;
-                }
-            }
-        },
     },
 };
 
@@ -66,23 +43,28 @@ export default {
 
 <template>
 
-    <div v-if="links.length > 3">
+    <div v-if="products.links.length > 3">
         <div class="flex flex-wrap my-5 text-center">
-            <template v-for="(link, p) in links" :key="p">
+            <template v-for="(link, p) in products.links" :key="p">
                 <div v-if="link.url === null"
                      class="d-inline-block w-auto mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded"
                      v-html="link.label"/>
-
-                <Link v-else
-                      class="mx-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500"
-                      :class="link.active ? ' bg-danger text__black' : ''"
-                      :href="link.url"
-                      method="get" :data="request_filter">
+                <Link
+                    v-if="!Number(link.label) && link.url !== null || +(link.label) && (products.current_page - +(link.label) < 2 && products.current_page - +(link.label) > -2) || +link.label === 1 || +link.label === products.last_page"
+                    class="mx-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500"
+                    :class="link.active ? ' bg-danger text__black' : ''"
+                    :href="link.url"
+                    method="get" :data="request_filter">
                     {{ convertString(link.label) }}
                 </Link>
+                <div v-if=" +(link.label) && +products.current_page !== 3 && (products.current_page - +(link.label) === 2)
+                ||
+                +(link.label) && +products.current_page + 2 !== +products.last_page && (products.current_page - +(link.label) === -2) "
+                     class="d-inline-block w-auto mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded">
+                    ...
+                </div>
             </template>
         </div>
     </div>
-
 
 </template>

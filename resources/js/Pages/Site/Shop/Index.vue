@@ -225,7 +225,7 @@ export default {
                                         <div
                                             class="product__view--mode__list product__short--by align-items-center d-flex">
                                             <div class="filter-sorting">
-<!--                                                <div class="collection-sorting position-relative d-none d-lg-block">-->
+                                                <!--                                                <div class="collection-sorting position-relative d-none d-lg-block">-->
                                                 <div class="collection-sorting position-relative d-lg-block">
                                                     <div
                                                         class="sorting-header text_16 d-flex align-items-center justify-content-end">
@@ -261,20 +261,20 @@ export default {
                                                                class="text_14">Дата, от новой к старой</a></li>
                                                     </ul>
                                                 </div>
-<!--                                                <div-->
-<!--                                                    class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">-->
-<!--                                                    <span class="mobile-filter-icon me-2">-->
-<!--                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
-<!--                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
-<!--                                                             stroke-width="2"-->
-<!--                                                             stroke-linecap="round" stroke-linejoin="round"-->
-<!--                                                             class="icon icon-filter">-->
-<!--                                                            <polygon-->
-<!--                                                                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>-->
-<!--                                                        </svg>-->
-<!--                                                    </span>-->
-<!--                                                    <span class="mobile-filter-heading">Filter and Sorting</span>-->
-<!--                                                </div>-->
+                                                <!--                                                <div-->
+                                                <!--                                                    class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">-->
+                                                <!--                                                    <span class="mobile-filter-icon me-2">-->
+                                                <!--                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
+                                                <!--                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
+                                                <!--                                                             stroke-width="2"-->
+                                                <!--                                                             stroke-linecap="round" stroke-linejoin="round"-->
+                                                <!--                                                             class="icon icon-filter">-->
+                                                <!--                                                            <polygon-->
+                                                <!--                                                                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>-->
+                                                <!--                                                        </svg>-->
+                                                <!--                                                    </span>-->
+                                                <!--                                                    <span class="mobile-filter-heading">Filter and Sorting</span>-->
+                                                <!--                                                </div>-->
                                             </div>
 
                                         </div>
@@ -357,7 +357,7 @@ export default {
                                     <p class="collection-counter text_16 mb-0 ms-2">({{ products.total }} ед.)</p>
                                 </div>
 
-                                <Pagination class="mt-6" :links="products.links" :request_filter="request_filter"/>
+                                <Pagination class="mt-6" :products="products" :request_filter="request_filter"/>
 
                                 <div class="tab_content">
                                     <div id="product_grid" class="tab_pane active show">
@@ -697,7 +697,7 @@ export default {
                                     </div>
                                 </div>
 
-                                <Pagination class="mt-6" :links="products.links" :request_filter="request_filter"/>
+                                <Pagination class="mt-6" :products="products" :request_filter="request_filter"/>
                             </div>
                         </div>
                     </div>
