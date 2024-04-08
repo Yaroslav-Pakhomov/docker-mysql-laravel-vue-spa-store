@@ -23,10 +23,7 @@ export default {
         request_filter: Object,
     },
 
-    mounted() {
-        console.log(this.products);
-        // console.log(this.links);
-    },
+    mounted() {},
 
     methods: {
         convertString(str) {

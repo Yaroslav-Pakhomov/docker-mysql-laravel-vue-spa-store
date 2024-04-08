@@ -56,7 +56,7 @@ class ShopController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Страница товара "Модальное окно"
      *
      * @param Product $product
      *

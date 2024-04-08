@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\FilterController as SiteFilterController;
 use App\Http\Controllers\Site\IndexController as SiteIndexController;
 use App\Http\Controllers\Site\ShopController as SiteShopController;
+use App\Http\Controllers\Site\ProductController as SiteProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -78,8 +79,25 @@ Route::prefix('/')->group(function () {
             Route::prefix('/shop')->group(function () {
                 Route::name('shop.')->group(function () {
 
-                    // Страница товара
-                    Route::get('/{product:slug}', 'show')->where('user:slug', '[a-z0-9_-]+')->name('show');
+                    // Страница товара "Модальное окно"
+                    Route::get('/{product:slug}', 'show')->where('product:slug', '[a-z0-9_-]+')->name('show');
+
+                    // // Страница товара
+                    // Route::get('/{product:slug}', 'show')->where('product:slug', '[a-z0-9_-]+')->name('show');
+
+                    // // Страница товара "На сайте"
+                    // Route::get('/{product:slug}', 'showDetailProduct')->where('product:slug', '[a-z0-9_-]+')->name('showDetailProduct');
+                });
+            });
+        });
+
+        // Товар
+        Route::controller(SiteProductController::class)->group(function () {
+            Route::prefix('/product')->group(function () {
+                Route::name('product.')->group(function () {
+
+                    // Страница товара "На сайте"
+                    Route::get('/{product:slug}', 'show')->where('product:slug', '[a-z0-9_-]+')->name('show');
                 });
             });
         });

@@ -94,6 +94,7 @@ export default {
             // Асинхронный запрос 2 способа
             // axios.get('/shop/' + product.slug)
             axios.get(this.route('site.shop.show', slug))
+            // axios.get(this.route('site.shop.show', slug))
                 .then(res => {
                     this.productModal = res.data;
                 });
@@ -261,20 +262,7 @@ export default {
                                                                class="text_14">Дата, от новой к старой</a></li>
                                                     </ul>
                                                 </div>
-                                                <!--                                                <div-->
-                                                <!--                                                    class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">-->
-                                                <!--                                                    <span class="mobile-filter-icon me-2">-->
-                                                <!--                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
-                                                <!--                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
-                                                <!--                                                             stroke-width="2"-->
-                                                <!--                                                             stroke-linecap="round" stroke-linejoin="round"-->
-                                                <!--                                                             class="icon icon-filter">-->
-                                                <!--                                                            <polygon-->
-                                                <!--                                                                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>-->
-                                                <!--                                                        </svg>-->
-                                                <!--                                                    </span>-->
-                                                <!--                                                    <span class="mobile-filter-heading">Filter and Sorting</span>-->
-                                                <!--                                                </div>-->
+                                                <!-- <div-->
                                             </div>
 
                                         </div>
@@ -368,7 +356,7 @@ export default {
                                                         <article class="product__card">
                                                             <div class="product__card--thumbnail">
                                                                 <a class="product__card--thumbnail__link display-block"
-                                                                   href="product-details.html">
+                                                                    :href="route('site.product.show', product.slug)">
                                                                     <img
                                                                         class="product__card--thumbnail__img product__primary--img"
                                                                         :src="product.main_img"
@@ -396,8 +384,7 @@ export default {
                                                                                     d="M15.6952 14.4991L11.7663 10.5588C12.7765 9.4008 13.33 7.94381 13.33 6.42703C13.33 2.88322 10.34 0 6.66499 0C2.98997 0 0 2.88322 0 6.42703C0 9.97085 2.98997 12.8541 6.66499 12.8541C8.04464 12.8541 9.35938 12.4528 10.4834 11.6911L14.4422 15.6613C14.6076 15.827 14.8302 15.9184 15.0687 15.9184C15.2944 15.9184 15.5086 15.8354 15.6711 15.6845C16.0166 15.364 16.0276 14.8325 15.6952 14.4991ZM6.66499 1.67662C9.38141 1.67662 11.5913 3.8076 11.5913 6.42703C11.5913 9.04647 9.38141 11.1775 6.66499 11.1775C3.94857 11.1775 1.73869 9.04647 1.73869 6.42703C1.73869 3.8076 3.94857 1.67662 6.66499 1.67662Z"
                                                                                     fill="currentColor"></path>
                                                                             </svg>
-                                                                            <span
-                                                                                class="visually-hidden">Подробнее</span>
+                                                                            <span class="visually-hidden">Подробнее</span>
                                                                         </a>
                                                                     </li>
                                                                     <li class="product__card--action__list">
@@ -494,7 +481,7 @@ export default {
                                                                     </li>
                                                                 </ul>
                                                                 <h3 class="product__card--title">
-                                                                    <a href="product-details.html">{{
+                                                                    <a :href="route('site.product.show', product.slug)">{{
                                                                             product.title
                                                                         }}</a>
                                                                 </h3>
@@ -538,7 +525,7 @@ export default {
                                                             <div
                                                                 class="product__card--thumbnail product__list--thumbnail">
                                                                 <a class="product__card--thumbnail__link display-block"
-                                                                   href="product-details.html">
+                                                                   :href="route('site.product.show', product.slug)">
                                                                     <img
                                                                         class="product__card--thumbnail__img product__primary--img"
                                                                         :src="product.main_img"
@@ -606,7 +593,7 @@ export default {
                                                             </div>
                                                             <div class="product__card--content product__list--content">
                                                                 <h3 class="product__card--title"><a
-                                                                    href="product-details.html">{{ product.title }} </a>
+                                                                    :href="route('site.product.show', product.slug)">{{ product.title }} </a>
                                                                 </h3>
                                                                 <ul class="rating product__card--rating d-flex">
                                                                     <li class="rating__list">

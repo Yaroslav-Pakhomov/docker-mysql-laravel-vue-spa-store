@@ -1,5 +1,5 @@
 <script>
-import {Link} from '@inertiajs/vue3';
+import {Link}                from '@inertiajs/vue3';
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
 
@@ -257,8 +257,11 @@ export default {
                                             </button>
                                         </div>
                                         <button class="primary__btn quickview__cart--btn" type="submit">
-                                            Add To Cart
+                                            Добавить в корзину
                                         </button>
+                                        <!--                                        <a class="primary__btn quickview__cart&#45;&#45;btn" :href="route('site.product.show', product.slug)">-->
+                                        <!--                                            Подробнее-->
+                                        <!--                                        </a>-->
                                     </div>
                                     <div class="quickview__variant--list variant__wishlist mb-10">
                                         <a class="variant__wishlist--icon" href="#" title="Add to wishlist">
@@ -269,12 +272,12 @@ export default {
                                                     fill="none" stroke="currentColor" stroke-linecap="round"
                                                     stroke-linejoin="round" stroke-width="32"/>
                                             </svg>
-                                            Add to Wishlist
+                                            В избранное
                                         </a>
                                     </div>
                                 </div>
                                 <div class="quickview__social d-flex align-items-center">
-                                    <label class="quickview__social--title">Social Share:</label>
+                                    <label class="quickview__social--title">Социальные сети:</label>
                                     <ul class="quickview__social--wrapper mt-0 d-flex">
                                         <li class="quickview__social--list">
                                             <a class="quickview__social--icon" target="_blank"
