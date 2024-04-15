@@ -1,15 +1,12 @@
 <script>
 import {Head, Link}  from '@inertiajs/vue3';
 import StoreLayout   from "@/Layouts/StoreLayout.vue";
-import Pagination    from "@/Components/Pagination.vue";
-import ModalProduct  from "@/Components/ModalProduct.vue";
-import Filter        from "@/Components/Filter.vue";
-import FilterSidebar from "@/Components/FilterSidebar.vue";
 import {SwiperSlide} from "swiper/vue";
-// import {createLogger} from "vite";
+import Site          from "@/Custom/site.js";
 
 /**
  * @typedef {Object} productDetail
+ * @property {Object} id
  * @property {Object} data
  * @typedef {Object} product
  * @property {string} title
@@ -39,13 +36,9 @@ export default {
      */
     components: {
         SwiperSlide,
-        ModalProduct,
         Head,
         Link,
         StoreLayout,
-        Pagination,
-        Filter,
-        FilterSidebar,
     },
 
     /**
@@ -65,6 +58,7 @@ export default {
             productModal: {},
             sort_str    : 'Рекомендуемые',
             sort_param  : '',
+            input_value : 1,
         }
     },
 
@@ -82,6 +76,39 @@ export default {
         // Номер итерации
         checkedIter(iter) {
             return Number(iter) === 0;
+        },
+
+        // -----------------------------
+        // Кол-во товара - начало
+        // -----------------------------
+
+        // Уменьшение
+        decreaseButton(event) {
+            let value = Site.decreaseButton(event);
+            let input = event.target.nextElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                this.input_value = value;
+            }
+        },
+        // Увеличение
+        increaseButton(event) {
+            let value = Site.increaseButton(event);
+            let input = event.target.previousElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                this.input_value = value;
+            }
+        },
+
+        // -----------------------------
+        // Кол-во товара - конец
+        // -----------------------------
+
+        /**
+         * Добавление товара в корзину на стороне браузера
+         */
+        addToCart(product) {
+            let qty = +this.input_value;
+            Site.changeQtyToCart(product, qty);
         },
     },
 
@@ -320,6 +347,7 @@ export default {
                                     <div class="product__variant--list quantity d-flex align-items-center mb-20">
                                         <div class="quantity__box">
                                             <button type="button"
+                                                    @click="decreaseButton"
                                                     class="quantity__value quickview__value--quantity decrease"
                                                     aria-label="quantity value" value="Decrease Value">-
                                             </button>
@@ -328,11 +356,13 @@ export default {
                                                        value="1" data-counter/>
                                             </label>
                                             <button type="button"
+                                                    @click="increaseButton"
                                                     class="quantity__value quickview__value--quantity increase"
                                                     aria-label="quantity value" value="Increase Value">+
                                             </button>
                                         </div>
-                                        <button class="primary__btn quickview__cart--btn" type="submit">Добавить в корзину
+                                        <button @click.prevent='addToCart(productDetail)'
+                                                class="primary__btn quickview__cart--btn" type="submit">В корзину
                                         </button>
                                     </div>
                                     <div class="product__variant--list mb-15">
@@ -424,8 +454,12 @@ export default {
                 <div class="row row-cols-1">
                     <div class="col">
                         <ul class="product__tab--one product__details--tab d-flex mb-30">
-                            <li class="product__details--tab__list active" data-toggle="tab" data-target="#description">Полное описание</li>
-                            <li class="product__details--tab__list" data-toggle="tab" data-target="#information">Дополнительная информация</li>
+                            <li class="product__details--tab__list active" data-toggle="tab" data-target="#description">
+                                Полное описание
+                            </li>
+                            <li class="product__details--tab__list" data-toggle="tab" data-target="#information">
+                                Дополнительная информация
+                            </li>
                         </ul>
                         <div class="product__details--tab__inner border-radius-10">
                             <div class="tab_content">
@@ -437,7 +471,8 @@ export default {
                                         </div>
                                         <div class="product__tab--content__step style2 d-flex align-items-center mb-30">
                                             <div class="product__tab--content__banner">
-                                                <img class="product__tab--content__banner--img border-radius-5" :src="productDetail.main_img" alt="banner-img">
+                                                <img class="product__tab--content__banner--img border-radius-5"
+                                                     :src="productDetail.main_img" alt="banner-img">
                                             </div>
                                             <div class="product__tab--content__right">
                                                 <p class="product__tab--content__desc">{{ productDetail.content }}</p>
@@ -450,8 +485,11 @@ export default {
                                         <div class="product__tab--content__step">
                                             <ul class="additional__info_list">
                                                 <li class="additional__info_list--item">
-                                                    <span class="info__list--item-head"><strong>Категория</strong></span>
-                                                    <span  class="info__list--item-content"> {{ productDetail.category ? productDetail.category.title : 'Нет' }}</span>
+                                                    <span
+                                                        class="info__list--item-head"><strong>Категория</strong></span>
+                                                    <span class="info__list--item-content"> {{
+                                                            productDetail.category ? productDetail.category.title : 'Нет'
+                                                        }}</span>
 
                                                 </li>
                                                 <li class="additional__info_list--item">
@@ -473,7 +511,9 @@ export default {
                                                     <ul class="variant__size d-flex flex-wrap">
                                                         <template v-for="tag in productDetail.tags">
                                                             <li class="variant__size--list">
-                                                                <a href="#" class="variant__size--value">#{{ tag.title }}</a>
+                                                                <a href="#" class="variant__size--value">#{{
+                                                                        tag.title
+                                                                    }}</a>
                                                             </li>
                                                         </template>
                                                     </ul>

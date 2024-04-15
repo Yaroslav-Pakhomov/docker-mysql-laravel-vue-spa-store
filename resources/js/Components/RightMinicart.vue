@@ -1,5 +1,6 @@
 <script>
 import {Link} from '@inertiajs/vue3';
+import Site   from "@/Custom/site.js";
 
 /**
  * @typedef {Object} product
@@ -22,21 +23,30 @@ export default {
 
     components: {
         Link,
+        Site,
     },
 
+    // Передаваемые св-ва от родителя и/или от контроллера
     props: {
-        product: Object,
+        cart_products: Array,
     },
+
+    // Передаваемые методы от родителя
+    emits: [],
 
     mounted() {
         // Имитация события изменения в теге body
         let body = document.querySelector('body');
         let event_change = new Event('change');
         body.dispatchEvent(event_change);
+
+        Site.setLocalStorageEventCart();
     },
 
     data() {
-        return {}
+        return {
+            // cart_products: [],
+        }
     },
 
     methods: {
@@ -49,34 +59,44 @@ export default {
         // Кол-во товара - начало
         // -----------------------------
 
-        increaseButton(event) {
-            event.preventDefault();
-            let input = event.target.previousElementSibling.children[0];
-            if (input.dataset.counter !== undefined) {
-                let value = parseInt(String(input.value), 10);
-                value = isNaN(value) ? 0 : value;
-                value++;
-                input.value = value;
-            }
-        },
-        decreaseButton(event) {
-            event.preventDefault();
+        // Уменьшение
+        decreaseButton(event, product) {
+            Site.decreaseButton(event);
             let input = event.target.nextElementSibling.children[0];
             if (input.dataset.counter !== undefined) {
-                let value = parseInt(String(input.value), 10);
-                value = isNaN(value) ? 0 : value;
-                value < 1 ? (value = 1) : "";
-                value--;
-                input.value = value;
+                Site.changeQtyToCart(product, -1);
+            }
+        },
+        // Увеличение
+        increaseButton(event, product) {
+            Site.increaseButton(event);
+            let input = event.target.previousElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                Site.changeQtyToCart(product, 1);
             }
         },
 
         // -----------------------------
         // Кол-во товара - конец
         // -----------------------------
+
+        /**
+         * Удаление товара из корзины
+         */
+        deleteCartProduct(product) {
+            Site.deleteCartProduct(product);
+        },
     },
 
-    computed: {}
+    computed: {
+        total_price_cart_products() {
+            let total = 0;
+            for (let cart_product of this.cart_products) {
+                total += (Number(cart_product.price) * Number(cart_product.qty));
+            }
+            return total.toFixed(2);
+        },
+    }
 };
 
 </script>
@@ -99,77 +119,52 @@ export default {
             <p class="minicart__header--desc">Ассортимент органических продуктов ограничен</p>
         </div>
         <div class="minicart__product">
-            <div class="minicart__product--items d-flex">
-                <div class="minicart__thumb">
-                    <a href="product-details.html"><img
-                        src="/site/assets/img/product/small-product/product1.webp"
-                        alt="product-img"></a>
-                </div>
-                <div class="minicart__text">
-                    <h4 class="minicart__subtitle"><a href="product-details.html">Car & Motorbike Care.</a></h4>
-                    <span class="color__variant"><b>Color:</b> Beige</span>
-                    <div class="minicart__price">
-                        <span class="minicart__current--price">$125.00</span>
-                        <span class="minicart__old--price">$140.00</span>
+            <template v-for="cart_product in cart_products" :key="cart_product.id">
+                <div class="minicart__product--items d-flex">
+                    <div class="minicart__thumb">
+                        <a :href="route('site.product.show', cart_product.slug)">
+                            <img :src="cart_product.img" :alt="cart_product.title">
+                        </a>
                     </div>
-                    <div class="minicart__text--footer d-flex align-items-center">
-                        <div class="quantity__box minicart__quantity">
-                            <button type="button" class="quantity__value decrease" aria-label="quantity value"
-                                    @click="decreaseButton"
-                                    value="Decrease Value">-
-                            </button>
-                            <label>
-                                <input type="number" class="quantity__number" value="1" data-counter/>
-                            </label>
-                            <button type="button" class="quantity__value increase" aria-label="quantity value"
-                                    @click="increaseButton"
-                                    value="Increase Value">+
+                    <div class="minicart__text">
+                        <h4 class="minicart__subtitle"><a
+                            :href="route('site.product.show', cart_product.slug)">{{ cart_product.title }}</a></h4>
+                        <span class="color__variant"><b>Color:</b> Beige</span>
+                        <div class="minicart__price">
+                            <span class="minicart__current--price">${{ cart_product.price }}</span>
+                            <!--                            <span class="minicart__old&#45;&#45;price">$140.00</span>-->
+                        </div>
+                        <div class="minicart__text--footer d-flex align-items-center">
+                            <div class="quantity__box minicart__quantity">
+                                <button type="button" class="quantity__value decrease" aria-label="quantity value"
+                                        @click="(event) => decreaseButton(event, cart_product)"
+                                        value="Decrease Value">-
+                                </button>
+                                <label>
+                                    <input type="number" class="quantity__number" :value="cart_product.qty"
+                                           data-counter/>
+                                </label>
+                                <button type="button" class="quantity__value increase" aria-label="quantity value"
+                                        @click="(event) => increaseButton(event, cart_product)"
+                                        value="Increase Value">+
+                                </button>
+                            </div>
+                            <button @click.prevent="deleteCartProduct(cart_product)" class="minicart__product--remove"
+                                    type="button">Remove
                             </button>
                         </div>
-                        <button class="minicart__product--remove" type="button">Remove</button>
                     </div>
                 </div>
-            </div>
-            <div class="minicart__product--items d-flex">
-                <div class="minicart__thumb">
-                    <a href="product-details.html"><img
-                        src="/site/assets/img/product/small-product/product2.webp"
-                        alt="product-img"></a>
-                </div>
-                <div class="minicart__text">
-                    <h4 class="minicart__subtitle"><a href="product-details.html">Engine And Drivetrain.</a></h4>
-                    <span class="color__variant"><b>Color:</b> Green</span>
-                    <div class="minicart__price">
-                        <span class="minicart__current--price">$115.00</span>
-                        <span class="minicart__old--price">$130.00</span>
-                    </div>
-                    <div class="minicart__text--footer d-flex align-items-center">
-                        <div class="quantity__box minicart__quantity">
-                            <button type="button" class="quantity__value decrease" aria-label="quantity value"
-                                    @click="decreaseButton"
-                                    value="Decrease Value">-
-                            </button>
-                            <label>
-                                <input type="number" class="quantity__number" value="1" data-counter/>
-                            </label>
-                            <button type="button" class="quantity__value increase" aria-label="quantity value"
-                                    @click="increaseButton"
-                                    value="Increase Value">+
-                            </button>
-                        </div>
-                        <button class="minicart__product--remove" type="button">Remove</button>
-                    </div>
-                </div>
-            </div>
+            </template>
         </div>
         <div class="minicart__amount">
             <div class="minicart__amount_list d-flex justify-content-between">
                 <span>Sub Total:</span>
-                <span><b>$240.00</b></span>
+                <span><b>$ {{ total_price_cart_products }}</b></span>
             </div>
             <div class="minicart__amount_list d-flex justify-content-between">
                 <span>Total:</span>
-                <span><b>$240.00</b></span>
+                <span><b>$ {{ total_price_cart_products }}</b></span>
             </div>
         </div>
         <div class="minicart__conditions text-center">
@@ -178,7 +173,7 @@ export default {
                 class="minicart__conditions--link" href="privacy-policy.html">Privacy Policy</a></label>
         </div>
         <div class="minicart__button d-flex justify-content-center">
-            <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
+            <a class="primary__btn minicart__button--link" :href="route('site.cart.index')">Корзина</a>
             <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
         </div>
     </div>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Site\FilterController as SiteFilterController;
 use App\Http\Controllers\Site\IndexController as SiteIndexController;
 use App\Http\Controllers\Site\ShopController as SiteShopController;
 use App\Http\Controllers\Site\ProductController as SiteProductController;
+use App\Http\Controllers\Site\CartController as SiteCartController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -101,6 +102,18 @@ Route::prefix('/')->group(function () {
                 });
             });
         });
+
+        // Корзина
+        Route::controller(SiteCartController::class)->group(function () {
+            Route::prefix('/cart')->group(function () {
+                Route::name('cart.')->group(function () {
+
+                    // Главная
+                    Route::get('/', 'index')->name('index');
+                });
+            });
+        });
+
     });
 });
 

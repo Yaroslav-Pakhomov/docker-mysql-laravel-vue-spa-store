@@ -27,7 +27,7 @@
     <!-- Определение цвета по HEX-код -->
     <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script>
 
-    @vite(['resources/js/admin.js'])
+    @vite(['resources/js/Custom/admin.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

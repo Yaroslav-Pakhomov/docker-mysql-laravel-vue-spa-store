@@ -15,6 +15,7 @@ import '../../css/swiper.css';
 
 // import required modules
 import {Pagination, Navigation} from 'swiper/modules';
+import Site                     from "@/Custom/site.js";
 
 /**
  * @typedef {Object} product
@@ -43,6 +44,7 @@ export default {
         Link,
         Swiper,
         SwiperSlide,
+        Site,
     },
 
     setup() {
@@ -65,6 +67,7 @@ export default {
     data() {
         return {
             data_counter: 1,
+            input_value : 1,
         }
     },
 
@@ -78,31 +81,34 @@ export default {
         // Кол-во товара - начало
         // -----------------------------
 
-        increaseButton(event) {
-            event.preventDefault();
-            let input = event.target.previousElementSibling.children[0];
-            if (input.dataset.counter !== undefined) {
-                let value = parseInt(String(input.value), 10);
-                value = isNaN(value) ? 0 : value;
-                value++;
-                input.value = value;
-            }
-        },
+        // Уменьшение
         decreaseButton(event) {
-            event.preventDefault();
+            let value = Site.decreaseButton(event);
             let input = event.target.nextElementSibling.children[0];
             if (input.dataset.counter !== undefined) {
-                let value = parseInt(String(input.value), 10);
-                value = isNaN(value) ? 0 : value;
-                value < 1 ? (value = 1) : "";
-                value--;
-                input.value = value;
+                this.input_value = value;
+            }
+        },
+        // Увеличение
+        increaseButton(event) {
+            let value = Site.increaseButton(event);
+            let input = event.target.previousElementSibling.children[0];
+            if (input.dataset.counter !== undefined) {
+                this.input_value = value;
             }
         },
 
         // -----------------------------
         // Кол-во товара - конец
         // -----------------------------
+
+        /**
+         * Добавление товара в корзину на стороне браузера
+         */
+        addToCart(product) {
+            let qty = +this.input_value;
+            Site.changeQtyToCart(product, qty);
+        },
     },
 
     computed: {},
@@ -256,8 +262,9 @@ export default {
                                                     aria-label="quantity value" value="Increase Value">+
                                             </button>
                                         </div>
-                                        <button class="primary__btn quickview__cart--btn" type="submit">
-                                            Добавить в корзину
+                                        <button @click.prevent='addToCart(product)'
+                                                class="primary__btn quickview__cart--btn" type="submit">
+                                            В корзину
                                         </button>
                                         <!--                                        <a class="primary__btn quickview__cart&#45;&#45;btn" :href="route('site.product.show', product.slug)">-->
                                         <!--                                            Подробнее-->

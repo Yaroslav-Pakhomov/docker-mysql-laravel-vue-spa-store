@@ -1,6 +1,7 @@
 <script>
-import {Head, Link} from '@inertiajs/vue3';
+import {Head, Link}  from '@inertiajs/vue3';
 import RightMinicart from "@/Components/RightMinicart.vue";
+import Site          from "@/Custom/site.js";
 
 export default {
 
@@ -10,6 +11,7 @@ export default {
         Head,
         Link,
         RightMinicart,
+        Site,
     },
 
     // Передаваемые св-ва от родителя и/или от контроллера
@@ -17,6 +19,7 @@ export default {
         categories: Array,
         shopActive: Boolean,
         siteActive: Boolean,
+        cartActive: Boolean,
     },
 
     mounted() {
@@ -24,28 +27,45 @@ export default {
         let body = document.querySelector('body');
         let event_change = new Event('change');
         body.dispatchEvent(event_change);
+
+        // Слушатель события изменения корзины
+        window.addEventListener('cart-localstorage-changed', (event) => {
+            this.cart_products = JSON.parse(event.detail.storage);
+        });
+
+        Site.setLocalStorageEventCart();
     },
 
     data() {
-        return {}
+        return {
+            cart_products: [],
+        }
     },
 
-    methods: {
-        // setActiveLink(event) {
-        //     console.log(event.target.innerHTML);
-        //     console.log(event.target.classList);
-        //     console.log(event.target);
-        //     console.log(event);
-        //     event.target.classList.add('active');
-        // }
-    },
+    methods: {},
 
     computed: {
+        counter_cart_products() {
+            return this.cart_products.length;
+        },
+        total_price_cart_products() {
+            let total = 0;
+            for (let cart_product of this.cart_products) {
+                total += (Number(cart_product.price) * Number(cart_product.qty));
+            }
+            return total.toFixed(2);
+        },
         siteActiveClass() {
             return this.siteActive ? 'active' : '';
         },
         shopActiveClass() {
             return this.shopActive ? 'active' : '';
+        },
+        pagesActiveClass() {
+            return this.cartActive ? 'active' : '';
+        },
+        cartActiveClass() {
+            return this.cartActive ? 'active' : '';
         },
     },
 }
@@ -93,7 +113,6 @@ export default {
         </div>
     </div>
     <!-- End preloader -->
-
 
 
     <!-- Start header area -->
@@ -337,32 +356,7 @@ export default {
                                     </ul>
                                 </li>
                                 <li class="header__menu--items">
-                                    <a class="header__menu--link" href="blog.html">Blog
-                                        <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12"
-                                             height="7.41" viewBox="0 0 12 7.41">
-                                            <path d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z"
-                                                  transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
-                                        </svg>
-                                    </a>
-                                    <ul class="header__sub--menu">
-                                        <li class="header__sub--menu__items"><a href="blog.html"
-                                                                                class="header__sub--menu__link">Blog
-                                            Grid</a></li>
-                                        <li class="header__sub--menu__items"><a href="blog-details.html"
-                                                                                class="header__sub--menu__link">Blog
-                                            Details</a></li>
-                                        <li class="header__sub--menu__items"><a href="blog-left-sidebar.html"
-                                                                                class="header__sub--menu__link">Blog
-                                            Left
-                                            Sidebar</a></li>
-                                        <li class="header__sub--menu__items"><a href="blog-right-sidebar.html"
-                                                                                class="header__sub--menu__link">Blog
-                                            Right
-                                            Sidebar</a></li>
-                                    </ul>
-                                </li>
-                                <li class="header__menu--items">
-                                    <a class="header__menu--link" href="#">Pages
+                                    <a class="header__menu--link" href="#" :class="pagesActiveClass">Pages
                                         <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12"
                                              height="7.41" viewBox="0 0 12 7.41">
                                             <path d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z"
@@ -377,9 +371,10 @@ export default {
                                         <li class="header__sub--menu__items"><a href="contact.html"
                                                                                 class="header__sub--menu__link">Contact
                                             Us</a></li>
-                                        <li class="header__sub--menu__items"><a href="cart.html"
-                                                                                class="header__sub--menu__link">Cart
-                                            Page</a></li>
+                                        <li class="header__sub--menu__items"><a :href="route('site.cart.index')"
+                                                                                class="header__sub--menu__link"
+                                                                                :class="cartActiveClass">Корзина</a>
+                                        </li>
                                         <li class="header__sub--menu__items"><a href="portfolio.html"
                                                                                 class="header__sub--menu__link">Portfolio
                                             Page</a></li>
@@ -442,8 +437,9 @@ export default {
                                 </a>
                             </li>
                             <li class="header__account--items header__minicart--items">
-                                <a class="header__account--btn minicart__open--btn" href="javascript:void(0)"
-                                   data-offcanvas>
+                                <a
+                                    class="header__account--btn minicart__open--btn" href="javascript:void(0)"
+                                    data-offcanvas>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22.706" height="22.534"
                                          viewBox="0 0 14.706 13.534">
                                         <g transform="translate(0 0)">
@@ -460,9 +456,11 @@ export default {
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="items__count">2</span>
-                                    <span class="minicart__btn--text">My Cart <br> <span
-                                        class="minicart__btn--text__price">$0.00</span></span>
+                                    <span class="items__count">{{ counter_cart_products }}</span>
+                                    <span class="minicart__btn--text">Корзина <br> <span
+                                        class="minicart__btn--text__price">$ {{
+                                            total_price_cart_products
+                                        }}</span></span>
                                 </a>
                             </li>
                         </ul>
@@ -506,8 +504,9 @@ export default {
                                 </a>
                             </li>
                             <li class="header__account--items header__minicart--items">
-                                <a class="header__account--btn minicart__open--btn" href="javascript:void(0)"
-                                   data-offcanvas>
+                                <a
+                                    class="header__account--btn minicart__open--btn" href="javascript:void(0)"
+                                    data-offcanvas>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22.706" height="22.534"
                                          viewBox="0 0 14.706 13.534">
                                         <g transform="translate(0 0)">
@@ -524,7 +523,7 @@ export default {
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="items__count">2</span>
+                                    <span class="items__count">{{ counter_cart_products }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -707,32 +706,7 @@ export default {
                                         </ul>
                                     </li>
                                     <li class="header__menu--items">
-                                        <a class="header__menu--link text-white" href="blog.html">Blog
-                                            <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg"
-                                                 width="12"
-                                                 height="7.41" viewBox="0 0 12 7.41">
-                                                <path d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z"
-                                                      transform="translate(-6 -8.59)" fill="currentColor"
-                                                      opacity="0.7"/>
-                                            </svg>
-                                        </a>
-                                        <ul class="header__sub--menu">
-                                            <li class="header__sub--menu__items"><a href="blog.html"
-                                                                                    class="header__sub--menu__link">Blog
-                                                Grid</a></li>
-                                            <li class="header__sub--menu__items"><a href="blog-details.html"
-                                                                                    class="header__sub--menu__link">Blog
-                                                Details</a></li>
-                                            <li class="header__sub--menu__items"><a href="blog-left-sidebar.html"
-                                                                                    class="header__sub--menu__link">Blog
-                                                Left Sidebar</a></li>
-                                            <li class="header__sub--menu__items"><a href="blog-right-sidebar.html"
-                                                                                    class="header__sub--menu__link">Blog
-                                                Right Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="header__menu--items">
-                                        <a class="header__menu--link text-white" href="#">Pages
+                                        <a class="header__menu--link text-white" href="#" :class="pagesActiveClass">Pages
                                             <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg"
                                                  width="12"
                                                  height="7.41" viewBox="0 0 12 7.41">
@@ -748,9 +722,10 @@ export default {
                                             <li class="header__sub--menu__items"><a href="contact.html"
                                                                                     class="header__sub--menu__link">Contact
                                                 Us</a></li>
-                                            <li class="header__sub--menu__items"><a href="cart.html"
-                                                                                    class="header__sub--menu__link">Cart
-                                                Page</a></li>
+                                            <li class="header__sub--menu__items"><a :href="route('site.cart.index')"
+                                                                                    class="header__sub--menu__link"
+                                                                                    :class="cartActiveClass">Корзина</a>
+                                            </li>
                                             <li class="header__sub--menu__items"><a href="portfolio.html"
                                                                                     class="header__sub--menu__link">Portfolio
                                                 Page</a></li>
@@ -852,24 +827,7 @@ export default {
                             </Link>
                         </li>
                         <li class="offcanvas__menu_li">
-                            <a class="offcanvas__menu_item" href="blog.html">Blog</a>
-                            <ul class="offcanvas__sub_menu">
-                                <li class="offcanvas__sub_menu_li"><a href="blog.html" class="offcanvas__sub_menu_item">Blog
-                                    Grid</a></li>
-                                <li class="offcanvas__sub_menu_li"><a href="blog-details.html"
-                                                                      class="offcanvas__sub_menu_item">Blog Details</a>
-                                </li>
-                                <li class="offcanvas__sub_menu_li"><a href="blog-left-sidebar.html"
-                                                                      class="offcanvas__sub_menu_item">Blog Left
-                                    Sidebar</a>
-                                </li>
-                                <li class="offcanvas__sub_menu_li"><a href="blog-right-sidebar.html"
-                                                                      class="offcanvas__sub_menu_item">Blog Right
-                                    Sidebar</a></li>
-                            </ul>
-                        </li>
-                        <li class="offcanvas__menu_li">
-                            <a class="offcanvas__menu_item" href="#">Pages</a>
+                            <a class="offcanvas__menu_item" href="#" :class="pagesActiveClass">Pages</a>
                             <ul class="offcanvas__sub_menu">
                                 <li class="offcanvas__sub_menu_li"><a href="about.html"
                                                                       class="offcanvas__sub_menu_item">About
@@ -877,8 +835,9 @@ export default {
                                 <li class="offcanvas__sub_menu_li"><a href="contact.html"
                                                                       class="offcanvas__sub_menu_item">Contact
                                     Us</a></li>
-                                <li class="offcanvas__sub_menu_li"><a href="cart.html" class="offcanvas__sub_menu_item">Cart
-                                    Page</a></li>
+                                <li class="offcanvas__sub_menu_li"><a :href="route('site.cart.index')"
+                                                                      class="offcanvas__sub_menu_item"
+                                                                      :class="cartActiveClass">Корзина</a></li>
                                 <li class="offcanvas__sub_menu_li"><a href="portfolio.html"
                                                                       class="offcanvas__sub_menu_item">Portfolio
                                     Page</a>
@@ -956,7 +915,7 @@ export default {
         </div>
         <!-- End Offcanvas header menu -->
 
-        <!-- Start Offcanvas stikcy toolbar -->
+        <!-- Start Offcanvas sticky toolbar -->
         <div class="offcanvas__stikcy--toolbar">
             <ul class="d-flex justify-content-between">
                 <li class="offcanvas__stikcy--toolbar__list">
@@ -1018,7 +977,7 @@ export default {
                             </svg>
                         </span>
                         <span class="offcanvas__stikcy--toolbar__label">Cart</span>
-                        <span class="items__count">3</span>
+                        <span class="items__count">{{ counter_cart_products }}</span>
                     </a>
                 </li>
                 <li class="offcanvas__stikcy--toolbar__list">
@@ -1035,10 +994,10 @@ export default {
                 </li>
             </ul>
         </div>
-        <!-- End Offcanvas stikcy toolbar -->
+        <!-- End Offcanvas sticky toolbar -->
 
         <!-- Start offCanvas minicart -->
-        <RightMinicart/>
+        <RightMinicart :cart_products="cart_products"/>
         <!-- End offCanvas minicart -->
 
         <!-- Start search box area -->
