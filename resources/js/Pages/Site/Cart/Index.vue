@@ -80,6 +80,15 @@ export default {
         deleteCartProduct(product) {
             Site.deleteCartProduct(product);
         },
+
+        /**
+         * Удаление всех товаров из корзины
+         */
+        clearCart() {
+            localStorage.setItem('cart', JSON.stringify([]));
+
+            Site.setLocalStorageEventCart();
+        },
     },
 
     computed: {
@@ -202,9 +211,8 @@ export default {
                                         </tbody>
                                     </table>
                                     <div class="continue__shopping d-flex justify-content-between">
-                                        <a class="continue__shopping--link" :href="route('site.shop.index')">Continue
-                                            shopping</a>
-                                        <button class="continue__shopping--clear" type="submit">Clear Cart</button>
+                                        <a class="continue__shopping--link" :href="route('site.shop.index')">Продолжить покупки</a>
+                                        <button @click.prevent="clearCart()" class="continue__shopping--clear" type="submit">Очистить корзину</button>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +264,7 @@ export default {
                                                 </button>
                                             </li>
                                             <li><a class="cart__summary--footer__btn primary__btn checkout"
-                                                   href="checkout.html">Check Out</a></li>
+                                                   :href="route('site.checkout.index')">Оформить</a></li>
                                         </ul>
                                     </div>
                                 </div>

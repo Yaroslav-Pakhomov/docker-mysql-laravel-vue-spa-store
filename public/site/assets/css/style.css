@@ -11666,6 +11666,8 @@ details > summary::-webkit-details-marker {
     opacity: 0;
     cursor: pointer;
     z-index: 999;
+    width: 20px;
+    height: 20px;
 }
 
 .checkout__checkbox--input:checked ~ .checkout__checkbox--checkmark {

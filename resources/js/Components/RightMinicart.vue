@@ -174,7 +174,7 @@ export default {
         </div>
         <div class="minicart__button d-flex justify-content-center">
             <a class="primary__btn minicart__button--link" :href="route('site.cart.index')">Корзина</a>
-            <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
+            <a class="primary__btn minicart__button--link" :href="route('site.checkout.index')">Оформить</a>
         </div>
     </div>
     <!-- End offCanvas minicart -->

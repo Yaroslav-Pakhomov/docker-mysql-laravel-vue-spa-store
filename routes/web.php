@@ -14,6 +14,7 @@ use App\Http\Controllers\Site\IndexController as SiteIndexController;
 use App\Http\Controllers\Site\ShopController as SiteShopController;
 use App\Http\Controllers\Site\ProductController as SiteProductController;
 use App\Http\Controllers\Site\CartController as SiteCartController;
+use App\Http\Controllers\Site\CheckoutController as SiteCheckoutController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -110,6 +111,17 @@ Route::prefix('/')->group(function () {
 
                     // Главная
                     Route::get('/', 'index')->name('index');
+                });
+            });
+        });
+
+        // Оформление заказа
+        Route::controller(SiteCheckoutController::class)->group( function () {
+            Route::prefix('/checkout')->group(function () {
+                Route::name('checkout.')->group(function () {
+
+                // Главная
+                Route::get('/', 'index')->name('index');
                 });
             });
         });
