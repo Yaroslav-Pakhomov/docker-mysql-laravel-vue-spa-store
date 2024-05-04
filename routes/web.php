@@ -15,6 +15,7 @@ use App\Http\Controllers\Site\ShopController as SiteShopController;
 use App\Http\Controllers\Site\ProductController as SiteProductController;
 use App\Http\Controllers\Site\CartController as SiteCartController;
 use App\Http\Controllers\Site\CheckoutController as SiteCheckoutController;
+use App\Http\Controllers\Site\OrderController as SiteOrderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -122,6 +123,17 @@ Route::prefix('/')->group(function () {
 
                 // Главная
                 Route::get('/', 'index')->name('index');
+                });
+            });
+        });
+
+        // Запись заказа в БД
+        Route::controller(SiteOrderController::class)->group(function () {
+            Route::prefix('/order')->group(function () {
+                Route::name('order.')->group(function () {
+
+                    // Сохранение в БД
+                    Route::post('/save-order', 'saveOrder')->name('saveOrder');
                 });
             });
         });

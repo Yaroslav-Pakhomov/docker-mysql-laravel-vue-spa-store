@@ -1,7 +1,7 @@
 <script>
 import {Head, Link} from '@inertiajs/vue3';
-import StoreLayout  from "@/Layouts/StoreLayout.vue";
-import Site         from "@/Custom/site.js";
+import StoreLayout from "@/Layouts/StoreLayout.vue";
+import Site from "@/Custom/site.js";
 
 export default {
     // Название компонента
@@ -37,8 +37,27 @@ export default {
 
     data() {
         return {
-            cart_products: [],
-            email        : '',
+            cart_products        : [],
+            email                : '',
+            surname              : '',
+            name                 : '',
+            patronymic           : '',
+            company_name         : '',
+            address              : '',
+            apartment            : '',
+            city                 : '',
+            selected_country     : '',
+            post_code            : '',
+            surname_fact         : '',
+            name_fact            : '',
+            patronymic_fact      : '',
+            company_name_fact    : '',
+            address_fact         : '',
+            apartment_fact       : '',
+            selected_country_fact: '',
+            country_fact         : '',
+            post_code_fact       : '',
+            notes                : '',
         };
     },
 
@@ -51,40 +70,76 @@ export default {
         },
 
         checkoutNow() {
-            console.log(this.email);
+            // Корзина
+            let cart = localStorage.getItem('cart');
+            cart = JSON.parse(cart);
+            console.log(cart);
+            console.log(this.cart_products);
+
+            const laravelToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            // const headers = {
+            //     "X-CSRF-TOKEN": laravelToken,
+            // };
+
+            let countries = {
+                1: 'India',
+                2: 'United',
+                3: 'Netherlands',
+                4: 'Afghanistan',
+                5: 'Islands',
+                6: 'Albania',
+                7: 'Antigua',
+                8: 'Russia',
+            };
+
+            const data = {
+                '_token'               : laravelToken,
+                'cart_products'        : this.cart_products,
+                'email'                : this.email,
+                'surname'              : this.surname,
+                'name'                 : this.name,
+                'patronymic'           : this.patronymic,
+                'company_name'         : this.company_name,
+                'address'              : this.address,
+                'apartment'            : this.apartment,
+                'city'                 : this.city,
+                'selected_country'     : countries[+this.selected_country],
+                'post_code'            : this.post_code,
+                'surname_fact'         : this.surname_fact,
+                'name_fact'            : this.name_fact,
+                'patronymic_fact'      : this.patronymic_fact,
+                'company_name_fact'    : this.company_name_fact,
+                'address_fact'         : this.address_fact,
+                'apartment_fact'       : this.apartment_fact,
+                'city_fact'            : this.city_fact,
+                'selected_country_fact': countries[+this.selected_country_fact],
+                'post_code_fact'       : this.post_code_fact,
+                'notes'                : this.notes,
+            };
+
+            this.$inertia.post(this.route('site.order.saveOrder'), data);
+
+            // console.log(this.email);
+            // console.log(this.surname);
+            // console.log(this.name);
+            // console.log(this.patronymic);
+            // console.log(this.company_name);
+            // console.log(this.address);
+            // console.log(this.apartment);
+            // console.log(this.city);
+            // console.log(this.selected_country);
+            // console.log(this.post_code);
+            // console.log(this.surname_fact);
+            // console.log(this.name_fact);
+            // console.log(this.patronymic_fact);
+            // console.log(this.company_name_fact);
+            // console.log(this.address_fact);
+            // console.log(this.apartment_fact);
+            // console.log(this.city_fact);
+            // console.log(this.country_fact);
+            // console.log(this.post_code_fact);
+            // console.log(this.notes);
         },
-
-        // -----------------------------
-        // Кол-во товара - начало
-        // -----------------------------
-
-        // Уменьшение
-        // decreaseButton(event, product) {
-        //     Site.decreaseButton(event);
-        //     let input = event.target.nextElementSibling.children[0];
-        //     if (input.dataset.counter !== undefined) {
-        //         Site.changeQtyToCart(product, -1);
-        //     }
-        // },
-        // // Увеличение
-        // increaseButton(event, product) {
-        //     Site.increaseButton(event);
-        //     let input = event.target.previousElementSibling.children[0];
-        //     if (input.dataset.counter !== undefined) {
-        //         Site.changeQtyToCart(product, 1);
-        //     }
-        // },
-
-        // -----------------------------
-        // Кол-во товара - конец
-        // -----------------------------
-
-        /**
-         * Удаление товара из корзины
-         */
-        // deleteCartProduct(product) {
-        //     Site.deleteCartProduct(product);
-        // },
     },
 
     computed: {
@@ -144,11 +199,11 @@ export default {
                                         <div class="checkout__email--phone mb-12">
                                             <label>
                                                 Ваша почта <span class="checkout__input--label__star">*</span>
-                                                <input name="email" class="checkout__input--field border-radius-5"
-                                                       placeholder="Email (обязательно)" type="text" v-model="email">
+                                                <input name="email" v-model="email"
+                                                       class="checkout__input--field border-radius-5"
+                                                       placeholder="Email (обязательно)" type="text">
                                             </label>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="checkout__content--step section__shipping--address">
@@ -161,7 +216,8 @@ export default {
                                                 <div class="checkout__input--list">
                                                     <label class="checkout__input--label mb-1" for="input2">Фамилия
                                                         <span class="checkout__input--label__star">*</span></label>
-                                                    <input name="surname" class="checkout__input--field border-radius-5"
+                                                    <input name="surname" v-model="surname"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Фамилия (обязательно)" id="input2" type="text">
                                                 </div>
                                             </div>
@@ -169,7 +225,8 @@ export default {
                                                 <div class="checkout__input--list ">
                                                     <label class="checkout__input--label mb-1" for="input1">Имя <span
                                                         class="checkout__input--label__star">*</span></label>
-                                                    <input name="name" class="checkout__input--field border-radius-5"
+                                                    <input name="name" v-model="name"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Имя (необязательно)" id="input1" type="text">
                                                 </div>
                                             </div>
@@ -177,7 +234,7 @@ export default {
                                                 <div class="checkout__input--list">
                                                     <label class="checkout__input--label mb-1" for="input2">Отчество
                                                         <span class="checkout__input--label__star">*</span></label>
-                                                    <input name="patronymic"
+                                                    <input name="patronymic" v-model="patronymic"
                                                            class="checkout__input--field border-radius-5"
                                                            placeholder="Отчество (необязательно)" id="input2"
                                                            type="text">
@@ -188,7 +245,8 @@ export default {
                                                     <label class="checkout__input--label mb-1" for="input3">Название
                                                         компании <span
                                                             class="checkout__input--label__star">*</span></label>
-                                                    <input class="checkout__input--field border-radius-5"
+                                                    <input name="company_name" v-model="company_name"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Название компании (необязательно)" id="input3"
                                                            type="text">
                                                 </div>
@@ -197,13 +255,15 @@ export default {
                                                 <div class="checkout__input--list">
                                                     <label class="checkout__input--label mb-1" for="input4">Адрес <span
                                                         class="checkout__input--label__star">*</span></label>
-                                                    <input class="checkout__input--field border-radius-5"
+                                                    <input name="address" v-model="address"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Адрес (юридический)" id="input4" type="text">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <div class="checkout__input--list">
-                                                    <input class="checkout__input--field border-radius-5"
+                                                    <input name="apartment" v-model="apartment"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Апартаменты, кв. и т.д. (необязательно)"
                                                            type="text">
                                                 </div>
@@ -213,7 +273,8 @@ export default {
                                                     <label class="checkout__input--label mb-1" for="input5">Город/Населённый
                                                         пункт <span
                                                             class="checkout__input--label__star">*</span></label>
-                                                    <input class="checkout__input--field border-radius-5"
+                                                    <input name="city" v-model="city"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Город" id="input5" type="text">
                                                 </div>
                                             </div>
@@ -222,7 +283,8 @@ export default {
                                                     <label class="checkout__input--label mb-1" for="country">Страна/регион
                                                         <span class="checkout__input--label__star">*</span></label>
                                                     <div class="checkout__input--select select">
-                                                        <select class="checkout__input--select__field border-radius-5"
+                                                        <select name="selected_country" v-model="selected_country"
+                                                                class="checkout__input--select__field border-radius-5"
                                                                 id="country">
                                                             <option value="1">India</option>
                                                             <option value="2">United States</option>
@@ -241,7 +303,8 @@ export default {
                                                     <label class="checkout__input--label mb-1" for="input6">Почтовый
                                                         Индекс <span
                                                             class="checkout__input--label__star">*</span></label>
-                                                    <input class="checkout__input--field border-radius-5"
+                                                    <input name="post_code" v-model="post_code"
+                                                           class="checkout__input--field border-radius-5"
                                                            placeholder="Индекс (необязательно)" id="input6" type="text">
                                                 </div>
                                             </div>
@@ -259,7 +322,8 @@ export default {
                                                     <div class="checkout__input--list">
                                                         <label class="checkout__input--label mb-1" for="input9">Фамилия
                                                             <span class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="surname_fact" v-model="surname_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Фамилия (обязательно)" id="input9"
                                                                type="text">
                                                     </div>
@@ -268,7 +332,8 @@ export default {
                                                     <div class="checkout__input--list ">
                                                         <label class="checkout__input--label mb-1" for="input7">Имя
                                                             <span class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="name_fact" v-model="name_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Имя (необязательно)" id="input7"
                                                                type="text">
                                                     </div>
@@ -277,7 +342,8 @@ export default {
                                                     <div class="checkout__input--list">
                                                         <label class="checkout__input--label mb-1" for="input8">Отчество
                                                             <span class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="patronymic_fact" v-model="patronymic_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Отчество (необязательно)" id="input8"
                                                                type="text">
                                                     </div>
@@ -286,7 +352,8 @@ export default {
                                                     <div class="checkout__input--list">
                                                         <label class="checkout__input--label mb-1" for="input9">Название
                                                             компании <span class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="company_name_fact" v-model="company_name_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Название компании (необязательно)"
                                                                id="input9" type="text">
                                                     </div>
@@ -295,14 +362,16 @@ export default {
                                                     <div class="checkout__input--list">
                                                         <label class="checkout__input--label mb-1" for="input10">Адрес
                                                             <span class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="address_fact" v-model="address_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Адрес (фактический)" id="input10"
                                                                type="text">
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <div class="checkout__input--list">
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="apartment_fact" v-model="apartment_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Апартаменты, кв. и т.д. (необязательно)"
                                                                type="text">
                                                     </div>
@@ -312,7 +381,8 @@ export default {
                                                         <label class="checkout__input--label mb-1" for="input11">Город/Населённый
                                                             пункт <span
                                                                 class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="city_fact" v-model="city_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Город" id="input11" type="text">
                                                     </div>
                                                 </div>
@@ -321,9 +391,9 @@ export default {
                                                         <label class="checkout__input--label mb-1" for="country2">Страна/Регион
                                                             <span class="checkout__input--label__star">*</span></label>
                                                         <div class="checkout__input--select select">
-                                                            <select
-                                                                class="checkout__input--select__field border-radius-5"
-                                                                id="country2">
+                                                            <select name="country_fact" v-model="selected_country_fact"
+                                                                    class="checkout__input--select__field border-radius-5"
+                                                                    id="country2">
                                                                 <option value="1">India</option>
                                                                 <option value="2">United States</option>
                                                                 <option value="3">Netherlands</option>
@@ -331,6 +401,7 @@ export default {
                                                                 <option value="5">Islands</option>
                                                                 <option value="6">Albania</option>
                                                                 <option value="7">Antigua Barbuda</option>
+                                                                <option value="8">Russia</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -340,7 +411,8 @@ export default {
                                                         <label class="checkout__input--label mb-1" for="input12">Почтовый
                                                             Индекс <span
                                                                 class="checkout__input--label__star">*</span></label>
-                                                        <input class="checkout__input--field border-radius-5"
+                                                        <input name="post_code_fact" v-model="post_code_fact"
+                                                               class="checkout__input--field border-radius-5"
                                                                placeholder="Индекс (необязательно)" id="input12"
                                                                type="text">
                                                     </div>
@@ -358,7 +430,8 @@ export default {
                                 <div class="order-notes mb-3">
                                     <label class="checkout__input--label mb-1" for="order">Комментарий к заказу <span
                                         class="checkout__input--label__star">*</span></label>
-                                    <textarea class="checkout__notes--textarea__field border-radius-5" id="order"
+                                    <textarea name="notes" v-model="notes"
+                                              class="checkout__notes--textarea__field border-radius-5" id="order"
                                               placeholder="Примечания к вашему заказу, например, специальные примечания к доставке."
                                               spellcheck="false"></textarea>
                                 </div>
@@ -467,10 +540,11 @@ export default {
                                     </li>
                                 </ul>
                             </div>
-                            <button @click.prevent="checkoutNow()" class="checkout__now--btn primary__btn" type="submit">Оформить сейчас</button>
+                            <button @click.prevent="checkoutNow()" class="checkout__now--btn primary__btn"
+                                    type="submit">Оформить сейчас
+                            </button>
                         </aside>
                     </div>
-
                 </div>
             </div>
         </div>
