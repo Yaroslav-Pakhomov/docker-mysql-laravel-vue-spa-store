@@ -35,6 +35,7 @@
                 <tr>
                     <th style="width: 10px">#</th>
                     <th>Название</th>
+                    <th>Кол-во товара</th>
                     <th>Ссылка</th>
                     <th>Действия</th>
                 </tr>
@@ -54,6 +55,9 @@
                         </td>
                         <td class="align-middle">
                             <a href="{{ route('admin.tag.show', $tag->slug ) }}">{{ $tag->title }}</a>
+                        </td>
+                        <td class="align-middle">
+                            {{ count($tag->products) }}
                         </td>
                         <td class="align-middle">
                             {{ $tag->slug }}

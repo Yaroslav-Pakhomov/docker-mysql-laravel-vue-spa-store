@@ -14,6 +14,7 @@ class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @return View
      */
     public function index(): View
@@ -25,6 +26,7 @@ class TagController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return View
      */
     public function create(): View
@@ -60,7 +62,8 @@ class TagController extends Controller
      */
     public function show(Tag $tag): View
     {
-        return view('admin.tag.show', compact('tag'));
+        $counter_paginate = 10;
+        return view('admin.tag.show', compact('tag', 'counter_paginate'));
     }
 
     /**
