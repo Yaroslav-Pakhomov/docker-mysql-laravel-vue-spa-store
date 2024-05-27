@@ -36,6 +36,7 @@
                     <th style="width: 10px">#</th>
                     <th>Название</th>
                     <th>Цвет</th>
+                    <th>Кол-во товара</th>
                     <th>Ссылка</th>
                     <th>Действия</th>
                 </tr>
@@ -58,6 +59,9 @@
                         </td>
                         <td class="align-middle">
                             <div style="background: {{ $color->code }}; " class="p-2">{{ $color->code }}</div>
+                        </td>
+                        <td class="align-middle">
+                            {{ count($color->products) }}
                         </td>
                         <td class="align-middle">
                             {{ $color->slug }}

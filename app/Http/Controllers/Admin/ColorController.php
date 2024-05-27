@@ -14,6 +14,7 @@ class ColorController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @return View
      */
     public function index(): View
@@ -25,6 +26,7 @@ class ColorController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return View
      */
     public function create(): View
@@ -60,7 +62,8 @@ class ColorController extends Controller
      */
     public function show(Color $color): View
     {
-        return view('admin.color.show', compact('color'));
+        $counter_paginate = 10;
+        return view('admin.color.show', compact('color', 'counter_paginate'));
     }
 
     /**
