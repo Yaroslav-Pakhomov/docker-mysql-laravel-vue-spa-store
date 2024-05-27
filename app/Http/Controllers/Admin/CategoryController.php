@@ -61,7 +61,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category): View
     {
-        return view('admin.category.show', compact('category'));
+        $counter_paginate = 10;
+        return view('admin.category.show', compact('category', 'counter_paginate'));
     }
 
     /**
@@ -73,6 +74,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category): View
     {
+
         return view('admin.category.edit', compact('category'));
     }
 
@@ -80,7 +82,7 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param CategoryRequest $request
-     * @param Category $category
+     * @param Category        $category
      *
      * @return RedirectResponse
      */
