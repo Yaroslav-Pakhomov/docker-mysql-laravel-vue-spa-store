@@ -86,7 +86,7 @@
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="{{ route('admin.product.edit', $product->slug) }}"
-                                   class="btn btn-block btn-outline-success mt-0 ml-2 w-auto mt-2">
+                                   class="btn btn-block btn-outline-success w-auto ml-2 mt-2">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                                 <form action="{{ route('admin.product.delete', $product->slug) }}" method="POST">

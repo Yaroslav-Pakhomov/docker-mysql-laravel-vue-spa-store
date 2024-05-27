@@ -81,17 +81,17 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a href="{{ route('admin.user.show', $user->email ) }}"
-                                   class="btn btn-block btn-outline-primary w-auto">
+                                   class="btn btn-block btn-outline-primary w-auto mt-2">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="{{ route('admin.user.edit', $user->email) }}"
-                                   class="btn btn-block btn-outline-success mt-0 ml-2 w-auto">
+                                   class="btn btn-block btn-outline-success w-auto ml-2 mt-2">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                                 <form action="{{ route('admin.user.delete', $user->email) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-block btn-outline-danger ml-2">
+                                    <button type="submit" class="btn btn-block btn-outline-danger ml-2 mt-2">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
