@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\FilterController as SiteFilterController;
 use App\Http\Controllers\Site\IndexController as SiteIndexController;
@@ -243,6 +244,24 @@ Route::prefix('/admin')->group(function () {
 
                     // Удаление товара
                     Route::delete('/{product:slug}', 'delete')->where('user:slug', '[a-z0-9_-]+')->name('delete');
+                });
+            });
+        });
+
+        // Заказы
+        Route::resource('order', AdminOrderController::class)->only(['index', 'create', 'store', 'update', ]);
+        Route::controller(AdminOrderController::class)->group(function () {
+            Route::prefix('/order')->group(function () {
+                Route::name('order.')->group(function () {
+
+                    // Страница заказа
+                    Route::get('{order:id}', 'show')->where('order:id', '[0-9]+')->name('show');
+
+                    // Редактирование заказа
+                    Route::get('/{order:id}/edit', 'edit')->where('order:id', '[0-9]+')->name('edit');
+
+                    // Удаление заказа
+                    Route::delete('/{order:id}', 'delete')->where('user:id', '[0-9]+')->name('delete');
                 });
             });
         });

@@ -85,6 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    /**
+     *  Мониторинг цвета
+     */
     let input_name_code = document.querySelector('input[name="code"]');
     if (input_name_code) {
         /**
@@ -123,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let k in mapSymbol) {
             text_title = text_title.replace(RegExp(k, 'g'), mapSymbol[k]);
         }
-        console.log(text_title);
 
         text_slug = text_title.replace(/[^- _a-zA-Z0-9]/g, '');
         text_slug = text_slug.replace(/\s+/g, '-');
@@ -131,5 +133,67 @@ document.addEventListener('DOMContentLoaded', () => {
         text_slug = text_slug.toLowerCase();
 
         document.querySelector('input[name="slug"]').value = text_slug;
+    }
+
+    /**
+     * Активация кнопки количества у товара в редактировании заказа
+     */
+    const quantityWrapper = document.querySelectorAll(".quantity__box");
+    if (quantityWrapper) {
+        quantityWrapper.forEach(function (singleItem) {
+            let increaseButton = singleItem.querySelector(".increase");
+            let decreaseButton = singleItem.querySelector(".decrease");
+
+            increaseButton.addEventListener("click", function (e) {
+                let input = e.target.previousElementSibling.children[0];
+                if (input.dataset.counter !== undefined) {
+                    let value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value++;
+                    input.value = value;
+                    getCalculateCost(singleItem, value);
+                }
+            });
+
+            decreaseButton.addEventListener("click", function (e) {
+                let input = e.target.nextElementSibling.children[0];
+                if (input.dataset.counter !== undefined) {
+                    let value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value < 1 ? (value = 1) : "";
+                    value--;
+                    input.value = value;
+                    getCalculateCost(singleItem, value);
+                }
+            });
+        });
+    }
+
+    /**
+     * Считает стоимость (цена * кол-во) товара при редактировании заказа
+     */
+    function getCalculateCost(singleItem, qty) {
+        let parent_td = singleItem.closest('td.align-middle');
+        let price_td = parent_td.previousElementSibling;
+        let price_value = +price_td.textContent;
+        let cost_td = parent_td.nextElementSibling;
+        let cost_value = price_value * qty;
+        cost_value = (Math.round(cost_value * 100)/100).toFixed(2);
+        cost_td.textContent = cost_value;
+    }
+
+    /**
+     * Кнопка "Корзины" у товара в редактировании заказа
+     */
+    const removeBlock = document.querySelectorAll(".form-check");
+    if (removeBlock) {
+        removeBlock.forEach(function (singleItem) {
+            let removeElement = singleItem.querySelector(".form-check-label");
+
+            removeElement.addEventListener("click", function () {
+                let span = this.querySelector('span');
+                span.classList.toggle('active');
+            });
+        });
     }
 })

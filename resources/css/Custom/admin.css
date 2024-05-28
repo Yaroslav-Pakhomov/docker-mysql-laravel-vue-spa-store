@@ -1,0 +1,49 @@
+:root {
+    --border-color: #E5E5E5;
+}
+
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    margin: 0;
+}
+
+/*div.form-check {*/
+/*    min-width: 70px;*/
+/*}*/
+
+div.quantity__box {
+    min-width: 100px;
+}
+
+input.quantity__number {
+    text-align: center;
+    border: none;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin: 0;
+    width: 3.3rem;
+    height: 3rem;
+}
+
+input.quickview__value--number {
+    height: 2.0rem;
+    font-size: 1.0rem;
+}
+
+.quickview__value--quantity.decrease {
+    border-radius: 17px 0 0 17px;
+}
+
+.quantity__value.decrease {
+    margin-right: -4px;
+    border-radius: 13px 0 0 13px;
+}
+
+.quickview__value--quantity.increase {
+    border-radius: 0 17px 17px 0;
+}
+.quantity__value.increase {
+    margin-left: -4px;
+    border-radius: 0 13px 13px 0;
+}

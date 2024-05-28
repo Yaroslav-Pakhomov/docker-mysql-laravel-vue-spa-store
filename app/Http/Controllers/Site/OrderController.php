@@ -11,17 +11,18 @@ use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class OrderController extends Controller
 {
     /**
      * @param OrderRequest $request
      *
-     * @return
+     * @return Response|ResponseFactory
      */
-    public function saveOrder(OrderRequest $request)
+    public function saveOrder(OrderRequest $request): Response|ResponseFactory
     {
-
         $validated = $request->validated();
 
         $password = Hash::make('1234');
@@ -49,7 +50,7 @@ class OrderController extends Controller
             'name_fact'         => $validated['name_fact'],
             'patronymic_fact'   => $validated['patronymic_fact'],
             'company_name_fact' => $validated['company_name_fact'],
-            'address_fact'      => $validated['address_fact'] . ' ' . $validated['apartment_fact'],
+            'address_fact'      => !empty($validated['apartment_fact']) ? $validated['address_fact'] . ', ' . $validated['apartment_fact'] : $validated['address_fact'],
             'city_fact'         => $validated['city_fact'] ?? '',
             'country_fact'      => $validated['selected_country_fact']  ?? '',
             'post_code_fact'    => isset($validated['post_code_fact']) ? (int)$validated['post_code_fact'] : 0,

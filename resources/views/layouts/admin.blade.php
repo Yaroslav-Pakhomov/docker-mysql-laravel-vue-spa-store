@@ -24,9 +24,12 @@
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 
+{{--    <link rel="stylesheet" href="{{ asset('adminlte/dist/css/Custom/admin.css') }}">--}}
+
     <!-- Определение цвета по HEX-код -->
     <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script>
 
+    @vite(['resources/css/Custom/admin.css'])
     @vite(['resources/js/Custom/admin.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -219,7 +222,7 @@
 
                     <li class="nav-header">РАЗДЕЛЫ</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('admin.order.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-shopping-bag"></i>
                             <p>Заказы</p>
                         </a>
@@ -276,13 +279,24 @@
             @endif
             @if($errors->any())
                 <div class="bg-opacity-75 alert alert-danger alert-dismissible mt-3 mx-3 " role="alert">
-                    {{--                    @dd($errors->all())--}}
+{{--                                        @dd($errors->all())--}}
                     <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>
-                                <button type="button" class="close btn-close" data-dismiss="alert">×</button>
-                                {{ $error }}
-                            </li>
+                        @foreach ($errors->all() as $errors)
+{{--                            @dd($errors)--}}
+                            @if(is_array($errors))
+                                @foreach ($errors as $error)
+                                    <li>
+                                        <button type="button" class="close btn-close" data-dismiss="alert">×</button>
+                                        {{ $error }}
+                                    </li>
+                                @endforeach
+                            @else
+                                <li>
+                                    <button type="button" class="close btn-close" data-dismiss="alert">×</button>
+                                    {{ $errors }}
+                                </li>
+                            @endif
+
                         @endforeach
                     </ul>
                 </div>
