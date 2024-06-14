@@ -324,4 +324,29 @@ class Product extends Model
             }
         }
     }
+
+    /**
+     * Удаление изображения при обновлении и удалении поста
+     *
+     * @param string $search_value
+     *      Строка запроса
+     * @param int    $category_id
+     *      ID категория
+     *
+     * @return LengthAwarePaginator
+     */
+    public static function getSearch(string $search_value, int $category_id = 0): LengthAwarePaginator
+    {
+        $query = self::query();
+
+        if ($category_id !== 0) {
+            $query->where('category_id', $category_id);
+        }
+        $query->where('title', 'like', "%{$search_value}%")
+            ->orWhere('description', 'like', "%{$search_value}%")
+            ->orWhere('content', 'like', "%{$search_value}%")
+            ->paginate(9);
+
+        // return $query;
+    }
 }

@@ -170,7 +170,7 @@ export default {
 </script>
 
 <template>
-    <StoreLayout :categories="categories" :shopActive="active">
+    <StoreLayout :categories="categories" :shopActive="active" :requestFilter="request_filter">
 
         <!-- Start offcanvas filter sidebar -->
         <FilterSidebar :request_filter="request_filter" :sort_param="sort_param"/>

@@ -16,10 +16,11 @@ export default {
 
     // Передаваемые св-ва от родителя и/или от контроллера
     props: {
-        categories: Array,
-        shopActive: Boolean,
-        siteActive: Boolean,
-        cartActive: Boolean,
+        categories   : Array,
+        requestFilter: Object,
+        shopActive   : Boolean,
+        siteActive   : Boolean,
+        cartActive   : Boolean,
     },
 
     mounted() {
@@ -38,11 +39,27 @@ export default {
 
     data() {
         return {
-            cart_products: [],
+            cart_products  : [],
+            selected_search: this.requestFilter ? +this.requestFilter.selected_search : 0,
+            input_search   : this.requestFilter ? this.requestFilter.input_search : '',
         }
     },
 
-    methods: {},
+    methods: {
+        /**
+         * Сброс всех фильтров
+         */
+        getSearch() {
+            console.log(this.selected_search);
+            console.log(this.input_search);
+            let search_params = {
+                'selected_search': this.selected_search,
+                'input_search'   : this.input_search,
+            };
+
+            this.$inertia.get('/search', search_params);
+        },
+    },
 
     computed: {
         counter_cart_products() {
@@ -245,22 +262,25 @@ export default {
                             alt="logo-img"></a></h1>
                     </div>
                     <div class="header__search--widget d-none d-lg-block header__sticky--none">
-                        <form class="d-flex header__search--form border-radius-5" action="#">
+                        <form class="d-flex header__search--form border-radius-5" action="{{ route('site.search') }}">
                             <div class="header__select--categories select">
-                                <select class="header__select--inner">
-                                    <option selected value="1"> All categories</option>
-                                    <option value="2">Accessories</option>
-                                    <option value="3">Accessories & More</option>
-                                    <option value="4">Camera & Video</option>
-                                    <option value="5">Butters & Eggs</option>
+                                <select class="header__select--inner" v-model="selected_search">
+                                    <option selected value="0"> All categories</option>
+                                    <template v-for="category in categories" :key="category.id">
+                                        <option :value="category.id">{{ category.title }}</option>
+                                    </template>
                                 </select>
+
                             </div>
                             <div class="header__search--box">
                                 <label>
-                                    <input class="header__search--input" placeholder="Search For Products..."
-                                           type="text">
+                                    <input class="header__search--input" v-model="input_search"
+                                           placeholder="Search For Products..."
+                                           type="text"
+                                           value="">
                                 </label>
-                                <button class="header__search--button bg__primary text-white" aria-label="search button"
+                                <button class="header__search--button bg__primary text-white"
+                                        @click.prevent="getSearch()" aria-label="search button"
                                         type="submit">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
