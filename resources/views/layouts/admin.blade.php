@@ -64,10 +64,11 @@
                     <i class="fas fa-search"></i>
                 </a>
                 <div class="navbar-search-block">
-                    <form class="form-inline">
+                    <form class="form-inline" action="{{ route('admin.search') }}">
+                        @csrf
                         <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                   aria-label="Search">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Search1" name="search_value"
+                                   aria-label="Search" value="{{ old('search_value') ?? '' }}">
                             <div class="input-group-append">
                                 <button class="btn btn-navbar" type="submit">
                                     <i class="fas fa-search"></i>
@@ -203,7 +204,7 @@
             <!-- SidebarSearch Form -->
             <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                    <input class="form-control form-control-sidebar" type="search" placeholder="Search2"
                            aria-label="Search">
                     <div class="input-group-append">
                         <button class="btn btn-sidebar">
@@ -282,7 +283,6 @@
 {{--                                        @dd($errors->all())--}}
                     <ul class="mb-0">
                         @foreach ($errors->all() as $errors)
-{{--                            @dd($errors)--}}
                             @if(is_array($errors))
                                 @foreach ($errors as $error)
                                     <li>

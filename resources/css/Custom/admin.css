@@ -47,3 +47,7 @@ input.quickview__value--number {
     margin-left: -4px;
     border-radius: 0 13px 13px 0;
 }
+
+.preloader {
+    top: -15px;
+}

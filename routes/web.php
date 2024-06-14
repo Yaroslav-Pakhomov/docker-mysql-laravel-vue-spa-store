@@ -64,6 +64,9 @@ Route::prefix('/')->group(function () {
         // Главная
         Route::controller(SiteIndexController::class)->group(function () {
             Route::get('/', 'index')->name('index');
+
+            // Поиск
+            Route::get('/search', 'search')->name('search');
         });
 
         // Фильтры
@@ -82,6 +85,9 @@ Route::prefix('/')->group(function () {
         Route::controller(SiteShopController::class)->group(function () {
             Route::prefix('/shop')->group(function () {
                 Route::name('shop.')->group(function () {
+
+                    // // Страница поиска
+                    // Route::get('/search', 'search')->name('search');
 
                     // Страница товара "Модальное окно"
                     Route::get('/{product:slug}', 'show')->where('product:slug', '[a-z0-9_-]+')->name('show');
@@ -152,9 +158,13 @@ Route::prefix('/')->group(function () {
 
 Route::prefix('/admin')->group(function () {
     Route::name('admin.')->group(function () {
-        // Главная
+
         Route::controller(AdminIndexController::class)->group(function () {
+            // Главная
             Route::get('/', 'index')->name('index');
+
+            // Поиск
+            Route::get('/search', 'search')->name('search');
         });
 
         // Категории
