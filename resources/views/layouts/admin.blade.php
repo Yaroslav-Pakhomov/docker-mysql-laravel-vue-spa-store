@@ -311,6 +311,10 @@
         <strong>Copyright &copy; 2014-{{ now()->year }}
             <a href="{{ route('site.index') }}" target="_blank">Сайт</a>.</strong>
         Все права защищены.
+        <div class="float-right d-none d-sm-inline-block">
+            {{-- <b>Version</b> 3.2.0--}}
+            <b>Laravel</b> v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+        </div>
     </footer>
 
     <!-- Control Sidebar -->
