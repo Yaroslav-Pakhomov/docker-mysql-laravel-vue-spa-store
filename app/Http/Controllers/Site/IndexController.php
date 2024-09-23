@@ -10,6 +10,7 @@ use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -27,6 +28,14 @@ class IndexController extends Controller
 
         $allCategories = Category::getAllCategoriesSite();
         $categories = CategoriesResource::collection($allCategories)->resolve();
+
+        // Запись в кэш, если ключ не существует
+        $value_categories = Cache::rememberForever('value_categories', static function () use ($categories) {
+            return $categories;
+        });
+
+        // Получение значение кэша по его ключу
+        $value_categories_get = Cache::get('value_categories');
 
         return inertia('Site/Index', [
             'products'   => $products,
@@ -54,9 +63,9 @@ class IndexController extends Controller
 
         $query = Product::query();
 
-        $query->where('title', 'like', "%{$search_value}%")
-            ->orWhere('description', 'like', "%{$search_value}%")
-            ->orWhere('content', 'like', "%{$search_value}%");
+        $query->where('title', 'like', "%{ $search_value }%")
+            ->orWhere('description', 'like', "%{ $search_value }%")
+            ->orWhere('content', 'like', "%{ $search_value }%");
         // $query->whereAny([
         //     'title',
         //     'description',
